@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yEd 3.14.4-->
+  <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
+  <key for="port" id="d1" yfiles.type="portgraphics"/>
+  <key for="port" id="d2" yfiles.type="portgeometry"/>
+  <key for="port" id="d3" yfiles.type="portuserdata"/>
+  <key attr.name="url" attr.type="string" for="node" id="d4"/>
+  <key attr.name="description" attr.type="string" for="node" id="d5"/>
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key for="graphml" id="d7" yfiles.type="resources"/>
+  <key attr.name="url" attr.type="string" for="edge" id="d8"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d9"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <data key="d0"/>
+    <node id="n0">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="2200.0" width="1700.0" x="0.0" y="0.0"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#FFFFFF" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="76.966796875" x="811.5166015625" y="1091.015625">Root:Margin</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="2000.0" width="1500.0" x="100.0" y="100.0"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="66.0625" x="716.96875" y="991.015625">Root:Body</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n2">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="32.0" width="750.0" x="100.0" y="100.0"/>
+          <y:Fill hasColor="false" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="24.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="336.685546875" x="206.6572265625" y="4.0">QMXStdLib::Stringizable - Class Diagram</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n3">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="32.0" width="325.0" x="130.0" y="162.0"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="72.1298828125" x="126.43505859375" y="6.5">QMXStdLib</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n4">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="1876.0" width="1440.0" x="130.0" y="194.0"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="103.931640625" x="668.0341796875" y="929.015625">QMXStdLib:Body</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n5">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Stringizable Class]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="182.0" width="603.0" x="162.0" y="226.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="76.802734375" x="263.0986328125" y="25.96875">Stringizable</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Mixin" use3DEffect="true">
+            <y:AttributeLabel/>
+            <y:MethodLabel>&lt;html&gt;
+&lt;p style="font-family:Calibri;font-size:15pt;"&gt;
+
+&lt;b&gt;&lt;u&gt;Methods&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
+
++ Stringizable() : Void&lt;br&gt;
++ ~Stringizable() : Void {Virtual}&lt;br&gt;
++ ToString() : String&lt;br&gt;
++ SetStringFormat( [Out] Target : StringFormat, [In] Base : NumericBase = Decimal ) : Void {Static}&lt;br&gt;
+- ToStringImp() : String {Pure-Virtual}&lt;br&gt;
+
+&lt;/p&gt;
+&lt;/html&gt;</y:MethodLabel>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n6">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Stringizable::NumericBase Enumeration]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="131.0" width="122.0" x="162.0" y="504.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="86.32421875" x="17.837890625" y="25.96875">NumericBase</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Enumeration" use3DEffect="true">
+            <y:AttributeLabel>&lt;html&gt;
+&lt;p style="font-family:Calibri;font-size:15pt;"&gt;
+
+None&lt;br&gt;
+Octal&lt;br&gt;
+Decimal&lt;br&gt;
+Hexidecimal&lt;br&gt;
+&lt;br&gt;
+
+&lt;/p&gt;
+&lt;/html&gt;</y:AttributeLabel>
+            <y:MethodLabel/>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n7">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Stringizable::StringFormat Structure]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="207.0" width="137.0" x="316.0" y="504.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="85.55517578125" x="25.722412109375" y="25.96875">StringFormat</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Structure" use3DEffect="true">
+            <y:AttributeLabel>&lt;html&gt;
+&lt;p style="font-family:Calibri;font-size:15pt;"&gt;
+
+UsePrefix : Bool&lt;br&gt;
+UseUpperCase : Bool&lt;br&gt;
+UseYesNo : Bool&lt;br&gt;
+CharsAsInts : Bool&lt;br&gt;
+Filler : Char&lt;br&gt;
+Width : Int32&lt;br&gt;
+Precision : Int32&lt;br&gt;
+Base : NumericBase&lt;br&gt;
+&lt;br&gt;
+
+&lt;/p&gt;
+&lt;/html&gt;</y:AttributeLabel>
+            <y:MethodLabel/>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n8">
+      <data key="d5"/>
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="16.0" width="10.08203125" x="233.0" y="645.125"/>
+          <y:Fill hasColor="false" transparent="false"/>
+          <y:BorderStyle hasColor="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="10.08203125" x="0.0" y="0.0">1</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <edge id="e0" source="n4" target="n0">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e1" source="n5" target="n6">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-240.5" sy="91.0" tx="0.0" ty="-65.5"/>
+          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
+          <y:Arrows source="none" target="plain"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e2" source="n5" target="n7">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-79.0" sy="91.0" tx="0.0" ty="-103.5"/>
+          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
+          <y:Arrows source="none" target="plain"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e3" source="n7" target="n6">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="103.5" tx="0.0" ty="65.5">
+            <y:Point x="384.5" y="743.0"/>
+            <y:Point x="223.0" y="743.0"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="white_diamond" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d7">
+    <y:Resources/>
+  </data>
+</graphml>

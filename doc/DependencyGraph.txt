@@ -1,0 +1,115 @@
+QMXException
+StackTracer
+Numeric
+ConsoleIO
+String
+FileSystem
+DynamicLibrary
+Timer
+Utility
+PluginManager
+ProgramOptions
+Sequencer
+UniqueRandom
+
+----------------
+
+[X] ConsoleIO
+=============
+- Numeric
+- Mixins/NonCopyable
+
+[X] DynamicLibrary
+==================
+- Object
+- FileSystem
+- RAII/ScopedStackTrace
+
+[X] FileSystem
+==============
+- String
+- RAII/ScopedStackTrace
+
+[X] Numeric
+===========
+- Mixins/Stringizable
+- RAII/ScopedStackTrace
+
+[-] Object
+==========
+- Mixins/Lockable
+- RAII/ScopedStackTrace
+
+[X] PluginManager
+=================
+- Object
+- FileSystem
+- DynamicLibrary
+- Utility
+- Mixins/Singleton
+- Mixins/Plugin
+- RAII/ScopedStackTrace
+
+[X] ProgramOptions
+==================
+- Object
+- FileSystem
+- Mixins/Singleton
+
+[X] QMXException
+================
+- NONE
+
+[X] Sequencer
+=============
+- Object
+- RAII/ScopedStackTrace
+
+[X] StackTracer
+===============
+- QMXException
+
+[X] String
+==========
+- Mixins/Stringizable
+- RAII/ScopedStackTrace
+
+[X] Timer
+=========
+- Object
+- RAII/ScopedStackTrace
+
+[X] UniqueRandom
+================
+- Object
+- Numeric
+- Utility
+
+[X] Utility
+===========
+- Timer
+
+[-] Mixins/Lockable
+===================
+- None
+
+[-] Mixins/NonCopyable
+======================
+- None
+
+[-] Mixins/Plugin
+=================
+- Utility
+
+[-] Mixins/Singleton
+====================
+- None
+
+[-] Mixins/Stringizable
+=======================
+- None
+
+[-] RAII/ScopedStackTrace
+=========================
+- Mixins/NonCopyable
+- StackTracer

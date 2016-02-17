@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yEd 3.14.4-->
+  <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
+  <key for="port" id="d1" yfiles.type="portgraphics"/>
+  <key for="port" id="d2" yfiles.type="portgeometry"/>
+  <key for="port" id="d3" yfiles.type="portuserdata"/>
+  <key attr.name="url" attr.type="string" for="node" id="d4"/>
+  <key attr.name="description" attr.type="string" for="node" id="d5"/>
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key for="graphml" id="d7" yfiles.type="resources"/>
+  <key attr.name="url" attr.type="string" for="edge" id="d8"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d9"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <data key="d0"/>
+    <node id="n0">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="2200.0" width="1700.0" x="0.0" y="0.0"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#FFFFFF" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="76.966796875" x="811.5166015625" y="1091.015625">Root:Margin</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="2000.0" width="1500.0" x="100.0" y="100.0"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="66.0625" x="716.96875" y="991.015625">Root:Body</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n2">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="32.0" width="750.0" x="100.0" y="100.0"/>
+          <y:Fill hasColor="false" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="24.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="310.25" x="219.875" y="4.0">QMXStdLib::Numeric - Class Diagram</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n3">
+      <data key="d5"><![CDATA[QMXStdLib::Numeric]]></data>
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="32.0" width="325.0" x="130.0" y="162.0"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="132.18115234375" x="96.409423828125" y="6.5">QMXStdLib::Numeric</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n4">
+      <data key="d4"/>
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="1876.0" width="1440.0" x="130.0" y="194.0"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="162.537109375" x="638.7314453125" y="929.015625">QMXStdLib::Numeric:Body</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n5">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Numeric Functions]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="153.0" width="832.0" x="162.0" y="226.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="56.97607421875" x="387.511962890625" y="25.96875">Numeric</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Functions" use3DEffect="true">
+            <y:AttributeLabel>&lt;html&gt;
+&lt;p style="font-family:Calibri;font-size:15pt;"&gt;
+
+InRange&amp;lt; NType : TypeName &amp;gt;( [In] Value : NType, [In] Min : NType, [In] Max : NType ) : Bool&lt;br&gt;
+Clamp&amp;lt; NType : TypeName &amp;gt;( [Out] Value : NType, [In] Min : NType, [In] Max : NType ) : Void&lt;br&gt;
+IsWholeNumber&amp;lt; NType : TypeName &amp;gt;( [In] Value : NType ) : Bool&lt;br&gt;
+GetNextPowerOfTwo&amp;lt; NType : TypeName &amp;gt;( [In]Value : NType ) : NType&lt;br&gt;
+ToString&amp;lt; NType : TypeName &amp;gt;( [In] Value : NType, [In] Base : NumericBase = Decimal, [In] TargetFormat : StringFormat* = Null) : String&lt;br&gt;
+&lt;br&gt;
+
+&lt;/p&gt;
+&lt;/html&gt;</y:AttributeLabel>
+            <y:MethodLabel/>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n6">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Stringizable::NumericBase Enumeration]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="46.0" width="248.0" x="162.0" y="494.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="245.7578125" x="1.12109375" y="25.96875">QMXStdLib::Stringizable::NumericBase</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Enumeration" use3DEffect="true">
+            <y:AttributeLabel/>
+            <y:MethodLabel/>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <node id="n7">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Stringizable::StringFormat Structure]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="49.0" width="248.0" x="442.0" y="494.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="244.98876953125" x="1.505615234375" y="25.96875">QMXStdLib::Stringizable::StringFormat</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Structure" use3DEffect="true">
+            <y:AttributeLabel/>
+            <y:MethodLabel/>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <edge id="e0" source="n5" target="n6">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-292.0" sy="76.5" tx="0.0" ty="-23.0"/>
+          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
+          <y:Arrows source="none" target="plain"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e1" source="n5" target="n7">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-12.0" sy="76.5" tx="0.0" ty="-24.0"/>
+          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
+          <y:Arrows source="none" target="plain"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d7">
+    <y:Resources/>
+  </data>
+</graphml>

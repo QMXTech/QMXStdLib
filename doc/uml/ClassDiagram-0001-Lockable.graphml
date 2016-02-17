@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yEd 3.12.2-->
+  <key for="graphml" id="d0" yfiles.type="resources"/>
+  <key for="port" id="d1" yfiles.type="portgraphics"/>
+  <key for="port" id="d2" yfiles.type="portgeometry"/>
+  <key for="port" id="d3" yfiles.type="portuserdata"/>
+  <key attr.name="url" attr.type="string" for="node" id="d4"/>
+  <key attr.name="description" attr.type="string" for="node" id="d5"/>
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key attr.name="Description" attr.type="string" for="graph" id="d7"/>
+  <key attr.name="url" attr.type="string" for="edge" id="d8"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d9"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <data key="d7"/>
+    <node id="n0">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="2200.0" width="1700.0" x="0.0" y="0.0"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#FFFFFF" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.40625" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="69.361328125" x="815.3193359375" y="1091.296875">Root:Margin</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="2000.0" width="1500.0" x="100.0" y="100.0"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.40625" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="60.033203125" x="719.9833984375" y="991.296875">Root:Body</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n2">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="32.0" width="750.0" x="100.0" y="100.0"/>
+          <y:Fill hasColor="false" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="24.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="312.37890625" x="218.810546875" y="4.0">QMXStdLib::Lockable - Class Diagram</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n3">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="32.0" width="325.0" x="130.0" y="162.0"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="72.1298828125" x="126.43505859375" y="6.5">QMXStdLib</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n4">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry height="1876.0" width="1440.0" x="130.0" y="194.0"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.40625" modelName="internal" modelPosition="c" textColor="#000000" visible="false" width="96.044921875" x="671.9775390625" y="929.296875">QMXStdLib:Body</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n5">
+      <data key="d4"/>
+      <data key="d5"><![CDATA[QMXStdLib::Lockable Class]]></data>
+      <data key="d6">
+        <y:UMLClassNode>
+          <y:Geometry height="181.0" width="183.0" x="162.0" y="226.0"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="58.57275390625" x="62.213623046875" y="25.40625">Lockable</y:NodeLabel>
+          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Mixin" use3DEffect="true">
+            <y:AttributeLabel>&lt;html&gt;
+&lt;p style="font-family:Calibri;font-size:15pt;"&gt;
+
+&lt;b&gt;&lt;u&gt;Attributes&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
+
+# LocalMutex : Mutex&amp;nbsp;&lt;br&gt;
+
+&lt;/p&gt;
+&lt;/html&gt;</y:AttributeLabel>
+            <y:MethodLabel>&lt;html&gt;
+&lt;p style="font-family:Calibri;font-size:15pt;"&gt;
+
+&lt;b&gt;&lt;u&gt;Methods&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
+
++ Lockable() : Void&lt;br&gt;
++ ~Lockable() : Void {Virtual}&lt;br&gt;
++ GetMutex() : Mutex&lt;br&gt;
+
+&lt;/p&gt;
+&lt;/html&gt;</y:MethodLabel>
+          </y:UML>
+        </y:UMLClassNode>
+      </data>
+    </node>
+    <edge id="e0" source="n4" target="n0">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d0">
+    <y:Resources/>
+  </data>
+</graphml>
