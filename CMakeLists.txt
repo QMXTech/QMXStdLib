@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Lesser General Public License along with 'QMXStdLib'.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################################################################################################
 
-# TODO (Malachy - Priority 100): Create install/uninstall targets.
 # TODO (Malachy - Priority 50): Complete and test for Apple Mac OS X platform.
 # TODO (Malachy - Priority 50): Complete and test for Microsoft Windows platform.
 
@@ -37,9 +36,52 @@ find_package( Boost 1.60.0 REQUIRED )
 find_package( GTest 1.7.0 REQUIRED )
 find_package( Doxygen )
 set( CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true )
-set( MAX_BUFFER_SIZE "1024" CACHE STRING "Maximum default size for a c-string buffer." )
-set( CONSOLEIO_DEF_INPUT_TYPE "ConsoleIO::Range" CACHE STRING "Default input type for the 'ConsoleIO::GetInput' method." )
-set( CONSOLEIO_DEF_CHOICES "\"A, B, C, D, or E\"" CACHE STRING "Default set of choices for the 'ConsoleIO::GetInput' method." )
+set( MAX_BUFFER_SIZE "1024"
+     CACHE STRING "Maximum default size for a c-string buffer." )
+set( CONSOLEIO_DEF_INPUT_TYPE "ConsoleIO::Range"
+     CACHE STRING "Default input type for the 'ConsoleIO::GetInput' method." )
+set( CONSOLEIO_DEF_CHOICES "\"A, B, C, D, or E\""
+     CACHE STRING "Default set of choices for the 'ConsoleIO::GetInput' method." )
+set( COMPILE_FLAGS_DEBUG "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
+     CACHE STRING "These are the debug compile flags." )
+set( COMPILE_FLAGS_RELWITHDEBINFO "-std=c++11 -O2 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
+     CACHE STRING "These are the release with debug info compile flags." )
+set( COMPILE_FLAGS_RELEASE "-std=c++11 -O3 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
+     CACHE STRING "These are the release compile flags." )
+set( COMPILE_FLAGS_MINSIZEREL "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
+     CACHE STRING "These are the minimum size release compile flags." )
+set( LINK_FLAGS_DEBUG "-z defs"
+     CACHE STRING "These are the debug link flags." )
+set( LINK_FLAGS_RELWITHDEBINFO "-z defs"
+     CACHE STRING "These are the release with debug info link flags." )
+set( LINK_FLAGS_RELEASE "-z defs -s"
+     CACHE STRING "These are the release link flags." )
+set( LINK_FLAGS_MINSIZEREL "-z defs -s"
+     CACHE STRING "These are the minimum size release link flags." )
+
+if( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+	set( QMXSTDLIB_INCLUDE_PATH "include/qmxstdlib"
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the headers will be installed." )
+	set( QMXSTDLIB_LIB_PATH "lib"
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the libraries will be installed." )
+	set( QMXSTDLIB_DOC_PATH "share/doc/qmxstdlib"
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the documentation will be installed." )
+elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
+	set( QMXSTDLIB_INCLUDE_PATH ""
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the headers will be installed." )
+	set( QMXSTDLIB_LIB_PATH ""
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the libraries will be installed." )
+	set( QMXSTDLIB_DOC_PATH ""
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the documentation will be installed." )
+elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
+	set( QMXSTDLIB_INCLUDE_PATH ""
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the headers will be installed." )
+	set( QMXSTDLIB_LIB_PATH ""
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the libraries will be installed." )
+	set( QMXSTDLIB_DOC_PATH ""
+	     CACHE STRING "This is the path (appended to 'CMAKE_INSTALL_PREFIX') where the documentation will be installed." )
+endif()
+
 configure_file( "Config.hpp.in" "../include/Config.hpp" )
 
 if( DOXYGEN_FOUND )
@@ -86,29 +128,6 @@ set( QMXSTDLIB_TEST_LIBRARIES
      "boost_system"
      "boost_thread"
      "gtest" )
-set( COMPILE_FLAGS_DEBUG "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
-set( COMPILE_FLAGS_RELWITHDEBINFO "-std=c++11 -O2 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
-set( COMPILE_FLAGS_RELEASE "-std=c++11 -O3 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
-set( COMPILE_FLAGS_MINSIZEREL "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
-set( LINK_FLAGS_DEBUG "-z defs" )
-set( LINK_FLAGS_RELWITHDEBINFO "-z defs" )
-set( LINK_FLAGS_RELEASE "-z defs -s" )
-set( LINK_FLAGS_MINSIZEREL "-z defs -s" )
-
-if( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
-	set( QMXSTDLIB_INCLUDE_PATH "include/qmxstdlib" )
-	set( QMXSTDLIB_LIB_PATH "lib" )
-	set( QMXSTDLIB_DOC_PATH "share/doc/qmxstdlib" )
-elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
-	set( QMXSTDLIB_INCLUDE_PATH "" )
-	set( QMXSTDLIB_LIB_PATH "" )
-	set( QMXSTDLIB_DOC_PATH "" )
-elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
-	set( QMXSTDLIB_INCLUDE_PATH "" )
-	set( QMXSTDLIB_ARCHIVE_PATH "" )
-	set( QMXSTDLIB_LIB_PATH "" )
-	set( QMXSTDLIB_DOC_PATH "" )
-endif()
 
 ################################################################################################################################################################
 # Targets
