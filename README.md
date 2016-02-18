@@ -5,7 +5,7 @@
 > QuantuMatriX Software Standard Library - V1.0.0
 > Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
 >
-> This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMX Software website at 'software.qmxtech.com'.
+> This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMX Software website at 'https://software.qmxtech.com/'.
 >
 > 'QMXStdLib' is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -41,7 +41,7 @@
 
 ## Building
 
-> The source release for QMXStdLib may be downloaded from: 'https://git.qmxtech.com/open-source/qmxstdlib'.
+> The source release for QMXStdLib may be downloaded from the website link listed under 'Contacts and Support'.
 >
 > To build using CMake, use the following steps:
 >
@@ -67,13 +67,13 @@
 
 ## Installing and Uninstalling
 
-> To install on any platform, use the 'install' target of the generated project files.  To uninstall on any platform, use the 'uninstall' target of the generated project files.
+> To install on any platform, use the 'install' target of the generated project files.  To uninstall on any platform, use the 'uninstall' target of the generated project files.  Note that on a GNU Linux platform, you will need to run 'ldconfig' after the installation process; otherwise, the system will not be able to locate the new libraries.
 
 ## Contacts and Support
 
-> * Site: 'https://software.qmxtech.com/'
-> * Forums: 'https://forums.qmxtech.com/'
-> * Bug Tracker: 'https://bugzilla.qmxtech.com/'
+> * Site: 'https://software.qmxtech.com/qmxstdlib/'
+> * Forums: 'https://forums.qmxtech.com/qmxstdlib/'
+> * Bug Tracker: 'https://bugs.qmxtech.com/qmxstdlib/'
 > * Email: 'support@qmxtech.com'
 
 ## Event Messages

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXStdLib.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 28JAN16 by Robert M. Baker
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 18FEB16 by Robert M. Baker
 // Version : 1.0.0
 // This is the main header file for 'QMXStdLib'; it is for users of the library as a convenient way to include all headers.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
+  * @date    Last Modified : 18FEB16 by Robert M. Baker
   * @version 1.0.0
   *
   * @brief This is the main header file for 'QMXStdLib' which includes all the other necessary headers.
@@ -53,7 +53,7 @@
   *   its specific usefulness to be determined.
   *
   * @subsection Subsection0000_0000 Contact Info
-  * 	For more information about this library, check out the <a href="http://software.qmxtech.com/">QMX Software</a> web site.
+  * 	For more information about this library, check out the <a href="https://software.qmxtech.com/">QMX Software</a> web site.
   */
 
 #ifndef __QMX_QMXSTDLIB_QMXSTDLIB_HPP_
