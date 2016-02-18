@@ -1,6 +1,6 @@
 ################################################################################################################################################################
 # CMakeLists.txt
-# Robert M. Baker | Created : 10DEC11 | Last Modified : 17FEB16 by Robert M. Baker
+# Robert M. Baker | Created : 10DEC11 | Last Modified : 18FEB16 by Robert M. Baker
 # Version : 1.0.0
 # This is a CMake script for building 'QMXStdLib'.
 ################################################################################################################################################################
@@ -17,242 +17,409 @@
 # You should have received a copy of the GNU Lesser General Public License along with 'QMXStdLib'.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################################################################################################
 
+# TODO (Malachy - Priority 100): Create install/uninstall targets.
+# TODO (Malachy - Priority 50): Complete and test for Apple Mac OS X platform.
+# TODO (Malachy - Priority 50): Complete and test for Microsoft Windows platform.
+
 ################################################################################################################################################################
 # Setup
 ################################################################################################################################################################
 
 cmake_minimum_required( VERSION 3.4 )
-project( QMXStdLib C CXX )
-find_package ( Threads REQUIRED )
-set( DoUnitTests false
-     CACHE BOOL
-     "If 'true' build unit tests; otherwise, build library." )
-set( MaxBufferSize "1024"
-     CACHE STRING
-     "Maximum default size for a c-string buffer." )
-set( ConsoleIODefInputType "ConsoleIO::Range"
-     CACHE STRING
-     "Default input type for the 'ConsoleIO::GetInput' method." )
-set( ConsoleIODefChoices "\"A, B, C, D, or E\""
-     CACHE STRING
-     "Default set of choices for the 'ConsoleIO::GetInput' method." )
-configure_file( "${QMXStdLib_SOURCE_DIR}/Config.hpp.in"
-                "${QMXStdLib_SOURCE_DIR}/include/Config.hpp" )
+
+if( NOT "${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}/build" )
+	message( FATAL_ERROR "You must build the project from '${CMAKE_SOURCE_DIR}/build'!  See 'README.md' for build instructions." )
+endif()
+
+project( QMXSTDLIB VERSION 1.0.0 LANGUAGES C CXX )
+find_package( Threads REQUIRED )
+find_package( Boost 1.60.0 REQUIRED )
+find_package( GTest 1.7.0 REQUIRED )
+find_package( Doxygen )
+set( CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true )
+set( MAX_BUFFER_SIZE "1024" CACHE STRING "Maximum default size for a c-string buffer." )
+set( CONSOLEIO_DEF_INPUT_TYPE "ConsoleIO::Range" CACHE STRING "Default input type for the 'ConsoleIO::GetInput' method." )
+set( CONSOLEIO_DEF_CHOICES "\"A, B, C, D, or E\"" CACHE STRING "Default set of choices for the 'ConsoleIO::GetInput' method." )
+configure_file( "Config.hpp.in" "../include/Config.hpp" )
+
+if( DOXYGEN_FOUND )
+	configure_file( "Doxyfile.in" "../Doxyfile" @ONLY )
+endif()
+
+set( QMXSTDLIB_SOURCES
+     "src/ConsoleIO.cpp"
+     "src/DynamicLibrary.cpp"
+     "src/FileSystem.cpp"
+     "src/PluginManager.cpp"
+     "src/ProgramOptions.cpp"
+     "src/QMXException.cpp"
+     "src/StackTracer.cpp"
+     "src/String.cpp"
+     "src/Timer.cpp"
+     "src/Utility.cpp" )
+set( QMXSTDLIB_LIBRARIES
+     "${CMAKE_DL_LIBS}"
+     "boost_filesystem"
+     "boost_locale"
+     "boost_system"
+     "boost_thread"
+     "boost_timer" )
+set( QMXSTDLIB_TEST_SOURCES
+     "test/src/ConsoleIOTest.cpp"
+     "test/src/DynamicLibraryTest.cpp"
+     "test/src/FileSystemTest.cpp"
+     "test/src/Main.cpp"
+     "test/src/NumericTest.cpp"
+     "test/src/PluginManagerTest.cpp"
+     "test/src/ProgramOptionsTest.cpp"
+     "test/src/QMXExceptionTest.cpp"
+     "test/src/SequencerTest.cpp"
+     "test/src/StackTracerTest.cpp"
+     "test/src/StringTest.cpp"
+     "test/src/TimerTest.cpp"
+     "test/src/UniqueRandomTest.cpp"
+     "test/src/UtilityTest.cpp" )
+set( QMXSTDLIB_TEST_LIBRARIES
+     "${CMAKE_THREAD_LIBS_INIT}"
+     "boost_filesystem"
+     "boost_locale"
+     "boost_system"
+     "boost_thread"
+     "gtest" )
+set( COMPILE_FLAGS_DEBUG "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
+set( COMPILE_FLAGS_RELWITHDEBINFO "-std=c++11 -O2 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
+set( COMPILE_FLAGS_RELEASE "-std=c++11 -O3 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
+set( COMPILE_FLAGS_MINSIZEREL "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
+set( LINK_FLAGS_DEBUG "-z defs" )
+set( LINK_FLAGS_RELWITHDEBINFO "-z defs" )
+set( LINK_FLAGS_RELEASE "-z defs -s" )
+set( LINK_FLAGS_MINSIZEREL "-z defs -s" )
+
+if( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+	set( QMXSTDLIB_INCLUDE_PATH "include/qmxstdlib" )
+	set( QMXSTDLIB_LIB_PATH "lib" )
+	set( QMXSTDLIB_DOC_PATH "share/doc/qmxstdlib" )
+elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
+	set( QMXSTDLIB_INCLUDE_PATH "" )
+	set( QMXSTDLIB_LIB_PATH "" )
+	set( QMXSTDLIB_DOC_PATH "" )
+elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
+	set( QMXSTDLIB_INCLUDE_PATH "" )
+	set( QMXSTDLIB_ARCHIVE_PATH "" )
+	set( QMXSTDLIB_LIB_PATH "" )
+	set( QMXSTDLIB_DOC_PATH "" )
+endif()
 
 ################################################################################################################################################################
 # Targets
 ################################################################################################################################################################
 
-if( NOT DoUnitTests )
-	add_library( qmxstdlib SHARED
-	             "src/ConsoleIO.cpp"
-	             "src/DynamicLibrary.cpp"
-	             "src/FileSystem.cpp"
-	             "src/PluginManager.cpp"
-	             "src/ProgramOptions.cpp"
-	             "src/QMXException.cpp"
-	             "src/StackTracer.cpp"
-	             "src/String.cpp"
-	             "src/Timer.cpp"
-	             "src/Utility.cpp" )
-	target_include_directories( qmxstdlib PRIVATE "${QMXStdLib_SOURCE_DIR}/include/" )
-	target_link_libraries( qmxstdlib
-	                       "${CMAKE_DL_LIBS}"
-	                       "boost_filesystem"
-	                       "boost_locale"
-	                       "boost_system"
-	                       "boost_thread"
-	                       "boost_timer" )
-	set_target_properties( qmxstdlib PROPERTIES
-	                       VERSION "1.0.0"
-	                       SOVERSION "1" )
+# QMXStdLib
 
-	if( CMAKE_BUILD_TYPE MATCHES "Debug" )
-		set_target_properties( qmxstdlib PROPERTIES
-		                       OUTPUT_NAME "qmxstdlib_d"
-		                       COMPILE_FLAGS "-std=c++11 -g -Wall -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
-	elseif( CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo" )
-		set_target_properties( qmxstdlib PROPERTIES
-		                       OUTPUT_NAME "qmxstdlib_d"
-		                       COMPILE_FLAGS "-std=c++11 -Og -g -Wall -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
-	elseif( CMAKE_BUILD_TYPE MATCHES "Release" )
-		set_target_properties( qmxstdlib PROPERTIES
-		                       OUTPUT_NAME "qmxstdlib"
-		                       COMPILE_FLAGS "-std=c++11 -O2 -Wall -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
-	elseif( CMAKE_BUILD_TYPE MATCHES "MinSizeRel" )
-		set_target_properties( qmxstdlib PROPERTIES
-		                       OUTPUT_NAME "qmxstdlib"
-		                       COMPILE_FLAGS "-std=c++11 -Os -Wall -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
-	else()
-		message( "Warning: Using unsupported value for 'CMAKE_BUILD_TYPE'!" )
-	endif()
-else()
-	add_library( TestPlugin1 SHARED
-	             "test/src/TestPlugins/TestPlugin1.cpp" )
-	target_include_directories( TestPlugin1 PRIVATE "${QMXStdLib_SOURCE_DIR}/test/include/" )
-	target_link_libraries( TestPlugin1
-	                       "boost_system" )
-	set_target_properties( TestPlugin1 PROPERTIES
-	                       PREFIX "" )
+add_library( debug SHARED ${QMXSTDLIB_SOURCES} )
+target_include_directories( debug PRIVATE "include/" )
+target_link_libraries( debug ${QMXSTDLIB_LIBRARIES} )
+set_target_properties( debug PROPERTIES
+                       VERSION "${QMXSTDLIB_VERSION_MAJOR}.${QMXSTDLIB_VERSION_MINOR}.${QMXSTDLIB_VERSION_PATCH}"
+                       SOVERSION "${QMXSTDLIB_VERSION_MAJOR}" )
+set_target_properties( debug PROPERTIES
+                       OUTPUT_NAME "qmxstdlib_d"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
+                       LINK_FLAGS ${LINK_FLAGS_DEBUG} )
 
-	add_library( TestPlugin2 SHARED
-	             "test/src/TestPlugins/TestPlugin2.cpp" )
-	target_include_directories( TestPlugin2 PRIVATE "${QMXStdLib_SOURCE_DIR}/test/include/" )
-	target_link_libraries( TestPlugin2
-	                       "boost_system" )
-	set_target_properties( TestPlugin2 PROPERTIES
-	                       PREFIX "" )
+add_library( relwithdebinfo SHARED ${QMXSTDLIB_SOURCES} )
+target_include_directories( relwithdebinfo PRIVATE "include/" )
+target_link_libraries( relwithdebinfo ${QMXSTDLIB_LIBRARIES} )
+set_target_properties( relwithdebinfo PROPERTIES
+                       VERSION "${QMXSTDLIB_VERSION_MAJOR}.${QMXSTDLIB_VERSION_MINOR}.${QMXSTDLIB_VERSION_PATCH}"
+                       SOVERSION "${QMXSTDLIB_VERSION_MAJOR}" )
+set_target_properties( relwithdebinfo PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       OUTPUT_NAME "qmxstdlib"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELWITHDEBINFO}
+                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO} )
 
-	add_library( TestPlugin3 SHARED
-	             "test/src/TestPlugins/TestPlugin3.cpp" )
-	target_include_directories( TestPlugin3 PRIVATE "${QMXStdLib_SOURCE_DIR}/test/include/" )
-	target_link_libraries( TestPlugin3
-	                       "boost_system" )
-	set_target_properties( TestPlugin3 PROPERTIES
-	                       PREFIX "" )
+add_library( release SHARED ${QMXSTDLIB_SOURCES} )
+target_include_directories( release PRIVATE "include/" )
+target_link_libraries( release ${QMXSTDLIB_LIBRARIES} )
+set_target_properties( release PROPERTIES
+                       VERSION "${QMXSTDLIB_VERSION_MAJOR}.${QMXSTDLIB_VERSION_MINOR}.${QMXSTDLIB_VERSION_PATCH}"
+                       SOVERSION "${QMXSTDLIB_VERSION_MAJOR}" )
+set_target_properties( release PROPERTIES
+                       OUTPUT_NAME "qmxstdlib"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
+                       LINK_FLAGS ${LINK_FLAGS_RELEASE} )
 
-	add_executable( qmxstdlib_test
-	                "test/src/ConsoleIOTest.cpp"
-	                "test/src/DynamicLibraryTest.cpp"
-	                "test/src/FileSystemTest.cpp"
-	                "test/src/Main.cpp"
-	                "test/src/NumericTest.cpp"
-	                "test/src/PluginManagerTest.cpp"
-	                "test/src/ProgramOptionsTest.cpp"
-	                "test/src/QMXExceptionTest.cpp"
-	                "test/src/SequencerTest.cpp"
-	                "test/src/StackTracerTest.cpp"
-	                "test/src/StringTest.cpp"
-	                "test/src/TimerTest.cpp"
-	                "test/src/UniqueRandomTest.cpp"
-	                "test/src/UtilityTest.cpp" )
-	target_include_directories( qmxstdlib_test PRIVATE "${QMXStdLib_SOURCE_DIR}/test/include/" )
-	target_link_libraries( qmxstdlib_test
-	                       "${CMAKE_THREAD_LIBS_INIT}"
-	                       "boost_filesystem"
-	                       "boost_locale"
-	                       "boost_system"
-	                       "boost_thread"
-	                       "gtest" )
+add_library( minesizerel SHARED ${QMXSTDLIB_SOURCES} )
+target_include_directories( minesizerel PRIVATE "include/" )
+target_link_libraries( minesizerel ${QMXSTDLIB_LIBRARIES} )
+set_target_properties( minesizerel PROPERTIES
+                       VERSION "${QMXSTDLIB_VERSION_MAJOR}.${QMXSTDLIB_VERSION_MINOR}.${QMXSTDLIB_VERSION_PATCH}"
+                       SOVERSION "${QMXSTDLIB_VERSION_MAJOR}" )
+set_target_properties( minesizerel PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       OUTPUT_NAME "qmxstdlib"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_MINSIZEREL}
+                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL} )
 
-	if( CMAKE_BUILD_TYPE MATCHES "Debug" )
-		target_link_libraries( TestPlugin1
-		                       "qmxstdlib_d" )
-		set_target_properties( TestPlugin1 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
+# TestPlugin1
 
-		target_link_libraries( TestPlugin2
-		                       "qmxstdlib_d" )
-		set_target_properties( TestPlugin2 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
+add_library( testplugin1_debug SHARED "test/src/TestPlugins/TestPlugin1.cpp" )
+target_include_directories( testplugin1_debug PRIVATE "test/include/" )
+target_link_libraries( testplugin1_debug "boost_system" "qmxstdlib_d" )
+set_target_properties( testplugin1_debug PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/debug/"
+                       OUTPUT_NAME "TestPlugin1"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
+                       LINK_FLAGS ${LINK_FLAGS_DEBUG} )
+add_dependencies( testplugin1_debug debug )
 
-		target_link_libraries( TestPlugin3
-		                       "qmxstdlib_d" )
-		set_target_properties( TestPlugin3 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
+add_library( testplugin1_relwithdebinfo SHARED "test/src/TestPlugins/TestPlugin1.cpp" )
+target_include_directories( testplugin1_relwithdebinfo PRIVATE "test/include/" )
+target_link_libraries( testplugin1_relwithdebinfo "boost_system" "qmxstdlib_d" )
+set_target_properties( testplugin1_relwithdebinfo PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/debug/"
+                       OUTPUT_NAME "TestPlugin1"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELWITHDEBINFO}
+                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO} )
+add_dependencies( testplugin1_relwithdebinfo relwithdebinfo )
 
-		target_link_libraries( qmxstdlib_test
-		                       "qmxstdlib_d" )
-		set_target_properties( qmxstdlib_test PROPERTIES
-		                       RUNTIME_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/bin/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
-	elseif( CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo" )
-		target_link_libraries( TestPlugin1
-		                       "qmxstdlib_d" )
-		set_target_properties( TestPlugin1 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -Og -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
+add_library( testplugin1_release SHARED "test/src/TestPlugins/TestPlugin1.cpp" )
+target_include_directories( testplugin1_release PRIVATE "test/include/" )
+target_link_libraries( testplugin1_release "boost_system" "qmxstdlib" )
+set_target_properties( testplugin1_release PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/release/"
+                       OUTPUT_NAME "TestPlugin1"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
+                       LINK_FLAGS ${LINK_FLAGS_RELEASE} )
+add_dependencies( testplugin1_release release )
 
-		target_link_libraries( TestPlugin2
-		                       "qmxstdlib_d" )
-		set_target_properties( TestPlugin2 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -Og -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
+add_library( testplugin1_minsizerel SHARED "test/src/TestPlugins/TestPlugin1.cpp" )
+target_include_directories( testplugin1_minsizerel PRIVATE "test/include/" )
+target_link_libraries( testplugin1_minsizerel "boost_system" "qmxstdlib" )
+set_target_properties( testplugin1_minsizerel PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/release/"
+                       OUTPUT_NAME "TestPlugin1"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_MINSIZEREL}
+                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL} )
+add_dependencies( testplugin1_minsizerel minesizerel )
 
-		target_link_libraries( TestPlugin3
-		                       "qmxstdlib_d" )
-		set_target_properties( TestPlugin3 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -Og -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs" )
+# TestPlugin2
 
-		target_link_libraries( qmxstdlib_test
-		                       "qmxstdlib_d" )
-		set_target_properties( qmxstdlib_test PROPERTIES
-		                       RUNTIME_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/bin/debug/"
-		                       COMPILE_FLAGS "-std=c++11 -Og -g -Wall -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED" )
-	elseif( CMAKE_BUILD_TYPE MATCHES "Release" )
-		target_link_libraries( TestPlugin1
-		                       "qmxstdlib" )
-		set_target_properties( TestPlugin1 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/release/"
-		                       COMPILE_FLAGS "-std=c++11 -O2 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
+add_library( testplugin2_debug SHARED "test/src/TestPlugins/TestPlugin2.cpp" )
+target_include_directories( testplugin2_debug PRIVATE "test/include/" )
+target_link_libraries( testplugin2_debug "boost_system" "qmxstdlib_d" )
+set_target_properties( testplugin2_debug PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/debug/"
+                       OUTPUT_NAME "TestPlugin2"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
+                       LINK_FLAGS ${LINK_FLAGS_DEBUG} )
+add_dependencies( testplugin2_debug debug )
 
-		target_link_libraries( TestPlugin2
-		                       "qmxstdlib" )
-		set_target_properties( TestPlugin2 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/release/"
-		                       COMPILE_FLAGS "-std=c++11 -O2 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
+add_library( testplugin2_relwithdebinfo SHARED "test/src/TestPlugins/TestPlugin2.cpp" )
+target_include_directories( testplugin2_relwithdebinfo PRIVATE "test/include/" )
+target_link_libraries( testplugin2_relwithdebinfo "boost_system" "qmxstdlib_d" )
+set_target_properties( testplugin2_relwithdebinfo PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/debug/"
+                       OUTPUT_NAME "TestPlugin2"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELWITHDEBINFO}
+                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO} )
+add_dependencies( testplugin2_relwithdebinfo relwithdebinfo )
 
-		target_link_libraries( TestPlugin3
-		                       "qmxstdlib" )
-		set_target_properties( TestPlugin3 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/release/"
-		                       COMPILE_FLAGS "-std=c++11 -O2 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
+add_library( testplugin2_release SHARED "test/src/TestPlugins/TestPlugin2.cpp" )
+target_include_directories( testplugin2_release PRIVATE "test/include/" )
+target_link_libraries( testplugin2_release "boost_system" "qmxstdlib" )
+set_target_properties( testplugin2_release PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/release/"
+                       OUTPUT_NAME "TestPlugin2"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
+                       LINK_FLAGS ${LINK_FLAGS_RELEASE} )
+add_dependencies( testplugin2_release release )
 
-		target_link_libraries( qmxstdlib_test
-		                       "qmxstdlib" )
-		set_target_properties( qmxstdlib_test PROPERTIES
-		                       RUNTIME_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/bin/release/"
-		                       COMPILE_FLAGS "-std=c++11 -O2 -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-s" )
-	elseif( CMAKE_BUILD_TYPE MATCHES "MinSizeRel" )
-		target_link_libraries( TestPlugin1
-		                       "qmxstdlib" )
-		set_target_properties( TestPlugin1 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/release/"
-		                       COMPILE_FLAGS "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
+add_library( testplugin2_minesizerel SHARED "test/src/TestPlugins/TestPlugin2.cpp" )
+target_include_directories( testplugin2_minesizerel PRIVATE "test/include/" )
+target_link_libraries( testplugin2_minesizerel "boost_system" "qmxstdlib" )
+set_target_properties( testplugin2_minesizerel PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/release/"
+                       OUTPUT_NAME "TestPlugin2"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_MINSIZEREL}
+                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL} )
+add_dependencies( testplugin2_minesizerel minesizerel )
 
-		target_link_libraries( TestPlugin2
-		                       "qmxstdlib" )
-		set_target_properties( TestPlugin2 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/release/"
-		                       COMPILE_FLAGS "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
+# TestPlugin3
 
-		target_link_libraries( TestPlugin3
-		                       "qmxstdlib" )
-		set_target_properties( TestPlugin3 PROPERTIES
-		                       LIBRARY_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/TestDirectory/TestPlugins/release/"
-		                       COMPILE_FLAGS "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-z defs -s" )
+add_library( testplugin3_debug SHARED "test/src/TestPlugins/TestPlugin3.cpp" )
+target_include_directories( testplugin3_debug PRIVATE "test/include/" )
+target_link_libraries( testplugin3_debug "boost_system" "qmxstdlib_d" )
+set_target_properties( testplugin3_debug PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/debug/"
+                       OUTPUT_NAME "TestPlugin3"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
+                       LINK_FLAGS ${LINK_FLAGS_DEBUG} )
+add_dependencies( testplugin3_debug debug )
 
-		target_link_libraries( qmxstdlib_test
-		                       "qmxstdlib" )
-		set_target_properties( qmxstdlib_test PROPERTIES
-		                       RUNTIME_OUTPUT_DIRECTORY "${QMXStdLib_SOURCE_DIR}/test/bin/release/"
-		                       COMPILE_FLAGS "-std=c++11 -Os -Wall -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG -DBOOST_FILESYSTEM_NO_DEPRECATED"
-		                       LINK_FLAGS "-s" )
-	else()
-		message( "Warning: Using unsupported value for 'CMAKE_BUILD_TYPE'!" )
-	endif()
+add_library( testplugin3_relwithdebinfo SHARED "test/src/TestPlugins/TestPlugin3.cpp" )
+target_include_directories( testplugin3_relwithdebinfo PRIVATE "test/include/" )
+target_link_libraries( testplugin3_relwithdebinfo "boost_system" "qmxstdlib_d" )
+set_target_properties( testplugin3_relwithdebinfo PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/debug/"
+                       OUTPUT_NAME "TestPlugin3"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELWITHDEBINFO}
+                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO} )
+add_dependencies( testplugin3_relwithdebinfo relwithdebinfo )
+
+add_library( testplugin3_release SHARED "test/src/TestPlugins/TestPlugin3.cpp" )
+target_include_directories( testplugin3_release PRIVATE "test/include/" )
+target_link_libraries( testplugin3_release "boost_system" "qmxstdlib" )
+set_target_properties( testplugin3_release PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/release/"
+                       OUTPUT_NAME "TestPlugin3"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
+                       LINK_FLAGS ${LINK_FLAGS_RELEASE} )
+add_dependencies( testplugin3_release release )
+
+add_library( testplugin3_minesizerel SHARED "test/src/TestPlugins/TestPlugin3.cpp" )
+target_include_directories( testplugin3_minesizerel PRIVATE "test/include/" )
+target_link_libraries( testplugin3_minesizerel "boost_system" "qmxstdlib" )
+set_target_properties( testplugin3_minesizerel PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       PREFIX ""
+                       LIBRARY_OUTPUT_DIRECTORY "../test/TestDirectory/TestPlugins/release/"
+                       OUTPUT_NAME "TestPlugin3"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_MINSIZEREL}
+                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL} )
+add_dependencies( testplugin3_minesizerel minesizerel )
+
+# QMXStdLibTest
+
+add_executable( qmxstdlib_test_debug ${QMXSTDLIB_TEST_SOURCES} )
+target_include_directories( qmxstdlib_test_debug PRIVATE "test/include/" )
+target_link_libraries( qmxstdlib_test_debug ${QMXSTDLIB_TEST_LIBRARIES} "qmxstdlib_d" )
+set_target_properties( qmxstdlib_test_debug PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       RUNTIME_OUTPUT_DIRECTORY "../test/bin/debug/"
+                       OUTPUT_NAME "qmxstdlib_test"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
+                       LINK_FLAGS ${LINK_FLAGS_DEBUG} )
+add_dependencies( qmxstdlib_test_debug debug testplugin1_debug testplugin2_debug testplugin3_debug )
+
+add_executable( qmxstdlib_test_relwithdebinfo ${QMXSTDLIB_TEST_SOURCES} )
+target_include_directories( qmxstdlib_test_relwithdebinfo PRIVATE "test/include/" )
+target_link_libraries( qmxstdlib_test_relwithdebinfo ${QMXSTDLIB_TEST_LIBRARIES} "qmxstdlib_d" )
+set_target_properties( qmxstdlib_test_relwithdebinfo PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       RUNTIME_OUTPUT_DIRECTORY "../test/bin/debug/"
+                       OUTPUT_NAME "qmxstdlib_test"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELWITHDEBINFO}
+                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO} )
+add_dependencies( qmxstdlib_test_relwithdebinfo relwithdebinfo testplugin1_relwithdebinfo testplugin2_relwithdebinfo testplugin3_relwithdebinfo )
+
+add_executable( qmxstdlib_test_release ${QMXSTDLIB_TEST_SOURCES} )
+target_include_directories( qmxstdlib_test_release PRIVATE "test/include/" )
+target_link_libraries( qmxstdlib_test_release ${QMXSTDLIB_TEST_LIBRARIES} "qmxstdlib" )
+set_target_properties( qmxstdlib_test_release PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       RUNTIME_OUTPUT_DIRECTORY "../test/bin/release/"
+                       OUTPUT_NAME "qmxstdlib_test"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
+                       LINK_FLAGS ${LINK_FLAGS_RELEASE} )
+add_dependencies( qmxstdlib_test_release release testplugin1_release testplugin2_release testplugin3_release )
+
+add_executable( qmxstdlib_test_minesizerel ${QMXSTDLIB_TEST_SOURCES} )
+target_include_directories( qmxstdlib_test_minesizerel PRIVATE "test/include/" )
+target_link_libraries( qmxstdlib_test_minesizerel ${QMXSTDLIB_TEST_LIBRARIES} "qmxstdlib" )
+set_target_properties( qmxstdlib_test_minesizerel PROPERTIES
+                       EXCLUDE_FROM_ALL true
+                       EXCLUDE_FROM_DEFAULT_BUILD true
+                       RUNTIME_OUTPUT_DIRECTORY "../test/bin/release/"
+                       OUTPUT_NAME "qmxstdlib_test"
+                       COMPILE_FLAGS ${COMPILE_FLAGS_MINSIZEREL}
+                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL} )
+add_dependencies( qmxstdlib_test_minesizerel minesizerel testplugin1_minsizerel testplugin2_minesizerel testplugin3_minesizerel )
+
+# Doxygen Documentation
+
+if( DOXYGEN_FOUND )
+	add_custom_target( doc ${DOXYGEN_EXECUTABLE} "${QMXSTDLIB_SOURCE_DIR}/Doxyfile"
+	                   WORKING_DIRECTORY "${QMXSTDLIB_SOURCE_DIR}" COMMENT "Generating Doxygen documentation ..." VERBATIM )
 endif()
+
+# Unit Tests
+
+add_custom_target( tests_debug
+                   DEPENDS debug testplugin1_debug testplugin2_debug testplugin3_debug qmxstdlib_test_debug )
+
+add_custom_target( tests_relwithdebinfo
+                   DEPENDS relwithdebinfo testplugin1_relwithdebinfo testplugin2_relwithdebinfo testplugin3_relwithdebinfo qmxstdlib_test_relwithdebinfo )
+
+add_custom_target( tests_release
+                   DEPENDS release testplugin1_release testplugin2_release testplugin3_release qmxstdlib_test_release )
+
+add_custom_target( tests_minsizerel
+                   DEPENDS minesizerel testplugin1_minsizerel testplugin2_minesizerel testplugin3_minesizerel qmxstdlib_test_minesizerel )
+
+# Installation
+
+install( DIRECTORY "include/" DESTINATION "${QMXSTDLIB_INCLUDE_PATH}" FILES_MATCHING PATTERN "*.hpp" )
+
+if( ( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" ) OR ( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" ) )
+	install( TARGETS debug LIBRARY DESTINATION "${QMXSTDLIB_LIB_PATH}" OPTIONAL )
+	install( TARGETS release LIBRARY DESTINATION "${QMXSTDLIB_LIB_PATH}" OPTIONAL )
+elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
+	install( TARGETS debug ARCHIVE DESTINATION "${QMXSTDLIB_ARCHIVE_PATH}" RUNTIME DESTINATION "${QMXSTDLIB_LIB_PATH}" OPTIONAL )
+	install( TARGETS release ARCHIVE DESTINATION "${QMXSTDLIB_ARCHIVE_PATH}" RUNTIME DESTINATION "${QMXSTDLIB_LIB_PATH}" OPTIONAL )
+endif()
+
+install( FILES "CHANGELOG" "CONTRIBUTING.md" "LICENSE" "README.md" DESTINATION "${QMXSTDLIB_DOC_PATH}" )
+install( DIRECTORY "doc/" DESTINATION "${QMXSTDLIB_DOC_PATH}" PATTERN "uml" EXCLUDE )
+install( DIRECTORY "build/doc/html" DESTINATION "${QMXSTDLIB_DOC_PATH}" OPTIONAL FILES_MATCHING REGEX ".*[.][chjp][nst][gms]*[l]*" )
+
+# Uninstallation
+
+add_custom_target( uninstall
+                   COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${QMXSTDLIB_INCLUDE_PATH}"
+                   COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_INSTALL_PREFIX}/${QMXSTDLIB_LIB_PATH}/*qmxstdlib*"
+                   COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${QMXSTDLIB_DOC_PATH}"
+                   COMMENT "Uninstalling the project ..." VERBATIM )
 
 ################################################################################################################################################################
 # End of 'CMakeLists.txt'

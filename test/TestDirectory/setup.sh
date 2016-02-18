@@ -1,7 +1,7 @@
 #! /bin/bash
 ################################################################################################################################################################
 # install.sh
-# Robert M. Baker | Created : 15FEB16 | Last Modified : 16FEB16 by Robert M. Baker
+# Robert M. Baker | Created : 15FEB16 | Last Modified : 18FEB16 by Robert M. Baker
 # Version : 1.0.0
 # This is a bash script for setup/cleanup of the test directory for 'QMXStdLibTest'.
 ################################################################################################################################################################
@@ -45,7 +45,7 @@ DoAbort()
 		echo -e
 		echo -e "   -h, --help        Display this help text and exit."
 		echo -e
-		echo -e "   'PLATFORM' must be one of: 'lin' (GNU Linux), 'mac' (Apple Mac OS X), or 'win' (Microsoft Windows)"
+		echo -e "   'PLATFORM' must be one of: 'lin' (GNU Linux) or 'mac' (Apple Mac OS X)"
 		echo -e "   'MODE' must be one of: 0 (Setup) or 1 (Cleanup)"
 
 	# Exit script with specified abort code.
@@ -100,20 +100,6 @@ DoCleanupMac()
 		echo -e "Stub: Perform Apple Mac OS X cleanup."
 }
 
-DoSetupWin()
-{
-	# Perform setup on a Microsoft Windows platform.
-
-		echo -e "Stub: Perform Microsoft Windows setup."
-}
-
-DoCleanupWin()
-{
-	# Perform cleanup on a Microsoft Windows platform.
-
-		echo -e "Stub: Perform Microsoft Windows cleanup."
-}
-
 ################################################################################################################################################################
 # Arguments Check
 ################################################################################################################################################################
@@ -124,7 +110,7 @@ elif [[ ( ${1} == "-h" ) || ( ${1} == "--help" ) ]]; then
 	DoAbort "Display help text and exit." 0
 elif [[ ${#} < 2 ]]; then
 	DoAbort "Incorrect number of arguments specified!" 2
-elif [[ ( ${Platform} != "lin" ) && ( ${Platform} != "mac" ) && ( ${Platform} != "win" ) ]]; then
+elif [[ ( ${Platform} != "lin" ) && ( ${Platform} != "mac" ) ]]; then
 	DoAbort "Unsupported platform ( '${Platform}' ) specified!" 3
 elif [[ ( ${Mode} < 0 ) || ( ${Mode} > 1 ) ]]; then
 	DoAbort "Unknown mode ( '${Mode}' ) specified!" 4
@@ -141,16 +127,12 @@ if [[ ${Mode} == 0 ]]; then
 		DoSetupLin
 	elif [[ ${Platform} == "mac" ]]; then
 		DoSetupMac
-	else
-		DoSetupWin
 	fi
 else
 	if [[ ${Platform} == "lin" ]]; then
 		DoCleanupLin
 	elif [[ ${Platform} == "mac" ]]; then
 		DoCleanupMac
-	else
-		DoCleanupWin
 	fi
 fi
 

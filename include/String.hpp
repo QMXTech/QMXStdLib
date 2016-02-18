@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 28JAN16 by Robert M. Baker
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 17FEB16 by Robert M. Baker
 // Version : 1.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
+  * @date    Last Modified : 17FEB16 by Robert M. Baker
   * @version 1.0.0
   *
   * @brief This header file defines the interface for a set of string utility functions.
@@ -224,7 +224,7 @@ void Tokenize( StringDeque& Tokens, const std::string& Target );
   * @param Target
   * 	This is the string to convert into a numeric value.
   *
-  * @param TargetBase
+  * @param Base
   * 	This is the numeric base to use during the conversion; if it is out-of-range, it will be set to decimal.
   *
   * @return
