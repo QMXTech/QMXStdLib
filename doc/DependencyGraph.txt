@@ -1,36 +1,27 @@
-QMXException
-StackTracer
-Numeric
-ConsoleIO
-String
-FileSystem
-DynamicLibrary
-Timer
-Utility
-PluginManager
-ProgramOptions
-Sequencer
-UniqueRandom
+Dependency Graph and Unit Test Checklist
+========================================
 
-----------------
+* = Implemented
+X = Not Yet Implemented
+- = No Implementation Necessary
 
-[X] ConsoleIO
+[*] ConsoleIO
 =============
 - Numeric
 - Mixins/NonCopyable
 
-[X] DynamicLibrary
+[*] DynamicLibrary
 ==================
 - Object
 - FileSystem
 - RAII/ScopedStackTrace
 
-[X] FileSystem
+[*] FileSystem
 ==============
 - String
 - RAII/ScopedStackTrace
 
-[X] Numeric
+[*] Numeric
 ===========
 - Mixins/Stringizable
 - RAII/ScopedStackTrace
@@ -40,7 +31,7 @@ UniqueRandom
 - Mixins/Lockable
 - RAII/ScopedStackTrace
 
-[X] PluginManager
+[*] PluginManager
 =================
 - Object
 - FileSystem
@@ -50,42 +41,42 @@ UniqueRandom
 - Mixins/Plugin
 - RAII/ScopedStackTrace
 
-[X] ProgramOptions
+[*] ProgramOptions
 ==================
 - Object
 - FileSystem
 - Mixins/Singleton
 
-[X] QMXException
+[*] QMXException
 ================
 - NONE
 
-[X] Sequencer
+[*] Sequencer
 =============
 - Object
 - RAII/ScopedStackTrace
 
-[X] StackTracer
+[*] StackTracer
 ===============
 - QMXException
 
-[X] String
+[*] String
 ==========
 - Mixins/Stringizable
 - RAII/ScopedStackTrace
 
-[X] Timer
+[*] Timer
 =========
 - Object
 - RAII/ScopedStackTrace
 
-[X] UniqueRandom
+[*] UniqueRandom
 ================
 - Object
 - Numeric
 - Utility
 
-[X] Utility
+[*] Utility
 ===========
 - Timer
 
@@ -113,3 +104,22 @@ UniqueRandom
 =========================
 - Mixins/NonCopyable
 - StackTracer
+
+
+
+Order of Unit Test Implementation
+=================================
+
+- QMXException
+- StackTracer
+- Numeric
+- ConsoleIO
+- String
+- FileSystem
+- DynamicLibrary
+- Timer
+- Utility
+- PluginManager
+- ProgramOptions
+- Sequencer
+- UniqueRandom

@@ -117,13 +117,14 @@ set( PROJECT_SOURCES
      "src/String.cpp"
      "src/Timer.cpp"
      "src/Utility.cpp" )
-set( PROJECT_LIBRARIES
+set( PROJECT_LIBRARIES_DEBUG
      "${CMAKE_DL_LIBS}"
      "boost_filesystem"
      "boost_locale"
      "boost_system"
      "boost_thread"
      "boost_timer" )
+set( PROJECT_LIBRARIES_RELEASE ${PROJECT_LIBRARIES_DEBUG} )
 set( PROJECT_TEST_SOURCES
      "test/src/ConsoleIOTest.cpp"
      "test/src/DynamicLibraryTest.cpp"
@@ -139,13 +140,14 @@ set( PROJECT_TEST_SOURCES
      "test/src/TimerTest.cpp"
      "test/src/UniqueRandomTest.cpp"
      "test/src/UtilityTest.cpp" )
-set( PROJECT_TEST_LIBRARIES
+set( PROJECT_TEST_LIBRARIES_DEBUG
      "${CMAKE_THREAD_LIBS_INIT}"
      "boost_filesystem"
      "boost_locale"
      "boost_system"
      "boost_thread"
      "gtest" )
+set( PROJECT_TEST_LIBRARIES_RELEASE ${PROJECT_TEST_LIBRARIES_DEBUG} )
 
 # Configure Files
 
@@ -163,7 +165,7 @@ endif()
 
 add_library( debug SHARED ${PROJECT_SOURCES} )
 target_include_directories( debug PRIVATE "include/" )
-target_link_libraries( debug ${PROJECT_LIBRARIES} )
+target_link_libraries( debug ${PROJECT_LIBRARIES_DEBUG} )
 set_target_properties( debug PROPERTIES
                        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                        SOVERSION "${PROJECT_VERSION_MAJOR}" )
@@ -174,7 +176,7 @@ set_target_properties( debug PROPERTIES
 
 add_library( relwithdebinfo SHARED ${PROJECT_SOURCES} )
 target_include_directories( relwithdebinfo PRIVATE "include/" )
-target_link_libraries( relwithdebinfo ${PROJECT_LIBRARIES} )
+target_link_libraries( relwithdebinfo ${PROJECT_LIBRARIES_RELEASE} )
 set_target_properties( relwithdebinfo PROPERTIES
                        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                        SOVERSION "${PROJECT_VERSION_MAJOR}" )
@@ -187,7 +189,7 @@ set_target_properties( relwithdebinfo PROPERTIES
 
 add_library( release SHARED ${PROJECT_SOURCES} )
 target_include_directories( release PRIVATE "include/" )
-target_link_libraries( release ${PROJECT_LIBRARIES} )
+target_link_libraries( release ${PROJECT_LIBRARIES_RELEASE} )
 set_target_properties( release PROPERTIES
                        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                        SOVERSION "${PROJECT_VERSION_MAJOR}" )
@@ -198,7 +200,7 @@ set_target_properties( release PROPERTIES
 
 add_library( minesizerel SHARED ${PROJECT_SOURCES} )
 target_include_directories( minesizerel PRIVATE "include/" )
-target_link_libraries( minesizerel ${PROJECT_LIBRARIES} )
+target_link_libraries( minesizerel ${PROJECT_LIBRARIES_RELEASE} )
 set_target_properties( minesizerel PROPERTIES
                        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                        SOVERSION "${PROJECT_VERSION_MAJOR}" )
@@ -375,7 +377,7 @@ add_dependencies( testplugin3_minesizerel minesizerel )
 
 add_executable( project_test_debug ${PROJECT_TEST_SOURCES} )
 target_include_directories( project_test_debug PRIVATE "test/include/" )
-target_link_libraries( project_test_debug ${PROJECT_TEST_LIBRARIES} "${PROJECT_TARGET}_d" )
+target_link_libraries( project_test_debug ${PROJECT_TEST_LIBRARIES_DEBUG} "${PROJECT_TARGET}_d" )
 set_target_properties( project_test_debug PROPERTIES
                        EXCLUDE_FROM_ALL true
                        EXCLUDE_FROM_DEFAULT_BUILD true
@@ -387,7 +389,7 @@ add_dependencies( project_test_debug debug testplugin1_debug testplugin2_debug t
 
 add_executable( project_test_relwithdebinfo ${PROJECT_TEST_SOURCES} )
 target_include_directories( project_test_relwithdebinfo PRIVATE "test/include/" )
-target_link_libraries( project_test_relwithdebinfo ${PROJECT_TEST_LIBRARIES} "${PROJECT_TARGET}" )
+target_link_libraries( project_test_relwithdebinfo ${PROJECT_TEST_LIBRARIES_RELEASE} "${PROJECT_TARGET}" )
 set_target_properties( project_test_relwithdebinfo PROPERTIES
                        EXCLUDE_FROM_ALL true
                        EXCLUDE_FROM_DEFAULT_BUILD true
@@ -399,7 +401,7 @@ add_dependencies( project_test_relwithdebinfo relwithdebinfo testplugin1_relwith
 
 add_executable( project_test_release ${PROJECT_TEST_SOURCES} )
 target_include_directories( project_test_release PRIVATE "test/include/" )
-target_link_libraries( project_test_release ${PROJECT_TEST_LIBRARIES} "${PROJECT_TARGET}" )
+target_link_libraries( project_test_release ${PROJECT_TEST_LIBRARIES_RELEASE} "${PROJECT_TARGET}" )
 set_target_properties( project_test_release PROPERTIES
                        EXCLUDE_FROM_ALL true
                        EXCLUDE_FROM_DEFAULT_BUILD true
@@ -411,7 +413,7 @@ add_dependencies( project_test_release release testplugin1_release testplugin2_r
 
 add_executable( project_test_minesizerel ${PROJECT_TEST_SOURCES} )
 target_include_directories( project_test_minesizerel PRIVATE "test/include/" )
-target_link_libraries( project_test_minesizerel ${PROJECT_TEST_LIBRARIES} "${PROJECT_TARGET}" )
+target_link_libraries( project_test_minesizerel ${PROJECT_TEST_LIBRARIES_RELEASE} "${PROJECT_TARGET}" )
 set_target_properties( project_test_minesizerel PROPERTIES
                        EXCLUDE_FROM_ALL true
                        EXCLUDE_FROM_DEFAULT_BUILD true

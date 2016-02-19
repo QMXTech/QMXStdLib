@@ -21,6 +21,7 @@
 >>
 >> #### Libraries
 >> * Boost >= 1.60.0
+>> * GTest >= 1.7.0 (optional)
 >>
 >> #### Tools
 >> * CMake >= 3.4.3
@@ -35,6 +36,7 @@
 >>
 >> #### Libraries
 >> * Boost >= 1.60.0
+>> * GTest >= 1.7.0 (optional)
 >>
 >> #### Tools
 >> * CMake >= 3.4.3
