@@ -1,0 +1,31 @@
+################################################################################################################################################################
+# ProjectConfig.cmake
+# Robert M. Baker | Created : 27FEB16 | Last Modified : 27FEB16 by Robert M. Baker
+# Version : 1.1.0
+# This is a CMake package configuration script for 'QMXStdLib'.
+################################################################################################################################################################
+# Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+#
+# This file is part of 'QMXStdLib'.
+#
+# 'QMXStdLib' is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# 'QMXStdLib' is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License along with 'QMXStdLib'.  If not, see <http://www.gnu.org/licenses/>.
+################################################################################################################################################################
+
+set( @DOXYGEN_PROJECT_NAME@_VERSION @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@ )
+set( @DOXYGEN_PROJECT_NAME@_LIB_DEBUG "@PROJECT_TARGET@_d" )
+set( @DOXYGEN_PROJECT_NAME@_LIB_RELEASE "@PROJECT_TARGET@" )
+
+@PACKAGE_INIT@
+
+set_and_check( @DOXYGEN_PROJECT_NAME@_INCLUDE_PATH "@PACKAGE_PROJECT_INCLUDE_PATH@" )
+set_and_check( @DOXYGEN_PROJECT_NAME@_LIB_PATH "@PACKAGE_PROJECT_LIB_PATH@" )
+
+################################################################################################################################################################
+# End of 'ProjectConfig.cmake'
+################################################################################################################################################################

@@ -60,6 +60,7 @@
 >> * release
 >> * minsizerel
 >> * doc (builds Doxygen documentation)
+>> * tests (includes 'tests_debug' and 'tests_release' )
 >> * tests_debug
 >> * tests_relwithdebinfo
 >> * tests_release
@@ -70,6 +71,16 @@
 ## Installing and Uninstalling
 
 > To install on any platform, use the 'install' target of the generated project files.  To uninstall on any platform, use the 'uninstall' target of the generated project files.  Note that on a GNU Linux platform, you will need to run 'ldconfig' after the installation process; otherwise, the system will not be able to locate the new libraries.
+
+## CMake Package
+
+> This project provides a CMake package which can be used the the 'find_package' command.  Once found, the following variables are set:
+>
+>> * QMXStdLib_VERSION (the current library version)
+>> * QMXStdLib_LIB_DEBUG (the debug build of the library)
+>> * QMXStdLib_LIB_RELEASE (the release build of the library)
+>> * QMXStdLib_INCLUDE_PATH (the library headers path)
+>> * QMXStdLib_LIB_PATH (the library path)
 
 ## Contacts and Support
 
