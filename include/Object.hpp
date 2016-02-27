@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Object.hpp
-// Robert M. Baker | Created : 05JAN12 | Last Modified : 16FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 05JAN12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a generic base class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 05JAN12
-  * @date    Last Modified : 16FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a generic base class.
   *
@@ -127,7 +127,7 @@ public:
 		  * 	A boolean value of 'true' if this object is initialized, and 'false' otherwise.
 		  */
 
-		bool IsObjectInitialized()
+		bool IsObjectInitialized() const
 		{
 			// Report wether or not this object is initialized to calling routine.
 			
@@ -238,6 +238,20 @@ public:
 
 protected:
 
+	// Protected Fields
+
+		/**
+		  * @brief This is the flag used to determine initialization state.
+		  */
+
+		bool Initialized;
+
+		/**
+		  * @brief These are the public properties of this class.
+		  */
+
+		PPType Properties;
+
 	// Protected Methods
 
 		/**
@@ -280,20 +294,6 @@ protected:
 
 				return *this;
 		}
-
-	// Protected Fields
-
-		/**
-		  * @brief This is the flag used to determine initialization state.
-		  */
-
-		bool Initialized;
-
-		/**
-		  * @brief These are the public properties of this class.
-		  */
-
-		PPType Properties;
 
 private:
 

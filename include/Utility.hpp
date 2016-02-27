@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a general utility class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a general utility class.
   *
@@ -183,6 +183,20 @@ public:
 
 				WType WordData[ 2 ];
 		};
+
+	// Public Fields
+
+		/**
+		  * @brief This is the array of languages paired with their ISO 639-1 code.
+		  */
+
+		static const StringPair Languages[ UTILITY_LANGUAGES ];
+
+		/**
+		  * @brief This is the array of countries paired with their ISO 3166-1 alpha-2 code.
+		  */
+
+		static const StringPair Countries[ UTILITY_COUNTRIES ];
 
 	// Public Methods
 
@@ -407,7 +421,7 @@ public:
 		}
 
 		/**
-		  * @brief This template method defines the structure for a random integral number generator.
+		  * @brief This method defines the structure for a random integral number generator.
 		  *
 		  * @param Min
 		  * 	This is the minimum value of the random number.
@@ -431,7 +445,7 @@ public:
 		}
 
 		/**
-		  * @brief This template method defines the structure for a random floating point number generator.
+		  * @brief This method defines the structure for a random floating point number generator.
 		  *
 		  * @param Min
 		  * 	This is the minimum value of the random number.
@@ -454,21 +468,15 @@ public:
 				return Distro( Generator );
 		}
 
-	// Public Fields
-
-		/**
-		  * @brief This is the array of languages paired with their ISO 639-1 code.
-		  */
-
-		static const StringPair Languages[ UTILITY_LANGUAGES ];
-
-		/**
-		  * @brief This is the array of countries paired with their ISO 3166-1 alpha-2 code.
-		  */
-
-		static const StringPair Countries[ UTILITY_COUNTRIES ];
-
 private:
+
+	// Private Fields
+
+		/**
+		  * @brief This is the generator to use for the random number generation methods.
+		  */
+
+		static std::mt19937 Generator;
 
 	// Private Constructors
 
@@ -480,14 +488,6 @@ private:
 		{
 			// Do nothing.
 		}
-
-	// Private Fields
-
-		/**
-		  * @brief This is the generator to use for the random number generation methods.
-		  */
-
-		static std::mt19937 Generator;
 };
 
 } // 'QMXStdLib' Namespace

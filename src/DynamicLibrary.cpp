@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibrary.cpp
-// Robert M. Baker | Created : 15APR12 | Last Modified : 16FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 15APR12 | Last Modified : 26FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a dynamically-loaded library class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 15APR12
-  * @date    Last Modified : 16FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 26FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This source file defines the implementation for a dynamically-loaded library class.
   *
@@ -133,6 +133,10 @@ void* DynamicLibrary::GetSymbol( const std::string& Target ) const
 	// Obtain locks.
 
 		SCOPED_READ_LOCK;
+
+	// Create scoped stack traces.
+
+		SCOPED_STACK_TRACE( "DynamicLibrary::GetSymbol", 0000 );
 
 	// Create local variables.
 

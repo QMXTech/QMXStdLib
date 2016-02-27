@@ -74,11 +74,11 @@
       <data key="d5"><![CDATA[QMXStdLib::Plugin Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="390.0" width="451.0" x="162.0" y="226.0"/>
+          <y:Geometry height="412.5" width="451.0" x="162.0" y="226.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="42.56201171875" x="204.218994140625" y="25.96875">Plugin</y:NodeLabel>
-          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Mixin" use3DEffect="true">
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bolditalic" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="43.08935546875" x="203.955322265625" y="25.96875">Plugin</y:NodeLabel>
+          <y:UML clipContent="true" constraint="Abstract" omitDetails="false" stereotype="Mixin" use3DEffect="true">
             <y:AttributeLabel/>
             <y:MethodLabel>&lt;html&gt;
 &lt;p style="font-family:Calibri;font-size:15pt;"&gt;
@@ -113,7 +113,7 @@
       <data key="d5"><![CDATA[QMXStdLib::Utility::VersionData Structure]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="50.0" width="209.0" x="162.0" y="712.0"/>
+          <y:Geometry height="50.0" width="209.0" x="162.0" y="734.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="205.97998046875" x="1.510009765625" y="25.96875">QMXStdLib::Utility::VersionData</y:NodeLabel>
@@ -137,7 +137,7 @@
     <edge id="e1" source="n5" target="n6">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-121.0" sy="195.0" tx="0.0" ty="-25.0"/>
+          <y:Path sx="-121.0" sy="206.25" tx="0.0" ty="-25.0"/>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="plain"/>
           <y:BendStyle smoothed="false"/>

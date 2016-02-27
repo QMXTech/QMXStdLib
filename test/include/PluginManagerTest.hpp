@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PluginManagerTest.hpp
-// Robert M. Baker | Created : 23APR12 | Last Modified : 16FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 23APR12 | Last Modified : 23FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::PluginManager' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -27,8 +27,8 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "../../include/FileSystem.hpp"
 #include "../../include/QMXException.hpp"
+#include "../../include/FileSystem.hpp"
 #include "../../include/Utility.hpp"
 #include "../../include/PluginManager.hpp"
 

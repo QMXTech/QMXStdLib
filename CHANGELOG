@@ -13,3 +13,16 @@ Key
 17FEB16 1.0.0 Robert M. Baker <malachy@qmxtech.com>
 ===================================================
 * Initial release.
+
+
+
+27FEB16 1.1.0 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Modified various classes to use configurable values.
+~ Refactored code making use of the 'NonCopyable' mixin class to instead use C++11 method deletion. 
+~ Marked the 'NonCopyable' mixin class as deprecated in favor of C++11 method deletion.
+~ Modified 'ProgramOptions' class to allow for config files with groups.
++ Added 'SaveConfigFile' method to 'ProgramOptions' class to facilitate writing of config options to file.
++ Added 'SetConfigOption' method to 'ProgramOptions' class to facilitate setting/adding of config options at runtime.
++ Added 'RemoveConfigOption' method to 'ProgramOptions' class to facilitate removal of config options at runtime.
++ Added the 'ThreadManager' class to ease creation and management of threads and thread groups.

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracerTest.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 14FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 23FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::StackTracer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -26,7 +26,6 @@
 
 #include <gtest/gtest.h>
 
-#include "../../include/Base.hpp"
 #include "../../include/QMXException.hpp"
 #include "../../include/StackTracer.hpp"
 

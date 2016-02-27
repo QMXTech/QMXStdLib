@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIO.hpp
-// Robert M. Baker | Created : 12DEC11 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 12DEC11 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a console I/O class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 12DEC11
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a console I/O class.
   *
@@ -126,11 +126,20 @@ public:
 		  * @brief This class is a thread-safe wrapper for a console stream.
 		  */
 
-		class SynchronizedStream : public NonCopyable
+		class SynchronizedStream
 		{
 		public:
 
 			// Public Constructors
+
+				/**
+				  * @brief This is the copy constructor, which is deleted to prevent copying.
+				  *
+				  * @param Instance
+				  * 	N/A
+				  */
+
+				SynchronizedStream( const SynchronizedStream& Instance ) = delete;
 
 				/**
 				  * @brief This is the constructor which accepts a stream type.
@@ -169,6 +178,18 @@ public:
 				}
 
 			// Public Overloaded Operators
+
+				/**
+				  * @brief This is the default assignment-operator, which is deleted to prevent copying.
+				  *
+				  * @param Instance
+				  * 	N/A
+				  *
+				  * @return
+				  * 	N/A
+				  */
+
+				SynchronizedStream& operator=( const SynchronizedStream& Instance ) = delete;
 
 				/**
 				  * @brief This is the overloaded bitwise left shift operator, which redirects inputs to the specified console stream.
@@ -322,7 +343,7 @@ public:
 
 		template< typename DType > static DType GetInput( DType Min,
 		                                                  DType Max,
-		                                                  InputType Type = CONSOLEIO_DEF_INPUT_TYPE,
+		                                                  InputType Type = CONSOLEIO_DEFAULT_INPUT_TYPE,
 		                                                  const std::string& Choices = "",
 		                                                  const std::string& Prompt = "",
 		                                                  const std::string& Error = "" )
@@ -347,7 +368,7 @@ public:
 			// Set choices string if not specified.
 
 				if( ChoicesBuffer.str().empty() )
-					ChoicesBuffer.str( CONSOLEIO_DEF_CHOICES );
+					ChoicesBuffer.str( CONSOLEIO_DEFAULT_CHOICES );
 
 			// Set prompt string if not specified.
 
@@ -512,17 +533,6 @@ public:
 
 private:
 
-	// Private Constructors
-
-		/**
-		  * @brief This is the default constructor, which is made private to prevent instantiation.
-		  */
-
-		ConsoleIO()
-		{
-			// Do nothing.
-		}
-
 	// Private Fields
 
 		/**
@@ -542,6 +552,17 @@ private:
 		  */
 
 		static SharedMutex StreamMutexes[ StreamCount ];
+
+	// Private Constructors
+
+		/**
+		  * @brief This is the default constructor, which is made private to prevent instantiation.
+		  */
+
+		ConsoleIO()
+		{
+			// Do nothing.
+		}
 };
 
 } // 'QMXStdLib' Namespace

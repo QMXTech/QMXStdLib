@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystemTest.cpp
-// Robert M. Baker | Created : 12MAR12 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 12MAR12 | Last Modified : 22FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::FileSystem' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -34,14 +34,16 @@ TEST( FileSystemTest, ParseWorks )
 {
 	// Create local variables.
 
-		Path TestPathsBad[] = { "<QMX_TEST_HOME/directory/file.ext",
-		                        ">QMX_TEST_HOME</directory/file.ext",
-		                        "QMX_TEST_HOME>/directory/file.ext",
-		                        "<NON_EXISTENT_VAR>/directory/file.ext" };
-		Path TestPathsGood[] = { "<QMX_TEST_HOME>/<QMX_TEST_ALPHA>/file.ext",
-		                         "<QMX_TEST_HOME>/<QMX_TEST_BETA>/file.ext",
-		                         "<QMX_TEST_HOME>/<QMX_TEST_GAMMA>/file.ext",
-		                         "<QMX_TEST_HOME>/<QMX_TEST_DELTA>/file.ext" };
+		string DelimiterLeft( 1, FILESYSTEM_SYMBOL_DELIMITER_LEFT );
+		string DelimiterRight( 1, FILESYSTEM_SYMBOL_DELIMITER_RIGHT );
+		Path TestPathsBad[] = { ( DelimiterLeft + "QMX_TEST_HOME/directory/file.ext" ),
+		                        ( DelimiterRight + "QMX_TEST_HOME" + DelimiterLeft + "/directory/file.ext" ),
+		                        ( "QMX_TEST_HOME" + DelimiterRight + "/directory/file.ext" ),
+		                        ( DelimiterLeft + "NON_EXISTENT_VAR" + DelimiterRight + "/directory/file.ext" ) };
+		Path TestPathsGood[] = { ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_ALPHA" + DelimiterRight + "/file.ext" ),
+		                         ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_BETA" + DelimiterRight + "/file.ext" ),
+		                         ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_GAMMA" + DelimiterRight + "/file.ext" ),
+		                         ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_DELTA" + DelimiterRight + "/file.ext" ) };
 		Path ExpectedResults[] = { "/home/jdoe/foo/file.ext",
 		                           "/home/jdoe/bar/file.ext",
 		                           "/home/jdoe/baz/file.ext",

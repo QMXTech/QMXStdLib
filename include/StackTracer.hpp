@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracer.hpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a stack tracer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a stack tracer class.
   *
@@ -190,12 +190,12 @@ public:
 
 			// Add current thread to stack trace map, if its name has been properly set and has not already been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::AddThread", "00000021", BaseStackTrace );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::AddThread", "00000022", BaseStackTrace );
+				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::AddThread", "00000022", BaseStackTrace );
+				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::AddThread", "00000023", BaseStackTrace );
 				QMX_ASSERT_X( StackTraces.insert( StackTraceMap::value_type( *ThreadID, StringVector( 1, BaseStackTrace ) ) ).second,
 				              "QMXStdLib",
 				              "StackTracer::AddThread",
-				              "00000023",
+				              "00000024",
 				              *ThreadID << ", " << BaseStackTrace );
 		}
 
@@ -228,9 +228,9 @@ public:
 
 			// Remove the current thread from stack trace map, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::RemoveThread", "00000021", "" );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::RemoveThread", "00000022", "" );
-				QMX_ASSERT_X( StackTraces.erase( *ThreadID ), "QMXStdLib", "StackTracer::RemoveThread", "00000024", *ThreadID );
+				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::RemoveThread", "00000022", "" );
+				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::RemoveThread", "00000023", "" );
+				QMX_ASSERT_X( StackTraces.erase( *ThreadID ), "QMXStdLib", "StackTracer::RemoveThread", "00000025", *ThreadID );
 		}
 
 		/**
@@ -269,10 +269,10 @@ public:
 
 			// Push the specified entry onto the current thread's stack trace, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::Push", "00000021", Entry );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::Push", "00000022", Entry );
+				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::Push", "00000022", Entry );
+				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::Push", "00000023", Entry );
 				StackTraceMapIterator = StackTraces.find( *ThreadID );
-				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::Push", "00000024", *ThreadID << ", " << Entry );
+				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::Push", "00000025", *ThreadID << ", " << Entry );
 				StackTraceMapIterator->second.push_back( Entry );
 		}
 
@@ -310,10 +310,10 @@ public:
 
 			// Pop the last pushed entry off the current thread's stack trace, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::Pop", "00000021", "" );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::Pop", "00000022", "" );
+				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::Pop", "00000022", "" );
+				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::Pop", "00000023", "" );
 				StackTraceMapIterator = StackTraces.find( *ThreadID );
-				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::Pop", "00000024", *ThreadID );
+				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::Pop", "00000025", *ThreadID );
 
 				if( StackTraceMapIterator->second.size() > 1 )
 					StackTraceMapIterator->second.pop_back();
@@ -355,17 +355,17 @@ public:
 
 			// Construct the stack trace for the current thread, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::GetStackTrace", "00000021", "" );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::GetStackTrace", "00000022", "" );
+				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::GetStackTrace", "00000022", "" );
+				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::GetStackTrace", "00000023", "" );
 				StackTraceMapIterator = StackTraces.find( *ThreadID );
-				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::GetStackTrace", "00000024", *ThreadID );
+				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::GetStackTrace", "00000025", *ThreadID );
 
 				if( StackTraceMapIterator->second.size() == 1 )
 					Result = StackTraceMapIterator->second[ 0 ];
 				else
 				{
 					for( ; Index < ( StackTraceMapIterator->second.size() - 1 ); Index++ )
-						Result += StackTraceMapIterator->second[ Index ] + "->";
+						Result += StackTraceMapIterator->second[ Index ] + STACKTRACER_ENTRY_SEPERATOR;
 
 					Result += StackTraceMapIterator->second[ Index ];
 				}
@@ -397,17 +397,6 @@ private:
 
 		typedef std::unordered_map< std::string, StringVector > StackTraceMap;
 
-	// Private Constructors
-
-		/**
-		  * @brief This is the default constructor, which is made private to prevent instantiation.
-		  */
-
-		StackTracer()
-		{
-			// Do nothing.
-		}
-
 	// Private Fields
 
 		/**
@@ -426,13 +415,24 @@ private:
 		  * @brief This is a thread-specific pointer to a string containing the current thread's ID.
 		  */
 
-		static boost::thread_specific_ptr< std::string > ThreadID;
+		static StringTLS ThreadID;
 
 		/**
 		  * @brief This is the stack trace map.
 		  */
 
 		static StackTraceMap StackTraces;
+
+	// Private Constructors
+
+		/**
+		  * @brief This is the default constructor, which is made private to prevent instantiation.
+		  */
+
+		StackTracer()
+		{
+			// Do nothing.
+		}
 };
 
 } // 'QMXStdLib' Namespace

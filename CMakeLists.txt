@@ -1,7 +1,7 @@
 ################################################################################################################################################################
 # CMakeLists.txt
-# Robert M. Baker | Created : 10DEC11 | Last Modified : 19FEB16 by Robert M. Baker
-# Version : 1.0.0
+# Robert M. Baker | Created : 10DEC11 | Last Modified : 26FEB16 by Robert M. Baker
+# Version : 1.1.0
 # This is a CMake script for building 'QMXStdLib'.
 ################################################################################################################################################################
 # Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -32,7 +32,7 @@ if( NOT "${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}/build" )
 	message( FATAL_ERROR "You must build the project from '${CMAKE_SOURCE_DIR}/build'!  See 'README.md' for build instructions." )
 endif()
 
-project( PROJECT VERSION 1.0.0 LANGUAGES C CXX )
+project( PROJECT VERSION 1.1.0 LANGUAGES C CXX )
 
 find_package( GTest 1.7.0 REQUIRED )
 find_package( Doxygen )
@@ -101,10 +101,32 @@ endif()
 
 set( MAX_BUFFER_SIZE "1024"
      CACHE STRING "Maximum default size for a c-string buffer." )
-set( CONSOLEIO_DEF_INPUT_TYPE "ConsoleIO::Range"
+set( CONSOLEIO_DEFAULT_INPUT_TYPE "ConsoleIO::Range"
      CACHE STRING "Default input type for the 'ConsoleIO::GetInput' method." )
-set( CONSOLEIO_DEF_CHOICES "\"A, B, C, D, or E\""
+set( CONSOLEIO_DEFAULT_CHOICES "A, B, C, D, or E"
      CACHE STRING "Default set of choices for the 'ConsoleIO::GetInput' method." )
+set( FILESYSTEM_SYMBOL_DELIMITER_LEFT "<"
+     CACHE STRING "Left delimiter for embedded symbols in paths.  This must be a single-character value." )
+set( FILESYSTEM_SYMBOL_DELIMITER_RIGHT ">"
+     CACHE STRING "Right delimiter for embedded symbols in paths.  This must be a single-character value." )
+set( STACKTRACER_ENTRY_SEPERATOR "->"
+     CACHE STRING "Seperator between entries in a stack trace." )
+set( PROGRAMOPTIONS_TOGGLE_OPTION_PREFIX "-"
+     CACHE STRING "The prefix for a toggle option.  This must be a single-character value." )
+set( PROGRAMOPTIONS_COMMAND_OPTION_PREFIX "--"
+     CACHE STRING "The prefix for a command/config option.  This must be a two-character value." )
+set( PROGRAMOPTIONS_GROUP_KEY_SEPERATOR "."
+     CACHE STRING "Seperator used between the group and key of config options.  This must be a single-character value." )
+set( PROGRAMOPTIONS_ASSIGNMENT_OPERATOR "="
+     CACHE STRING "The assignment operator used between a key and its value.  This must be a single-character value." )
+set( PROGRAMOPTIONS_COMMENT_INITIATOR "#"
+     CACHE STRING "Character which initiates a comment.  This must be a single-character value." )
+set( PROGRAMOPTIONS_GROUP_DELIMITER_LEFT "["
+     CACHE STRING "Left delimiter for a config file group.  This must be a single-character value." )
+set( PROGRAMOPTIONS_GROUP_DELIMITER_RIGHT "]"
+     CACHE STRING "Right delimiter for a config file group.  This must be a single-character value." )
+set( PROGRAMOPTIONS_GROUP_DEFAULT "Global"
+     CACHE STRING "The default group for any config option not specifying one." )
 
 set( PROJECT_SOURCES
      "src/ConsoleIO.cpp"
@@ -115,6 +137,7 @@ set( PROJECT_SOURCES
      "src/QMXException.cpp"
      "src/StackTracer.cpp"
      "src/String.cpp"
+     "src/ThreadManager.cpp"
      "src/Timer.cpp"
      "src/Utility.cpp" )
 set( PROJECT_LIBRARIES_DEBUG
@@ -137,17 +160,21 @@ set( PROJECT_TEST_SOURCES
      "test/src/SequencerTest.cpp"
      "test/src/StackTracerTest.cpp"
      "test/src/StringTest.cpp"
+     "test/src/ThreadManagerTest.cpp"
      "test/src/TimerTest.cpp"
      "test/src/UniqueRandomTest.cpp"
      "test/src/UtilityTest.cpp" )
 set( PROJECT_TEST_LIBRARIES_DEBUG
      "${CMAKE_THREAD_LIBS_INIT}"
+     "boost_chrono"
      "boost_filesystem"
      "boost_locale"
      "boost_system"
      "boost_thread"
      "gtest" )
 set( PROJECT_TEST_LIBRARIES_RELEASE ${PROJECT_TEST_LIBRARIES_DEBUG} )
+
+configure_file( "setup.sh.in" "../test/TestDirectory/setup.sh" @ONLY )
 
 # Configure Files
 

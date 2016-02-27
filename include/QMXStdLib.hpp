@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXStdLib.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 18FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 24FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is the main header file for 'QMXStdLib'; it is for users of the library as a convenient way to include all headers.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 18FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 24FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This is the main header file for 'QMXStdLib' which includes all the other necessary headers.
   *
@@ -46,7 +46,7 @@
   */
 
 /**
-  * @mainpage QMX Standard Library API Documentation (V1.0.0)
+  * @mainpage QMX Standard Library API Documentation (V1.1.0)
   *
   * @section Section0000 About QMX Standard Library
   * 	This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for
@@ -77,6 +77,7 @@
 #include "Sequencer.hpp"
 #include "StackTracer.hpp"
 #include "String.hpp"
+#include "ThreadManager.hpp"
 #include "Timer.hpp"
 #include "UniqueRandom.hpp"
 #include "Utility.hpp"

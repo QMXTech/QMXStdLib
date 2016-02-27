@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Singleton.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
-// This is a header file for 'QMXStdLib'; it defines the interface for a mixin class.
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 21FEB16 by Robert M. Baker
+// Version : 1.1.0
+// This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to a singleton instance.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
 //
@@ -21,14 +21,14 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 21FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
-  * @brief This header file defines the interface for a mixin class.
+  * @brief This header file defines the interface for a mixin class to a singleton instance.
   *
   * @section Description
   *
-  * This header file defines the interface for a mixin class.
+  * This header file defines the interface for a mixin class to a singleton instance.
   *
   * @section License
   *

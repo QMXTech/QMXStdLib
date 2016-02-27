@@ -88,7 +88,7 @@ ToUTF8( [In] Target : U16String ) : String&lt;br&gt;
 ToUTF8( [In] Target : U32String ) : String&lt;br&gt;
 ToUTF16( [In] Target : String ) : U16String&lt;br&gt;
 ToUTF32( [In] Target : String ) : U32String&lt;br&gt;
-IsAllWhiteSpace( [In] Target : String ) : Bool&lt;br&gt;
+IsAllWhitespace( [In] Target : String ) : Bool&lt;br&gt;
 Strip( [Out] Target : String, [In] Substring : String, [In] ModifyTarget : Bool = False ) : String&lt;br&gt;
 ToUpper( [Out] Target : String, [In] ModifyTarget : Bool = False ) : String&lt;br&gt;
 ToLower( [Out] Target : String, [In] ModifyTarget : Bool = False ) : String&lt;br&gt;

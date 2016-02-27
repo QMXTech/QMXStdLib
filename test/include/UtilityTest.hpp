@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UtilityTest.hpp
-// Robert M. Baker | Created : 22FEB12 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 22FEB12 | Last Modified : 23FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Utility' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -31,8 +31,8 @@
 #include <boost/locale.hpp>
 #include <gtest/gtest.h>
 
-#include "../../include/Utility.hpp"
 #include "../../include/String.hpp"
+#include "../../include/Utility.hpp"
 
 #endif // __QMX_QMXSTDLIBTEST_UTILITYTEST_HPP_
 

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PluginManager.hpp
-// Robert M. Baker | Created : 15APR12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 15APR12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a plugin manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 15APR12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a plugin manager class.
   *
@@ -341,6 +341,20 @@ private:
 		typedef void (*PluginStartPointer)( Plugin** );
 		typedef void (*PluginStopPointer)();
 
+	// Private Fields
+
+		/**
+		  * @brief This is the boolean flag which determines if the system has been initialized or not.
+		  */
+
+		bool SystemInitialized;
+
+		/**
+		  * @brief This is the map of currently registered modules and their loaded plugins.
+		  */
+
+		ModuleMap Modules;
+
 	// Private Constructors
 
 		/**
@@ -382,20 +396,6 @@ private:
 		  */
 
 		void LoadImp( const Path& Target );
-
-	// Private Fields
-
-		/**
-		  * @brief This is the boolean flag which determines if the system has been initialized or not.
-		  */
-
-		bool SystemInitialized;
-
-		/**
-		  * @brief This is the map of currently registered modules and their loaded plugins.
-		  */
-
-		ModuleMap Modules;
 };
 
 } // 'QMXStdLib' Namespace

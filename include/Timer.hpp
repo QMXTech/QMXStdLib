@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Timer.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a timer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a timer class.
   *
@@ -151,6 +151,14 @@ public:
 
 private:
 
+	// Private Fields
+
+		/**
+		  * @brief This is the timer object.
+		  */
+
+		boost::timer::cpu_timer LocalTimer;
+
 	// Private Constructors
 
 		/**
@@ -178,14 +186,6 @@ private:
 		  */
 
 		CLONE_IMP( Timer )
-
-	// Private Fields
-
-		/**
-		  * @brief This is the timer object.
-		  */
-
-		boost::timer::cpu_timer LocalTimer;
 };
 
 } // 'QMXStdLib' Namespace

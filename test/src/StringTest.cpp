@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StringTest.cpp
-// Robert M. Baker | Created : 20FEB12 | Last Modified : 18FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 20FEB12 | Last Modified : 21FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::String' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -122,12 +122,12 @@ TEST( StringTest, ToUTF32Works )
 		/* Stub */
 }
 
-TEST( StringTest, IsAllWhiteSpaceWorks )
+TEST( StringTest, IsAllWhitespaceWorks )
 {
-	// Perform unit test for 'IsAllWhiteSpace' function.
+	// Perform unit test for 'IsAllWhitespace' function.
 
-		ASSERT_TRUE( String::IsAllWhiteSpace( WHITE_SPACE_CHARS ) );
-		ASSERT_FALSE( String::IsAllWhiteSpace( "     Text" ) );
+		ASSERT_TRUE( String::IsAllWhitespace( " \t\n\v\f\r" ) );
+		ASSERT_FALSE( String::IsAllWhitespace( "     Text" ) );
 }
 
 TEST( StringTest, StripWorks )

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystem.cpp
-// Robert M. Baker | Created : 17DEC14 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 17DEC14 | Last Modified : 20FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a set of file system functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 17DEC14
-  * @date    Last Modified : 15FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 20FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This source file defines the implementation for a set of file system functions.
   *
@@ -89,17 +89,17 @@ void Parse( Path& Target )
 
 		do
 		{
-			StartIndex = ParsedPath.find( "<", 0 );
+			StartIndex = ParsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_LEFT, 0 );
 
 			if( StartIndex != string::npos )
 			{
-				EndIndex = ParsedPath.find( ">", 0 );
+				EndIndex = ParsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_RIGHT, 0 );
 				QMX_ASSERT( ( ( EndIndex != string::npos ) && ( EndIndex > StartIndex ) ), "QMXStdLib", "FileSystem::Parse", "00000008", Target );
 				ExpandedSymbol = getenv( ParsedPath.substr( ( StartIndex + 1 ), ( EndIndex - StartIndex - 1 ) ).c_str() );
 				QMX_ASSERT( ExpandedSymbol, "QMXStdLib", "FileSystem::Parse", "00000009", Target );
 				String::FindReplace( ParsedPath, ParsedPath.substr( StartIndex, ( EndIndex - StartIndex + 1 ) ), ExpandedSymbol, true );
 			}
-			else if( ParsedPath.find( ">", 0 ) != string::npos )
+			else if( ParsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_RIGHT, 0 ) != string::npos )
 				QMX_THROW( "QMXStdLib", "FileSystem::Parse", "00000008", Target );
 			else
 				IsDone = true;

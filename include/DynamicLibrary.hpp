@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibrary.hpp
-// Robert M. Baker | Created : 14APR12 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 14APR12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a dynamically-loaded library class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 14APR12
-  * @date    Last Modified : 15FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a dynamically-loaded library class.
   *
@@ -181,6 +181,20 @@ public:
 
 private:
 
+	// Private Fields
+
+		/**
+		  * @brief This is the handle to the dynamic library.
+		  */
+
+		DYNLIB_HANDLE Handle;
+
+		/**
+		  * @brief This is the path to the dyanmic library.
+		  */
+
+		Path DynLibTarget;
+
 	// Private Constructors
 
 		/**
@@ -227,20 +241,6 @@ private:
 		  */
 
 		void UnloadImp();
-
-	// Private Fields
-
-		/**
-		  * @brief This is the handle to the dynamic library.
-		  */
-
-		DYNLIB_HANDLE Handle;
-
-		/**
-		  * @brief This is the path to the dyanmic library.
-		  */
-
-		Path DynLibTarget;
 };
 
 } // 'QMXStdLib' Namespace

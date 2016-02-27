@@ -1,8 +1,8 @@
 #! /bin/bash
 ################################################################################################################################################################
 # update-version.sh
-# Robert M. Baker | Created : 18FEB16 | Last Modified : 18FEB16 by Robert M. Baker
-# Version : 1.0.0
+# Robert M. Baker | Created : 18FEB16 | Last Modified : 22FEB16 by Robert M. Baker
+# Version : 1.1.0
 # This script updates the project version number in all files.
 ################################################################################################################################################################
 # Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -67,17 +67,17 @@ fi
 
 # Replace all occurrences of the current version with the new version.
 
-Files=( $( grep -Rl "Version : [0-9]+[.][0-9]+[.][0-9]+" )
-        $( grep -Rl "VERSION [0-9]+[.][0-9]+[.][0-9]+" )
-        $( grep -Rl "@version [0-9]+[.][0-9]+[.][0-9]+" )
-        $( grep -Rl "V[0-9]+[.][0-9]+[.][0-9]+" ) )
+Files=( $( grep -Rl "Version : [0-9]\+[.][0-9]\+[.][0-9]\+" )
+        $( grep -Rl "VERSION [0-9]\+[.][0-9]\+[.][0-9]\+" )
+        $( grep -Rl "@version [0-9]\+[.][0-9]\+[.][0-9]\+" )
+        $( grep -Rl "V[0-9]\+[.][0-9]\+[.][0-9]\+" ) )
 Files=( $( echo ${Files[@]} | tr ' ' '\n' | sort -u | tr '\n' ' ' ) )
 
 for Index in ${Files[@]}; do
-	cat ${Index} | sed "s/Version : [0-9]+[.][0-9]+[.][0-9]+/Version : ${NEW_VERSION}/" \
-	             | sed "s/VERSION [0-9]+[.][0-9]+[.][0-9]+/VERSION ${NEW_VERSION}/" \
-	             | sed "s/@version [0-9]+[.][0-9]+[.][0-9]+/@version ${NEW_VERSION}/" \
-	             | sed "s/V[0-9]+[.][0-9]+[.][0-9]+/V${NEW_VERSION}/" > ${Index}.new
+	cat ${Index} | sed "s/Version : [0-9]\+[.][0-9]\+[.][0-9]\+/Version : ${NEW_VERSION}/" \
+	             | sed "s/VERSION [0-9]\+[.][0-9]\+[.][0-9]\+/VERSION ${NEW_VERSION}/" \
+	             | sed "s/@version [0-9]\+[.][0-9]\+[.][0-9]\+/@version ${NEW_VERSION}/" \
+	             | sed "s/V[0-9]\+[.][0-9]\+[.][0-9]\+/V${NEW_VERSION}/" > ${Index}.new
 	touch -r ${Index} ${Index}.new
 	mv ${Index}.new ${Index}
 done

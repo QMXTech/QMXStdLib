@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Mixins.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 22FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it includes the various mixin classes.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 22FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file includes the various mixin classes.
   *
@@ -53,7 +53,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "Mixins/Lockable.hpp"
-#include "Mixins/NonCopyable.hpp"
 #include "Mixins/Plugin.hpp"
 #include "Mixins/Singleton.hpp"
 #include "Mixins/Stringizable.hpp"

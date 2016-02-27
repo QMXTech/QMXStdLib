@@ -164,10 +164,10 @@ StreamCount&lt;br&gt;
       <data key="d5"><![CDATA[QMXStdLib::ConsoleIO::SynchronizedStream Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="179.0" width="480.0" x="474.0" y="562.0"/>
+          <y:Geometry height="215.5" width="505.0" x="474.0" y="562.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="132.0419921875" x="173.97900390625" y="3.0">SynchronizedStream</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="132.0419921875" x="186.47900390625" y="3.0">SynchronizedStream</y:NodeLabel>
           <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
             <y:AttributeLabel>&lt;html&gt;
 &lt;p style="font-family:Calibri;font-size:15pt;"&gt;
@@ -184,8 +184,10 @@ StreamCount&lt;br&gt;
 
 &lt;b&gt;&lt;u&gt;Methods&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
 
++ SynchronizedStream( [In] Instance : SynchronizedStream ) : Void {Deleted}&lt;br&gt;
 + SynchronizedStream( [In] TargetType : StreamType ) : Void&lt;br&gt;
 + ~SynchronizedStream() : Void {Virtual}&lt;br&gt;
++ operator=( [In] Instance : SynchronizedStream ) : SynchronizedStream {Deleted}&lt;br&gt;
 + operator&amp;lt;&amp;lt; &amp;lt; DType : TypeName &amp;gt;( [In] RHS : DType ) : SynchronizedStream&amp;nbsp;&lt;br&gt;
 
 &lt;/p&gt;
@@ -195,22 +197,6 @@ StreamCount&lt;br&gt;
       </data>
     </node>
     <node id="n9">
-      <data key="d4"/>
-      <data key="d5"><![CDATA[QMXStdLib::NonCopyable Class]]></data>
-      <data key="d6">
-        <y:UMLClassNode>
-          <y:Geometry height="26.0" width="168.0" x="786.0" y="837.0"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="166.19482421875" x="0.902587890625" y="3.0">QMXStdLib::NonCopyable</y:NodeLabel>
-          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-            <y:AttributeLabel/>
-            <y:MethodLabel/>
-          </y:UML>
-        </y:UMLClassNode>
-      </data>
-    </node>
-    <node id="n10">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="16.0" width="10.08203125" x="232.0" y="708.125"/>
@@ -221,7 +207,7 @@ StreamCount&lt;br&gt;
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n11">
+    <node id="n10">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="16.0" width="22.1171875" x="722.0" y="751.125"/>
@@ -265,7 +251,7 @@ StreamCount&lt;br&gt;
     <edge id="e3" source="n5" target="n8">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-60.0" sy="120.0" tx="0.0" ty="-89.5"/>
+          <y:Path sx="-47.5" sy="120.0" tx="0.0" ty="107.5"/>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="plain" target="none"/>
           <y:BendStyle smoothed="false"/>
@@ -275,22 +261,12 @@ StreamCount&lt;br&gt;
     <edge id="e4" source="n8" target="n7">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="89.5" tx="0.0" ty="68.0">
-            <y:Point x="714.0" y="778.0"/>
-            <y:Point x="224.0" y="778.0"/>
+          <y:Path sx="0.0" sy="107.5" tx="0.0" ty="68.0">
+            <y:Point x="726.5" y="809.5"/>
+            <y:Point x="224.0" y="809.5"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="white_diamond" target="none"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e5" source="n8" target="n9">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="156.0" sy="89.5" tx="0.0" ty="-13.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>

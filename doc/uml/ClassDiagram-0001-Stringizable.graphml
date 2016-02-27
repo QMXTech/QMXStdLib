@@ -74,11 +74,11 @@
       <data key="d5"><![CDATA[QMXStdLib::Stringizable Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="182.0" width="603.0" x="162.0" y="226.0"/>
+          <y:Geometry height="204.5" width="603.0" x="162.0" y="226.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="76.802734375" x="263.0986328125" y="25.96875">Stringizable</y:NodeLabel>
-          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Mixin" use3DEffect="true">
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bolditalic" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="77.505859375" x="262.7470703125" y="25.96875">Stringizable</y:NodeLabel>
+          <y:UML clipContent="true" constraint="Abstract" omitDetails="false" stereotype="Mixin" use3DEffect="true">
             <y:AttributeLabel/>
             <y:MethodLabel>&lt;html&gt;
 &lt;p style="font-family:Calibri;font-size:15pt;"&gt;
@@ -102,7 +102,7 @@
       <data key="d5"><![CDATA[QMXStdLib::Stringizable::NumericBase Enumeration]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="131.0" width="122.0" x="162.0" y="504.0"/>
+          <y:Geometry height="131.0" width="122.0" x="162.0" y="526.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="86.32421875" x="17.837890625" y="25.96875">NumericBase</y:NodeLabel>
@@ -128,7 +128,7 @@ Hexidecimal&lt;br&gt;
       <data key="d5"><![CDATA[QMXStdLib::Stringizable::StringFormat Structure]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="207.0" width="137.0" x="316.0" y="504.0"/>
+          <y:Geometry height="207.0" width="137.0" x="316.0" y="526.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="85.55517578125" x="25.722412109375" y="25.96875">StringFormat</y:NodeLabel>
@@ -154,10 +154,9 @@ Base : NumericBase&lt;br&gt;
       </data>
     </node>
     <node id="n8">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="16.0" width="10.08203125" x="233.0" y="645.125"/>
+          <y:Geometry height="16.0" width="10.08203125" x="233.0" y="667.625"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle hasColor="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="10.08203125" x="0.0" y="0.0">1</y:NodeLabel>
@@ -178,7 +177,7 @@ Base : NumericBase&lt;br&gt;
     <edge id="e1" source="n5" target="n6">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-240.5" sy="91.0" tx="0.0" ty="-65.5"/>
+          <y:Path sx="-240.5" sy="102.0" tx="0.0" ty="-65.5"/>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="plain"/>
           <y:BendStyle smoothed="false"/>
@@ -188,7 +187,7 @@ Base : NumericBase&lt;br&gt;
     <edge id="e2" source="n5" target="n7">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-79.0" sy="91.0" tx="0.0" ty="-103.5"/>
+          <y:Path sx="-79.0" sy="102.0" tx="0.0" ty="-103.5"/>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="plain"/>
           <y:BendStyle smoothed="false"/>
@@ -199,8 +198,8 @@ Base : NumericBase&lt;br&gt;
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="103.5" tx="0.0" ty="65.5">
-            <y:Point x="384.5" y="743.0"/>
-            <y:Point x="223.0" y="743.0"/>
+            <y:Point x="384.5" y="765.5"/>
+            <y:Point x="223.0" y="765.5"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="white_diamond" target="none"/>

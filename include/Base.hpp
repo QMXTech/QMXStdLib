@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 17FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 26FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is the base header file for 'QMXStdLib'; it defines data common to all modules.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 17FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 26FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This base header file defines data common to all modules.
   *
@@ -147,11 +147,11 @@
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define DEPRECATED                 __attribute__ ((deprecated))
 #define SINGLE_STATEMENT(x)        do{ x }while( false )
 #define STRINGIZE_IMP(x)           #x
 #define STRINGIZE(x)               STRINGIZE_IMP( x )
 #define PURE_VIRTUAL               0
-#define WHITE_SPACE_CHARS          " \t\n\v\f\r"
 #define BIT_FLAG(x)                1ull<<( x##ull - 1ull )
 #define BIT_FLAG_ALL               0xFFFFFFFFFFFFFFFFull
 #define ZERO_MEMORY(x,y)           memset( x, QMXStdLib::Null, y )
@@ -161,6 +161,7 @@
 #define SAFE_DELETE_ARRAY(x)       SINGLE_STATEMENT( delete[] x;  x = nullptr; )
 #define FLUSH_ISTREAM(x)           x.ignore( std::numeric_limits< std::streamsize >::max(), '\n' )
 #define WAIT_FOR_ENTER             SINGLE_STATEMENT( COUT << "Press 'Enter' to continue...";  std::cin.peek();  FLUSH_ISTREAM( std::cin ); )
+#define STRIP_ALL_WHITESPACE(x)    x.erase( std::remove_if( x.begin(), x.end(), boost::algorithm::is_space() ), x.end() )
 #define QMX_THROW(w,x,y,z)         SINGLE_STATEMENT(\
                                      std::ostringstream EventDataBuffer;\
                                      EventDataBuffer << z;\
@@ -185,18 +186,21 @@
                                    typedef std::vector< PointerType > PointerVector;\
                                    typedef std::deque< PointerType > PointerDeque;\
                                    typedef std::unordered_set< PointerType > PointerSet;\
-                                   typedef std::unordered_map< std::string, PointerType > PointerMap;
+                                   typedef std::unordered_map< std::string, PointerType > PointerMap;\
+                                   typedef boost::thread_specific_ptr< x > ThreadLocalStorage;
 #define STANDARD_TYPEDEFS_X(x,y)   typedef std::shared_ptr< x > y##Ptr;\
                                    typedef std::pair< std::string, x > y##Pair;\
                                    typedef std::vector< x > y##Vector;\
                                    typedef std::deque< x > y##Deque;\
                                    typedef std::unordered_set< x > y##Set;\
                                    typedef std::unordered_map< std::string, x > y##Map;\
+                                   typedef boost::thread_specific_ptr< x > y##TLS;\
                                    typedef std::pair< std::string, y##Ptr > y##PtrPair;\
                                    typedef std::vector< y##Ptr > y##PtrVector;\
                                    typedef std::deque< y##Ptr > y##PtrDeque;\
                                    typedef std::unordered_set< y##Ptr > y##PtrSet;\
-                                   typedef std::unordered_map< std::string, y##Ptr > y##PtrMap;
+                                   typedef std::unordered_map< std::string, y##Ptr > y##PtrMap;\
+                                   typedef boost::thread_specific_ptr< y##Ptr > y##PtrTLS;
 
 #if ( QMX_PLATFORM == QMX_PLATFORM_LINUX )
 #	define IS_LINUX                 true
@@ -212,7 +216,7 @@
 #	define IS_WINDOWS               true
 #else
 #	error "Unsupported value for 'QMX_PLATFORM'; aborting compile!"
-#endif // IS_LINUX, IS_OSX, & IS_LINUX
+#endif // IS_LINUX, IS_OSX, & IS_WINDOWS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -229,35 +233,47 @@ namespace QMXStdLib
 // Type Definitions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef long double                                           real_t;
-typedef uint64_t                                              BitField;
-typedef boost::shared_mutex                                   SharedMutex;
-typedef boost::shared_lock< boost::shared_mutex >             SharedLock;
-typedef boost::unique_lock< boost::shared_mutex >             UniqueLock;
-typedef boost::filesystem::path                               Path;
-typedef boost::filesystem::directory_iterator                 DirectoryIterator;
+typedef long double                               real_t;
+typedef uint64_t                                  BitField;
+typedef boost::chrono::nanoseconds                Nanoseconds;
+typedef boost::chrono::microseconds               Microseconds;
+typedef boost::chrono::milliseconds               Milliseconds;
+typedef boost::chrono::seconds                    Seconds;
+typedef boost::chrono::minutes                    Minutes;
+typedef boost::chrono::hours                      Hours;
+typedef boost::thread                             Thread;
+typedef boost::barrier                            Barrier;
+typedef boost::this_thread::disable_interruption  DisableInterruption;
+typedef boost::thread_interrupted                 ThreadInterrupted;
+typedef boost::shared_mutex                       SharedMutex;
+typedef boost::shared_lock< boost::shared_mutex > SharedLock;
+typedef boost::unique_lock< boost::shared_mutex > UniqueLock;
+typedef boost::filesystem::path                   Path;
+typedef boost::filesystem::directory_iterator     DirectoryIterator;
 
 #ifdef QMX_32BIT
-	typedef uint32_t                                           PointerSize;
+	typedef uint32_t                               PointerSize;
 #else
-	typedef uint64_t                                           PointerSize;
+	typedef uint64_t                               PointerSize;
 #endif // PointerSize
 
-STANDARD_TYPEDEFS_X( void*,       Void )
-STANDARD_TYPEDEFS_X( bool,        Bool )
-STANDARD_TYPEDEFS_X( int,         Int )
-STANDARD_TYPEDEFS_X( int8_t,      Int8 )
-STANDARD_TYPEDEFS_X( int16_t,     Int16 )
-STANDARD_TYPEDEFS_X( int32_t,     Int32 )
-STANDARD_TYPEDEFS_X( int64_t,     Int64 )
-STANDARD_TYPEDEFS_X( uint8_t,     UInt8 )
-STANDARD_TYPEDEFS_X( uint16_t,    UInt16 )
-STANDARD_TYPEDEFS_X( uint32_t,    UInt32 )
-STANDARD_TYPEDEFS_X( uint64_t,    UInt64 )
-STANDARD_TYPEDEFS_X( float,       Float )
-STANDARD_TYPEDEFS_X( double,      Double )
-STANDARD_TYPEDEFS_X( real_t,      Real )
-STANDARD_TYPEDEFS_X( std::string, String )
+STANDARD_TYPEDEFS_X( void*,                       Void )
+STANDARD_TYPEDEFS_X( bool,                        Bool )
+STANDARD_TYPEDEFS_X( int,                         Int )
+STANDARD_TYPEDEFS_X( int8_t,                      Int8 )
+STANDARD_TYPEDEFS_X( int16_t,                     Int16 )
+STANDARD_TYPEDEFS_X( int32_t,                     Int32 )
+STANDARD_TYPEDEFS_X( int64_t,                     Int64 )
+STANDARD_TYPEDEFS_X( uint8_t,                     UInt8 )
+STANDARD_TYPEDEFS_X( uint16_t,                    UInt16 )
+STANDARD_TYPEDEFS_X( uint32_t,                    UInt32 )
+STANDARD_TYPEDEFS_X( uint64_t,                    UInt64 )
+STANDARD_TYPEDEFS_X( float,                       Float )
+STANDARD_TYPEDEFS_X( double,                      Double )
+STANDARD_TYPEDEFS_X( real_t,                      Real )
+STANDARD_TYPEDEFS_X( std::string,                 String )
+STANDARD_TYPEDEFS_X( Thread,                      Thread );
+STANDARD_TYPEDEFS_X( Barrier,                     Barrier );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Anonymous Enumerations

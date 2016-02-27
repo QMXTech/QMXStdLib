@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 17FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 24FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 17FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 24FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a set of string utility functions.
   *
@@ -128,7 +128,7 @@ std::u32string ToUTF32( const std::string& Target );
   * 	A boolean value of 'true' if the specified string is all whitespace, and 'false' otherwise.
   */
 
-bool IsAllWhiteSpace( const std::string& Target );
+bool IsAllWhitespace( const std::string& Target );
 
 /**
   * @brief This function strips all occurrences of the specified substring from the specified string.
@@ -216,7 +216,7 @@ std::string FindReplace( std::string& Target, const std::string& Find, const std
 void Tokenize( StringDeque& Tokens, const std::string& Target );
 
 /**
-  * @brief This template function defines the structure for a string to numeric value converter.
+  * @brief This function defines the structure for a string to numeric value converter.
   *
   * If converting to a boolean value, the string must be exactly (case-sensitive) one of the following: "true", "yes", "false", "no"; otherwise, the value
   * will always be 'false'.  Using an 'NType' of 'int8' or 'uint8' can have undesired results, so it is recommended to substitute 'int32' in those cases.

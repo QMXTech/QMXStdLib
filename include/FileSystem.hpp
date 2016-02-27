@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystem.hpp
-// Robert M. Baker | Created : 05MAR12 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 05MAR12 | Last Modified : 20FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of file system functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 05MAR12
-  * @date    Last Modified : 15FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 20FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a set of file system functions.
   *
@@ -144,8 +144,8 @@ enum CopyOption
 /**
   * @brief This function parses the specified path to expand any embedded symbols.
   *
-  * Angle brackets are used as delimiters for embedded symbols (e.g. "<HOME>/projects/<PROJECT_NAME>").  All functions/methods in QMXStdLib making use of paths
-  * will assume they have already been parsed.
+  * The default delimiters for embedded symbols are angled brackets (e.g. "<HOME>/projects/<PROJECT_NAME>"); though, they can be configured to something else.
+  * All functions/methods in QMXStdLib making use of paths will assume they have already been parsed.
   *
   * @param Target
   * 	This is the path to be parsed.

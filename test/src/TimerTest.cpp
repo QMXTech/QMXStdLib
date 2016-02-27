@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TimerTest.cpp
-// Robert M. Baker | Created : 19FEB12 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 19FEB12 | Last Modified : 26FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Timer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -70,10 +70,10 @@ TEST( TimerTest, GetTimeWorks )
 			// Empty Loop
 
 		Instance->Toggle();
-		ASSERT_NEAR( 250.0, Instance->GetTime( Timer::Milliseconds ), 5.0 );
-		ASSERT_NEAR( 0.25, Instance->GetTime( Timer::Seconds ), 0.005 );
-		ASSERT_NEAR( 0.004167, Instance->GetTime( Timer::Minutes ), 0.00008333 );
-		ASSERT_NEAR( 0.00006944, Instance->GetTime( Timer::Hours ), 0.000001389 );
+		ASSERT_NEAR( 250.0, Instance->GetTime( Timer::Milliseconds ), 50.0 );
+		ASSERT_NEAR( 0.25, Instance->GetTime( Timer::Seconds ), 0.05 );
+		ASSERT_NEAR( 0.004167, Instance->GetTime( Timer::Minutes ), 0.0008333 );
+		ASSERT_NEAR( 0.00006944, Instance->GetTime( Timer::Hours ), 0.00001389 );
 }
 
 TEST( TimerTest, ResetWorks )
@@ -90,9 +90,9 @@ TEST( TimerTest, ResetWorks )
 			// Empty Loop
 
 		Instance->Toggle();
-		ASSERT_NEAR( 0.25, Instance->GetTime(), 0.005 );
+		ASSERT_NEAR( 0.25, Instance->GetTime(), 0.05 );
 		Instance->Reset();
-		ASSERT_NEAR( 0.0, Instance->GetTime(), 0.005 );
+		ASSERT_NEAR( 0.0, Instance->GetTime(), 0.05 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

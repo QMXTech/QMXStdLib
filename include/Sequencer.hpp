@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sequencer.hpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 16FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 27FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a numeric sequencer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 16FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This header file defines the interface for a numeric sequencer class.
   *
@@ -348,6 +348,14 @@ public:
 
 private:
 
+	// Private Fields
+
+		/**
+		  * @brief This is a state flag used by the ocillation algorithms.
+		  */
+
+		bool OscillationFlag;
+
 	// Private Constructors
 
 		/**
@@ -390,14 +398,6 @@ private:
 		  */
 
 		CLONE_IMP_T( Sequencer< NType > )
-
-	// Private Fields
-
-		/**
-		  * @brief This is a state flag used by the ocillation algorithms.
-		  */
-
-		bool OscillationFlag;
 };
 
 } // 'QMXStdLib' Namespace

@@ -11,6 +11,7 @@ test/TestDirectory/TestDirectorySymlink
 test/TestDirectory/TestPlugins
 test/TestDirectory/EmptyTestFile.txt
 test/TestDirectory/NonEmptyTestFile.txt
+test/TestDirectory/setup.sh
 test/TestDirectory/Test.cfg
 test/TestDirectory/TestFileHardlink
 test/TestDirectory/TestFileSymlink

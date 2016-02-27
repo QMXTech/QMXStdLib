@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NumericTest.hpp
-// Robert M. Baker | Created : 10FEB12 | Last Modified : 14FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 10FEB12 | Last Modified : 23FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Numeric' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -28,8 +28,8 @@
 #include <gtest/gtest.h>
 
 #include "../../include/QMXException.hpp"
-#include "../../include/Numeric.hpp"
 #include "../../include/Mixins/Stringizable.hpp"
+#include "../../include/Numeric.hpp"
 
 #endif // __QMX_QMXSTDLIBTEST_NUMERICTEST_HPP_
 

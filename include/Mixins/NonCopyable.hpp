@@ -1,8 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DEPRECATED
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NonCopyable.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
-// This is a header file for 'QMXStdLib'; it defines the interface for a mixin class.
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 22FEB16 by Robert M. Baker
+// Version : 1.1.0
+// This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to prevent copying.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
 //
@@ -21,14 +23,14 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 22FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
-  * @brief This header file defines the interface for a mixin class.
+  * @brief This header file defines the interface for a mixin class to prevent copying (DEPRECATED).
   *
   * @section Description
   *
-  * This header file defines the interface for a mixin class.
+  * This header file defines the interface for a mixin class to prevent copying.  Note: This class is now marked deprecated in favor of C++11 method deletion.
   *
   * @section License
   *
@@ -68,9 +70,9 @@ namespace QMXStdLib
 /**
   * @class NonCopyable NonCopyable.hpp "include/NonCopyable.hpp"
   *
-  * @brief This class defines a mixin interface to prevent copying.
+  * @brief This class defines a mixin interface to prevent copying (DEPRECATED).
   *
-  * This is useful when there is a need to prevent the copying of a class instance.
+  * This is useful when it is necessary to prevent instance copying.  Note: This class is now marked deprecated in favor of C++11 method deletion.
   *
   * Platform Independent     : Yes<br>
   * Architecture Independent : Yes<br>
@@ -137,7 +139,7 @@ private:
 
 				return *this;
 		}
-};
+} DEPRECATED;
 
 } // 'QMXStdLib' Namespace
 

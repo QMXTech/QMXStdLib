@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ScopedStackTrace.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.0.0
-// This is a header file for 'QMXStdLib'; it defines the interface for an RAII class.
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 20FEB16 by Robert M. Baker
+// Version : 1.1.0
+// This is a header file for 'QMXStdLib'; it defines the interface for an RAII class to create a scoped trace.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
 //
@@ -21,14 +21,14 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 20FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
-  * @brief This header file defines the interface for an RAII class.
+  * @brief This header file defines the interface for an RAII class to create a scoped trace.
   *
   * @section Description
   *
-  * This header file defines the interface for an RAII class.
+  * This header file defines the interface for an RAII class to create a scoped trace.
   *
   * @section License
   *
@@ -85,11 +85,20 @@ namespace QMXStdLib
   * Thread-Safe              : Yes
   */
 
-class ScopedStackTrace : public NonCopyable
+class ScopedStackTrace
 {
 public:
 
 	// Public Constructors
+
+		/**
+		  * @brief This is the copy constructor, which is deleted to prevent copying.
+		  *
+		  * @param Instance
+		  * 	N/A
+		  */
+
+		ScopedStackTrace( const ScopedStackTrace& Instance ) = delete;
 
 		/**
 		  * @brief This is the constructor which accepts the initialization data.
@@ -117,6 +126,20 @@ public:
 
 				StackTracer::Pop();
 		}
+
+	// Public Overloaded Operators
+
+		/**
+		  * @brief This is the default assignment-operator, which is deleted to prevent copying.
+		  *
+		  * @param Instance
+		  * 	N/A
+		  *
+		  * @return
+		  * 	N/A
+		  */
+
+		ScopedStackTrace& operator=( const ScopedStackTrace& Instance ) = delete;
 };
 
 } // 'QMXStdLib' Namespace

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracerTest.cpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 14FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 20FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::StackTracer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -39,6 +39,10 @@ namespace StackTracerTest
 
 void ThreadMain( const string& TargetID, uint32_t TargetIndex )
 {
+	// Create local variables.
+
+		string Seperator = STACKTRACER_ENTRY_SEPERATOR;
+
 	// Perform thread test based on specified arguments.
 
 		switch( TargetIndex )
@@ -113,7 +117,7 @@ void ThreadMain( const string& TargetID, uint32_t TargetIndex )
 				StackTracer::AddThread( ( TargetID + "Main" ) );
 				ASSERT_EQ( ( TargetID + "Main" ), StackTracer::GetStackTrace() );
 				StackTracer::Push( "Class::Method" );
-				ASSERT_EQ( ( TargetID + "Main->Class::Method" ), StackTracer::GetStackTrace() );
+				ASSERT_EQ( ( TargetID + "Main" + Seperator + "Class::Method" ), StackTracer::GetStackTrace() );
 				StackTracer::Pop();
 				StackTracer::Pop();
 				ASSERT_EQ( ( TargetID + "Main" ), StackTracer::GetStackTrace() );

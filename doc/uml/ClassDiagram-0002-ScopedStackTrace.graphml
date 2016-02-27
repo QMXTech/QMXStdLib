@@ -74,10 +74,10 @@
       <data key="d5"><![CDATA[QMXStdLib::ScopedStackTrace Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="124.0" width="288.0" x="162.0" y="226.0"/>
+          <y:Geometry height="162.0" width="477.0" x="162.0" y="226.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="116.24365234375" x="85.878173828125" y="25.96875">ScopedStackTrace</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="116.24365234375" x="180.378173828125" y="25.96875">ScopedStackTrace</y:NodeLabel>
           <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="RAII" use3DEffect="true">
             <y:AttributeLabel/>
             <y:MethodLabel>&lt;html&gt;
@@ -85,27 +85,13 @@
 
 &lt;b&gt;&lt;u&gt;Methods&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
 
++ ScopedStackTrace( [In] Instance : ScopedStackTrace ) : Void {Deleted}&lt;br&gt;
 + ScopedStackTrace( [In] Entry : String ) : Void&lt;br&gt;
 + ~ScopedStackTrace() : Void &lt;br&gt;
++ operator=( [In] Instance : ScopedStackTrace ) : ScopedStackTrace {Deleted}&lt;br&gt;
 
 &lt;/p&gt;
 &lt;/html&gt;</y:MethodLabel>
-          </y:UML>
-        </y:UMLClassNode>
-      </data>
-    </node>
-    <node id="n6">
-      <data key="d4"/>
-      <data key="d5"><![CDATA[QMXStdLib::NonCopyable Class]]></data>
-      <data key="d6">
-        <y:UMLClassNode>
-          <y:Geometry height="48.0" width="168.0" x="162.0" y="446.0"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="166.19482421875" x="0.902587890625" y="25.96875">QMXStdLib::NonCopyable</y:NodeLabel>
-          <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="Mixin" use3DEffect="true">
-            <y:AttributeLabel/>
-            <y:MethodLabel/>
           </y:UML>
         </y:UMLClassNode>
       </data>
@@ -116,16 +102,6 @@
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e1" source="n5" target="n6">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-60.0" sy="62.0" tx="0.0" ty="-24.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>

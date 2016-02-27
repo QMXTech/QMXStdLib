@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.cpp
-// Robert M. Baker | Created : 08JAN15 | Last Modified : 18FEB16 by Robert M. Baker
-// Version : 1.0.0
+// Robert M. Baker | Created : 08JAN15 | Last Modified : 21FEB16 by Robert M. Baker
+// Version : 1.1.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 08JAN15
-  * @date    Last Modified : 18FEB16 by Robert M. Baker
-  * @version 1.0.0
+  * @date    Last Modified : 21FEB16 by Robert M. Baker
+  * @version 1.1.0
   *
   * @brief This source file defines the implementation for a set of string utility functions.
   *
@@ -123,7 +123,7 @@ u32string ToUTF32( const string& Target )
 		return u32string( U"" );
 }
 
-bool IsAllWhiteSpace( const string& Target )
+bool IsAllWhitespace( const string& Target )
 {
 	// Report whether or not the specified string is all whitespace to calling routine.
 
