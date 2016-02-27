@@ -1,6 +1,6 @@
 ################################################################################################################################################################
 # CMakeLists.txt
-# Robert M. Baker | Created : 10DEC11 | Last Modified : 26FEB16 by Robert M. Baker
+# Robert M. Baker | Created : 10DEC11 | Last Modified : 27FEB16 by Robert M. Baker
 # Version : 1.1.0
 # This is a CMake script for building 'QMXStdLib'.
 ################################################################################################################################################################
@@ -194,49 +194,45 @@ add_library( debug SHARED ${PROJECT_SOURCES} )
 target_include_directories( debug PRIVATE "include/" )
 target_link_libraries( debug ${PROJECT_LIBRARIES_DEBUG} )
 set_target_properties( debug PROPERTIES
+                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
+                       LINK_FLAGS ${LINK_FLAGS_DEBUG}
+                       OUTPUT_NAME "${PROJECT_TARGET}_d"
                        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                        SOVERSION "${PROJECT_VERSION_MAJOR}" )
-set_target_properties( debug PROPERTIES
-                       OUTPUT_NAME "${PROJECT_TARGET}_d"
-                       COMPILE_FLAGS ${COMPILE_FLAGS_DEBUG}
-                       LINK_FLAGS ${LINK_FLAGS_DEBUG} )
 
 add_library( relwithdebinfo SHARED ${PROJECT_SOURCES} )
 target_include_directories( relwithdebinfo PRIVATE "include/" )
 target_link_libraries( relwithdebinfo ${PROJECT_LIBRARIES_RELEASE} )
 set_target_properties( relwithdebinfo PROPERTIES
-                       VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-                       SOVERSION "${PROJECT_VERSION_MAJOR}" )
-set_target_properties( relwithdebinfo PROPERTIES
                        EXCLUDE_FROM_ALL true
                        EXCLUDE_FROM_DEFAULT_BUILD true
-                       OUTPUT_NAME "${PROJECT_TARGET}"
                        COMPILE_FLAGS ${COMPILE_FLAGS_RELWITHDEBINFO}
-                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO} )
+                       LINK_FLAGS ${LINK_FLAGS_RELWITHDEBINFO}
+                       OUTPUT_NAME "${PROJECT_TARGET}"
+                       VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+                       SOVERSION "${PROJECT_VERSION_MAJOR}" )
 
 add_library( release SHARED ${PROJECT_SOURCES} )
 target_include_directories( release PRIVATE "include/" )
 target_link_libraries( release ${PROJECT_LIBRARIES_RELEASE} )
 set_target_properties( release PROPERTIES
+                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
+                       LINK_FLAGS ${LINK_FLAGS_RELEASE}
+                       OUTPUT_NAME "${PROJECT_TARGET}"
                        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                        SOVERSION "${PROJECT_VERSION_MAJOR}" )
-set_target_properties( release PROPERTIES
-                       OUTPUT_NAME "${PROJECT_TARGET}"
-                       COMPILE_FLAGS ${COMPILE_FLAGS_RELEASE}
-                       LINK_FLAGS ${LINK_FLAGS_RELEASE} )
 
 add_library( minesizerel SHARED ${PROJECT_SOURCES} )
 target_include_directories( minesizerel PRIVATE "include/" )
 target_link_libraries( minesizerel ${PROJECT_LIBRARIES_RELEASE} )
 set_target_properties( minesizerel PROPERTIES
-                       VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-                       SOVERSION "${PROJECT_VERSION_MAJOR}" )
-set_target_properties( minesizerel PROPERTIES
                        EXCLUDE_FROM_ALL true
                        EXCLUDE_FROM_DEFAULT_BUILD true
-                       OUTPUT_NAME "${PROJECT_TARGET}"
                        COMPILE_FLAGS ${COMPILE_FLAGS_MINSIZEREL}
-                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL} )
+                       LINK_FLAGS ${LINK_FLAGS_MINSIZEREL}
+                       OUTPUT_NAME "${PROJECT_TARGET}"
+                       VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+                       SOVERSION "${PROJECT_VERSION_MAJOR}" )
 
 # TestPlugin1
 
