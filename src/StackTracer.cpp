@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracer.cpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 23FEB16 by Robert M. Baker
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 27FEB16 by Robert M. Baker
 // Version : 1.1.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a stack tracer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 23FEB16 by Robert M. Baker
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
   * @version 1.1.0
   *
   * @brief This source file defines the implementation for a stack tracer class.
@@ -49,7 +49,7 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <StackTracer.hpp>
+#include "../include/StackTracer.hpp"
 
 using namespace std;
 

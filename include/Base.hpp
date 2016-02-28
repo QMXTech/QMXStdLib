@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 26FEB16 by Robert M. Baker
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 27FEB16 by Robert M. Baker
 // Version : 1.1.0
 // This is the base header file for 'QMXStdLib'; it defines data common to all modules.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 26FEB16 by Robert M. Baker
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
   * @version 1.1.0
   *
   * @brief This base header file defines data common to all modules.
@@ -133,15 +133,17 @@
 #	include <boost/thread.hpp>
 #pragma GCC diagnostic pop
 
-#if ( QMX_PLATFORM == QMX_PLATFORM_LINUX )
-#	include <dlfcn.h>
-#elif( QMX_PLATFORM == QMX_PLATFORM_OSX )
+#if ( ( QMX_PLATFORM == QMX_PLATFORM_LINUX ) || ( QMX_PLATFORM == QMX_PLATFORM_OSX ) )
 #	include <dlfcn.h>
 #elif( QMX_PLATFORM == QMX_PLATFORM_WINDOWS )
 #	include <windows.h>
 #endif // Platform Headers
 
-#include "Config.hpp"
+#ifdef QMXSTDLIB_INTERNAL_BUILD
+#	include "../build/Config.hpp"
+#else
+#	include "Config.hpp"
+#endif // Configuration Header
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros

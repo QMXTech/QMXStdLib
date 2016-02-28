@@ -130,9 +130,7 @@ set( PROGRAMOPTIONS_GROUP_DEFAULT "Global"
      CACHE STRING "The default group for any config option not specifying one." )
 
 set( PROJECT_INCLUDES
-     "${Boost_INCLUDE_DIRS}"
-     "build/"
-     "include/" )
+     "${Boost_INCLUDE_DIRS}" )
 set( PROJECT_SOURCES
      "src/ConsoleIO.cpp"
      "src/DynamicLibrary.cpp"
@@ -151,9 +149,7 @@ set( PROJECT_LIBRARIES_DEBUG
 set( PROJECT_LIBRARIES_RELEASE ${PROJECT_LIBRARIES_DEBUG} )
 set( PROJECT_TEST_INCLUDES
      "${Boost_INCLUDE_DIRS}"
-     "${GTEST_INCLUDE_DIRS}"
-     "build/"
-     "test/include/" )
+     "${GTEST_INCLUDE_DIRS}" )
 set( PROJECT_TEST_SOURCES
      "test/src/ConsoleIOTest.cpp"
      "test/src/DynamicLibraryTest.cpp"
@@ -176,6 +172,7 @@ set( PROJECT_TEST_LIBRARIES_DEBUG
      "${GTEST_LIBRARIES}" )
 set( PROJECT_TEST_LIBRARIES_RELEASE ${PROJECT_TEST_LIBRARIES_DEBUG} )
 
+add_definitions( -DQMXSTDLIB_INTERNAL_BUILD )
 link_directories( "${Boost_LIBRARY_DIRS}" "build/" )
 
 configure_file( "config/test_setup.sh.in" "test_setup.sh" @ONLY )
@@ -469,6 +466,7 @@ add_custom_target( tests DEPENDS tests_debug tests_release )
 # Installation
 
 install( DIRECTORY "include/" DESTINATION "${PROJECT_INCLUDE_PATH}" FILES_MATCHING PATTERN "*.hpp" )
+install( FILES "build/Config.hpp" DESTINATION "${PROJECT_INCLUDE_PATH}" )
 
 if( ( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" ) OR ( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" ) )
 	install( TARGETS debug LIBRARY DESTINATION "${PROJECT_LIB_PATH}" OPTIONAL )
@@ -478,9 +476,9 @@ elseif( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
 	install( TARGETS release ARCHIVE DESTINATION "${PROJECT_ARCHIVE_PATH}" RUNTIME DESTINATION "${PROJECT_LIB_PATH}" OPTIONAL )
 endif()
 
-install( FILES "CHANGELOG" "CONTRIBUTING.md" "LICENSE" "README.md" DESTINATION "${PROJECT_DOC_PATH}" )
 install( DIRECTORY "doc/" DESTINATION "${PROJECT_DOC_PATH}" PATTERN "uml" EXCLUDE PATTERN "*.odg" EXCLUDE )
 install( DIRECTORY "build/doc/html" DESTINATION "${PROJECT_DOC_PATH}" OPTIONAL FILES_MATCHING REGEX ".*[.][chjp][nst][gms]*[l]*" )
+install( FILES "CHANGELOG" "CONTRIBUTING.md" "LICENSE" "README.md" DESTINATION "${PROJECT_DOC_PATH}" )
 install( FILES "build/${DOXYGEN_PROJECT_NAME}Config.cmake" "build/${DOXYGEN_PROJECT_NAME}ConfigVersion.cmake"
          DESTINATION "${PROJECT_LIB_PATH}/cmake/${PROJECT_TARGET}" )
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXException.cpp
-// Robert M. Baker | Created : 28FEB12 | Last Modified : 28JAN16 by Robert M. Baker
+// Robert M. Baker | Created : 28FEB12 | Last Modified : 27FEB16 by Robert M. Baker
 // Version : 1.1.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for an exception class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 28FEB12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
+  * @date    Last Modified : 27FEB16 by Robert M. Baker
   * @version 1.1.0
   *
   * @brief This source file defines the implementation for an exception class.
@@ -49,7 +49,7 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <QMXException.hpp>
+#include "../include/QMXException.hpp"
 
 using namespace std;
 
