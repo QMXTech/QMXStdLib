@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibrary.hpp
-// Robert M. Baker | Created : 14APR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 14APR12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a header file for 'QMXStdLib'; it defines the interface for a dynamically-loaded library class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 14APR12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This header file defines the interface for a dynamically-loaded library class.
   *
@@ -108,6 +108,10 @@ namespace QMXStdLib
 
 class DynamicLibrary : public Object< DynamicLibrary >
 {
+	// Friend Classes
+
+		friend class Object;
+
 public:
 
 	// Destructor
@@ -169,15 +173,6 @@ public:
 		  */
 
 		void* GetSymbol( const std::string& Target ) const;
-
-		/**
-		  * @brief This method creates an instance of this class.
-		  *
-		  * @return
-		  * 	A pointer to the newly created instance.
-		  */
-
-		static PointerType Create();
 
 private:
 

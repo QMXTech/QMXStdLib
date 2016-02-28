@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibrary.cpp
-// Robert M. Baker | Created : 15APR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 15APR12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a source file for 'QMXStdLib'; it defines the implementation for a dynamically-loaded library class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 15APR12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This source file defines the implementation for a dynamically-loaded library class.
   *
@@ -150,21 +150,6 @@ void* DynamicLibrary::GetSymbol( const std::string& Target ) const
 		            "DynamicLibrary::GetSymbol",
 		            "00000005",
 		            DynLibTarget << ", " << Target );
-
-	// Return result to calling routine.
-
-		return Result;
-}
-
-DynamicLibrary::PointerType DynamicLibrary::Create()
-{
-	// Create local variables.
-
-		PointerType Result( new DynamicLibrary() );
-
-	// Initialize new instance.
-
-		Result->Allocate();
 
 	// Return result to calling routine.
 

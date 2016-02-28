@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Stringizable.hpp
 // Robert M. Baker | Created : 04MAR12 | Last Modified : 21FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Version : 1.1.2
 // This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to allow for string representation of an object.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
   * @date    Last Modified : 21FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @version 1.1.2
   *
   * @brief This header file defines the interface for a mixin class to allow for string representation of an object.
   *

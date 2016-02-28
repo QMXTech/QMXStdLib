@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility.cpp
 // Robert M. Baker | Created : 22FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Version : 1.1.2
 // This is a source file for 'QMXStdLib'; it defines the implementation for a general utility class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 22FEB12
   * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @version 1.1.2
   *
   * @brief This source file defines the implementation for a general utility class.
   *

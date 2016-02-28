@@ -32,3 +32,10 @@ Key
 27FEB16 1.1.1 Robert M. Baker <malachy@qmxtech.com>
 ===================================================
 ~ Refactored 'CreateGroup' and 'CreateThread' methods of 'ThreadManager' to be more optimal.
+
+
+
+28FEB16 1.1.2 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Moved 'Create' method from 'Object' derived classes to 'Object' itself.
++ Added 'DoAllocate' boolean parameter to 'Create' method in 'Object' class to allow for deferment of object allocation.

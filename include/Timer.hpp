@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Timer.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a header file for 'QMXStdLib'; it defines the interface for a timer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This header file defines the interface for a timer class.
   *
@@ -81,6 +81,10 @@ namespace QMXStdLib
 
 class Timer : public Object< Timer >
 {
+	// Friend Classes
+
+		friend class Object;
+
 public:
 
 	// Public Data Types
@@ -139,15 +143,6 @@ public:
 		  */
 
 		real_t GetTime( TimeUnits Units = Seconds ) const;
-
-		/**
-		  * @brief This method creates an instance of this class.
-		  *
-		  * @return
-		  * 	A pointer to the newly created instance.
-		  */
-
-		static PointerType Create();
 
 private:
 

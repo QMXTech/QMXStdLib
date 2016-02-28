@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Timer.cpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a source file for 'QMXStdLib'; it defines the implementation for a timer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This source file defines the implementation for a timer class.
   *
@@ -116,21 +116,6 @@ real_t Timer::GetTime( Timer::TimeUnits Units ) const
 	// Return elapsed time, in specified units, to calling routine.
 
 		return( LocalTimer.elapsed().wall / static_cast< real_t >( Units ) );
-}
-
-Timer::PointerType Timer::Create()
-{
-	// Create local variables.
-
-		PointerType Result( new Timer() );
-
-	// Initialize new instance.
-
-		Result->Allocate();
-
-	// Return result to calling routine.
-
-		return Result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

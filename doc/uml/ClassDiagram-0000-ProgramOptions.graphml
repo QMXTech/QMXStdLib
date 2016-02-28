@@ -74,7 +74,7 @@
       <data key="d5"><![CDATA[QMXStdLib::ProgramOptions Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="425.5" width="649.5" x="162.0" y="226.0"/>
+          <y:Geometry height="405.5" width="649.5" x="162.0" y="226.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="106.60498046875" x="271.447509765625" y="3.0">ProgramOptions</y:NodeLabel>
@@ -106,7 +106,6 @@
 + SetConfigOption( [In] TargetOption : String, [In] TargetValue : String, [In] DoCreate : Bool = false ) : Void&lt;br&gt;
 + RemoveConfigOption( [In] TargetOption : String ) : Void&lt;br&gt;
 + GetPositionalOption( [In] TargetIndex : UInt ) : String&lt;br&gt;
-+ Create() : ProgramOptions* {Static}&lt;br&gt;
 - ProgramOptions() : Void&lt;br&gt;
 - DeallocateImp() : Void&lt;br&gt;
 - ExtractGroup( [Out] Target : String ) : String&lt;br&gt;
@@ -122,7 +121,7 @@
       <data key="d5"><![CDATA[QMXStdLib::Object Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="26.0" width="126.0" x="162.0" y="747.5"/>
+          <y:Geometry height="26.0" width="126.0" x="162.0" y="727.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="123.40673828125" x="1.296630859375" y="3.0">QMXStdLib::Object</y:NodeLabel>
@@ -138,7 +137,7 @@
       <data key="d5"><![CDATA[QMXStdLib::Singleton Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="49.0" width="142.0" x="385.5" y="747.5"/>
+          <y:Geometry height="49.0" width="142.0" x="385.5" y="727.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="140.83837890625" x="0.580810546875" y="25.96875">QMXStdLib::Singleton</y:NodeLabel>
@@ -152,7 +151,7 @@
     <edge id="e0" source="n5" target="n6">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-261.75" sy="212.75" tx="0.0" ty="-14.0"/>
+          <y:Path sx="-261.75" sy="202.75" tx="0.0" ty="-14.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="white_delta"/>
           <y:EdgeLabel alignment="left" configuration="AutoFlippingLabel" distance="4.0" fontFamily="Calibri" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.0" modelName="two_pos" modelPosition="tail" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="126.56640625" x="4.0" y="39.95361328125">DType = ProgramOptions<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
@@ -164,10 +163,10 @@
     <edge id="e1" source="n5" target="n7">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-30.0" sy="212.5" tx="0.0" ty="-25.0"/>
+          <y:Path sx="-30.25" sy="202.75" tx="0.0" ty="-25.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="white_delta"/>
-          <y:EdgeLabel alignment="left" configuration="AutoFlippingLabel" distance="4.0" fontFamily="Calibri" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.0" modelName="two_pos" modelPosition="tail" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="126.56640625" x="3.8955189677504904" y="40.0162353515625">DType = ProgramOptions<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+          <y:EdgeLabel alignment="left" configuration="AutoFlippingLabel" distance="4.0" fontFamily="Calibri" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.0" modelName="two_pos" modelPosition="tail" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="126.56640625" x="4.0" y="39.953369140625">DType = ProgramOptions<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
           </y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>

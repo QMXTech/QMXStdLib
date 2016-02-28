@@ -74,7 +74,7 @@
       <data key="d5"><![CDATA[QMXStdLib::Object Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="368.0" width="384.0" x="162.0" y="402.0"/>
+          <y:Geometry height="388.0" width="384.0" x="162.0" y="402.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="45.05224609375" x="169.473876953125" y="3.0">Object</y:NodeLabel>
@@ -101,6 +101,7 @@
 + Get( [Out] Target : PPType ) : Void&lt;br&gt;
 + Set( [In] Target : PPType ) : Void&lt;br&gt;
 + Clone() : Object*&lt;br&gt;
++ Create( [In] DoAllocate : Bool ) : DType* {Static}&lt;br&gt;
 # Object() : Void&lt;br&gt;
 # operator=( [In] Instance : Object ) : Object&lt;br&gt;
 - AllocateImp() : Void {Virtual}&lt;br&gt;
@@ -161,7 +162,7 @@ XXXXXXXXXXXXXX&lt;br&gt;
       <data key="d5"><![CDATA[QMXStdLib::Lockable Class]]></data>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="48.0" width="139.0" x="162.0" y="850.0"/>
+          <y:Geometry height="48.0" width="139.0" x="162.0" y="870.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Calibri" fontSize="15" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.0" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="136.92724609375" x="1.036376953125" y="25.96875">QMXStdLib::Lockable</y:NodeLabel>
@@ -197,7 +198,7 @@ XXXXXXXXXXXXXX&lt;br&gt;
     <edge id="e1" source="n5" target="n8">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-122.5" sy="184.1497992732909" tx="0.0" ty="-24.0"/>
+          <y:Path sx="-122.5" sy="194.0" tx="0.0" ty="-24.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>

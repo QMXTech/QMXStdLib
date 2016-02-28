@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base.hpp
 // Robert M. Baker | Created : 10DEC11 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Version : 1.1.2
 // This is the base header file for 'QMXStdLib'; it defines data common to all modules.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
   * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @version 1.1.2
   *
   * @brief This base header file defines data common to all modules.
   *

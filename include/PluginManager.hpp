@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PluginManager.hpp
-// Robert M. Baker | Created : 15APR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 15APR12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a header file for 'QMXStdLib'; it defines the interface for a plugin manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 15APR12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This header file defines the interface for a plugin manager class.
   *
@@ -93,6 +93,10 @@ namespace QMXStdLib
 
 class PluginManager : public Object< PluginManager >, public Singleton< PluginManager >
 {
+	// Friend Classes
+
+		friend class Object;
+
 public:
 
 	// Public Type Definitions
@@ -278,15 +282,6 @@ public:
 		  */
 
 		void Initialize();
-
-		/**
-		  * @brief This method creates an instance of this class.
-		  *
-		  * @return
-		  * 	A pointer to the newly created instance.
-		  */
-
-		static PointerType Create();
 
 private:
 

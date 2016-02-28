@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StringTest.cpp
-// Robert M. Baker | Created : 20FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 20FEB12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::String' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -32,7 +32,7 @@ using namespace QMXStdLib;
 
 TEST( StringTest, ToUTF8FromUTF16Works )
 {
-	// TODO (Malachy - Priority 50): Complete once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Complete once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		/*
@@ -55,7 +55,7 @@ TEST( StringTest, ToUTF8FromUTF16Works )
 
 TEST( StringTest, ToUTF8FromUTF32Works )
 {
-	// TODO (Malachy - Priority 50): Complete once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Complete once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		/*
@@ -78,7 +78,7 @@ TEST( StringTest, ToUTF8FromUTF32Works )
 
 TEST( StringTest, ToUTF16Works )
 {
-	// TODO (Malachy - Priority 50): Complete once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Complete once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		/*
@@ -101,7 +101,7 @@ TEST( StringTest, ToUTF16Works )
 
 TEST( StringTest, ToUTF32Works )
 {
-	// TODO (Malachy - Priority 50): Complete once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Complete once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		/*

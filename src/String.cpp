@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.cpp
-// Robert M. Baker | Created : 08JAN15 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 08JAN15 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a source file for 'QMXStdLib'; it defines the implementation for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 08JAN15
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This source file defines the implementation for a set of string utility functions.
   *
@@ -73,7 +73,7 @@ namespace String
 
 string ToUTF8( const u16string& Target )
 {
-	// TODO (Malachy - Priority 50): Uncomment once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Uncomment once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		//wstring_convert< codecvt_utf8_utf16< char16_t >, char16_t > Convert;
@@ -86,7 +86,7 @@ string ToUTF8( const u16string& Target )
 
 string ToUTF8( const u32string& Target )
 {
-	// TODO (Malachy - Priority 50): Uncomment once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Uncomment once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		//wstring_convert< codecvt_utf8< char32_t >, char32_t > Convert;
@@ -99,7 +99,7 @@ string ToUTF8( const u32string& Target )
 
 u16string ToUTF16( const string& Target )
 {
-	// TODO (Malachy - Priority 50): Uncomment once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Uncomment once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		//wstring_convert< codecvt_utf8_utf16< char16_t >, char16_t > Convert;
@@ -112,7 +112,7 @@ u16string ToUTF16( const string& Target )
 
 u32string ToUTF32( const string& Target )
 {
-	// TODO (Malachy - Priority 50): Uncomment once GCC becomes C++11 compliant.
+	// TODO (Robert M. Baker - Priority 50): Uncomment once GCC becomes C++11 compliant.
 	// Create local variables.
 
 		//wstring_convert< codecvt_utf8< char32_t >, char32_t > Convert;

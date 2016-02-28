@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptions.cpp
-// Robert M. Baker | Created : 23OCT13 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 23OCT13 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a source file for 'QMXStdLib'; it defines the implementation for a program options class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 23OCT13
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This source file defines the implementation for a program options class.
   *
@@ -354,21 +354,6 @@ string ProgramOptions::GetPositionalOption( size_t TargetIndex ) const
 	// Report either specified positional option value or an empty string to calling routine.
 
 		return( ( TargetIndex < PositionalOptions.size() ) ? PositionalOptions[ TargetIndex ] : "" );
-}
-
-ProgramOptions::PointerType ProgramOptions::Create()
-{
-	// Create local variables.
-
-		PointerType Result( new ProgramOptions() );
-
-	// Initialize new instance.
-
-		Result->Allocate();
-
-	// Return result to calling routine.
-
-		return Result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UniqueRandom.hpp
-// Robert M. Baker | Created : 03FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 03FEB12 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a header file for 'QMXStdLib'; it defines the interface for a unique random number generation class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 03FEB12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This header file defines the interface for a unique random number generation class.
   *
@@ -181,6 +181,10 @@ private:
 
 template< typename NType > class UniqueRandomI : public Object< UniqueRandomI< NType > >, public UniqueRandom< NType >
 {
+	// Friend Classes
+
+		friend class Object< UniqueRandomI< NType > >;
+
 public:
 
 	// Destructor
@@ -215,28 +219,6 @@ public:
 			// Return a non-mutable number vector reference to the calling routine.
 
 				return this->Numbers;
-		}
-
-		/**
-		  * @brief This method creates an instance of this class.
-		  *
-		  * @return
-		  * 	A pointer to the newly created instance.
-		  */
-
-		static typename UniqueRandomI< NType >::PointerType Create()
-		{
-			// Create local variables.
-
-				typename UniqueRandomI< NType >::PointerType Result( new UniqueRandomI() );
-
-			// Initialize new instance.
-
-				Result->Allocate();
-
-			// Return result to calling routine.
-
-				return Result;
 		}
 
 private:
@@ -344,6 +326,10 @@ private:
 
 template< typename NType > class UniqueRandomF : public Object< UniqueRandomF< NType > >, public UniqueRandom< NType >
 {
+	// Friend Classes
+
+		friend class Object< UniqueRandomF< NType > >;
+
 public:
 
 	// Destructor
@@ -378,28 +364,6 @@ public:
 			// Return a non-mutable number vector reference to the calling routine.
 
 				return this->Numbers;
-		}
-
-		/**
-		  * @brief This method creates an instance of this class.
-		  *
-		  * @return
-		  * 	A pointer to the newly created instance.
-		  */
-
-		static typename UniqueRandomF< NType >::PointerType Create()
-		{
-			// Create local variables.
-
-				typename UniqueRandomF< NType >::PointerType Result( new UniqueRandomF() );
-
-			// Initialize new instance.
-
-				Result->Allocate();
-
-			// Return result to calling routine.
-
-				return Result;
 		}
 
 private:

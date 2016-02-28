@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptions.hpp
-// Robert M. Baker | Created : 23OCT13 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.1
+// Robert M. Baker | Created : 23OCT13 | Last Modified : 28FEB16 by Robert M. Baker
+// Version : 1.1.2
 // This is a header file for 'QMXStdLib'; it defines the interface for a program options class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -17,12 +17,14 @@
 // You should have received a copy of the GNU Lesser General Public License along with 'QMXStdLib'.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// TODO (Robert M. Baker - Priority 50): Modify all '*ConfigOption' methods to use a separate parameter for group ID.
+
 /**
   * @file
   * @author  Robert M. Baker
   * @date    Created : 23OCT13
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.1
+  * @date    Last Modified : 28FEB16 by Robert M. Baker
+  * @version 1.1.2
   *
   * @brief This header file defines the interface for a program options class.
   *
@@ -90,6 +92,10 @@ namespace QMXStdLib
 
 class ProgramOptions : public Object< ProgramOptions >, public Singleton< ProgramOptions >
 {
+	// Friend Classes
+
+		friend class Object;
+
 public:
 
 	// Destructor
@@ -245,15 +251,6 @@ public:
 		  */
 
 		std::string GetPositionalOption( size_t TargetIndex ) const;
-
-		/**
-		  * @brief This method creates an instance of this class.
-		  *
-		  * @return
-		  * 	A pointer to the newly created instance.
-		  */
-
-		static PointerType Create();
 
 private:
 

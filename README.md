@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-> QuantuMatriX Software Standard Library - V1.1.1
+> QuantuMatriX Software Standard Library - V1.1.2
 > Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
 >
 > This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMX Software website at 'https://software.qmxtech.com/'.
