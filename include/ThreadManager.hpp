@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManager.hpp
 // Robert M. Baker | Created : 24FEB16 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.0
+// Version : 1.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 24FEB16
   * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.0
+  * @version 1.1.1
   *
   * @brief This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
   *
@@ -368,7 +368,6 @@ public:
 
 			// Create local variables.
 
-				ThreadPtr TargetThread;
 				auto GroupMapIterator = Groups.find( GroupID );
 				ThreadPtrMap::iterator ThreadPtrMapIterator;
 
@@ -381,8 +380,7 @@ public:
 				            "ThreadManager::CreateThread",
 				            "00000034",
 				            GroupID << ", " << ThreadID );
-				TargetThread = std::make_shared< Thread >( TargetFunction, TargetArguments... );
-				GroupMapIterator->second.Threads.insert( ThreadPtrMap::value_type( ThreadID, TargetThread ) );
+				GroupMapIterator->second.Threads.insert( ThreadPtrMap::value_type( ThreadID, std::make_shared< Thread >( TargetFunction, TargetArguments... ) ) );
 		}
 
 		/**

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManager.cpp
 // Robert M. Baker | Created : 24FEB16 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.0
+// Version : 1.1.1
 // This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 24FEB16
   * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.0
+  * @version 1.1.1
   *
   * @brief This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
   *
@@ -88,14 +88,13 @@ void ThreadManager::CreateGroup( const string& GroupID )
 
 		SCOPED_STACK_TRACE( "ThreadManager::CreateGroup", 0000 );
 
-	// Create local variables.
-
-		auto GroupMapIterator = Groups.find( GroupID );
-
 	// Create specified group, if it does not already exist.
 
-		QMX_ASSERT( ( GroupMapIterator == Groups.end() ), "QMXStdLib", "ThreadManager::CreateGroup", "00000026", GroupID );
-		Groups.insert( GroupMap::value_type( GroupID, { ThreadPtrMap(), BarrierPtr() } ) );
+		QMX_ASSERT( Groups.insert( GroupMap::value_type( GroupID, { ThreadPtrMap(), BarrierPtr() } ) ).second,
+		            "QMXStdLib",
+		            "ThreadManager::CreateGroup",
+		            "00000026",
+		            GroupID );
 }
 
 void ThreadManager::DestroyGroup( const string& GroupID, const bool DoDestroyThreads, const bool DoInterrupt )

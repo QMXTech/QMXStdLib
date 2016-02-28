@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PluginManager.cpp
 // Robert M. Baker | Created : 15APR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.0
+// Version : 1.1.1
 // This is a source file for 'QMXStdLib'; it defines the implementation for a plugin manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 15APR12
   * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.0
+  * @version 1.1.1
   *
   * @brief This source file defines the implementation for a plugin manager class.
   *

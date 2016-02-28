@@ -26,3 +26,9 @@ Key
 + Added 'SetConfigOption' method to 'ProgramOptions' class to facilitate setting/adding of config options at runtime.
 + Added 'RemoveConfigOption' method to 'ProgramOptions' class to facilitate removal of config options at runtime.
 + Added the 'ThreadManager' class to ease creation and management of threads and thread groups.
+
+
+
+27FEB16 1.1.1 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Refactored 'CreateGroup' and 'CreateThread' methods of 'ThreadManager' to be more optimal.
