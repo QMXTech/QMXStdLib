@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIO.cpp
-// Robert M. Baker | Created : 01OCT13 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 01OCT13 | Last Modified : 26AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a console I/O class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 01OCT13
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 26AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for a console I/O class.
   *
-  * @section Description
+  * @section ConsoleIOS0000 Description
   *
   * This source file defines the implementation for a console I/O class.
   *
-  * @section License
+  * @section ConsoleIOS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -64,9 +64,9 @@ namespace QMXStdLib
 // Static Field Initializers for the 'ConsoleIO' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool ConsoleIO::IsStreamDisabled[ ConsoleIO::StreamCount ] = { false, false, false };
-SharedMutex ConsoleIO::LocalMutex;
-SharedMutex ConsoleIO::StreamMutexes[ ConsoleIO::StreamCount ];
+bool ConsoleIO::isStreamDisabled[ ConsoleIO::STREAM_COUNT ] = { false, false, false };
+SharedMutexPair ConsoleIO::localMutex;
+SharedMutex ConsoleIO::streamMutexes[ ConsoleIO::STREAM_COUNT ];
 
 } // 'QMXStdLib' Namespace
 

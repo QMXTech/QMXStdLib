@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXException.cpp
-// Robert M. Baker | Created : 28FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 28FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for an exception class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 28FEB12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for an exception class.
   *
-  * @section Description
+  * @section QMXExceptionS0000 Description
   *
   * This source file defines the implementation for an exception class.
   *
-  * @section License
+  * @section QMXExceptionS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -68,36 +68,44 @@ QMXException::QMXException()
 {
 	// Initialize fields.
 
-		ZERO_ARRAY( RootID );
-		ZERO_ARRAY( ModuleID );
-		ZERO_ARRAY( EventIndex );
-		ZERO_ARRAY( EventData );
-		ZERO_ARRAY( StackTrace );
-		ZERO_ARRAY( Message );
-		sprintf( Buffer, "QMXStdLib::QMXException" );
+		ZERO_ARRAY( rootID );
+		ZERO_ARRAY( moduleID );
+		ZERO_ARRAY( eventIndex );
+		ZERO_ARRAY( eventData );
+		ZERO_ARRAY( stackTrace );
+		ZERO_ARRAY( message );
+		sprintf( buffer, "QMXStdLib::QMXException" );
 }
 
-QMXException::QMXException( const char* TargetRootID,
-                            const char* TargetModuleID,
-                            const char* TargetEventIndex,
-                            const char* TargetEventData,
-                            const char* TargetStackTrace )
+QMXException::QMXException(
+	const char* sourceRootID,
+	const char* sourceModuleID,
+	const char* sourceEventIndex,
+	const char* sourceEventData,
+	const char* sourceStackTrace
+)
 {
 	// Initialize fields.
 
-		strcpy( RootID, TargetRootID );
-		strcpy( ModuleID, TargetModuleID );
-		strcpy( EventIndex, TargetEventIndex );
-		strcpy( EventData, TargetEventData );
-		strcpy( StackTrace, TargetStackTrace );
-		sprintf( Message, "%s.EventMessages.<LL>_<CC>.%s", RootID, EventIndex );
-		sprintf( Buffer, "Exception ocurred in '%s::%s' -> %s", RootID, ModuleID, Message );
+		strcpy( rootID, sourceRootID );
+		strcpy( moduleID, sourceModuleID );
+		strcpy( eventIndex, sourceEventIndex );
+		strcpy( eventData, sourceEventData );
+		strcpy( stackTrace, sourceStackTrace );
+		sprintf( message, "%s.EventMessages.<LL>_<CC>.%s", rootID, eventIndex );
+		sprintf( buffer, "Exception occurred in '%s::%s' -> %s", rootID, moduleID, message );
 
-		if( strlen( EventData ) )
-			sprintf( Buffer, "%s : %s", Buffer, EventData );
+		if( strlen( eventData ) )
+		{		
+			strcat( buffer, " : " );
+			strcpy( buffer, strcat( buffer, eventData ) );
+		}
 
-		if( strlen( StackTrace ) )
-			sprintf( Buffer, "%s\n\nStack Trace: %s", Buffer, StackTrace );
+		if( strlen( stackTrace ) )
+		{
+			strcat( buffer, "\n\nStack Trace: " );
+			strcpy( buffer, strcat( buffer, stackTrace ) );
+		}
 }
 
 QMXException::~QMXException()
@@ -105,53 +113,53 @@ QMXException::~QMXException()
 	// Do nothing.
 }
 
-const char* QMXException::GetRootID() const
+const char* QMXException::getRootID() const
 {
 	// Return event root ID to calling routine.
 
-		return RootID;
+		return rootID;
 }
 
-const char* QMXException::GetModuleID() const
+const char* QMXException::getModuleID() const
 {
 	// Return event module ID to calling routine.
 
-		return ModuleID;
+		return moduleID;
 }
 
-const char* QMXException::GetEventIndex() const
+const char* QMXException::getEventIndex() const
 {
 	// Return event index to calling routine.
 
-		return EventIndex;
+		return eventIndex;
 }
 
-const char* QMXException::GetEventData() const
+const char* QMXException::getEventData() const
 {
 	// Return event data to calling routine.
 
-		return EventData;
+		return eventData;
 }
 
-const char* QMXException::GetStackTrace() const
+const char* QMXException::getStackTrace() const
 {
 	// Return event stack trace to calling routine.
 
-		return StackTrace;
+		return stackTrace;
 }
 
-const char* QMXException::GetMessage() const
+const char* QMXException::getMessage() const
 {
 	// Return event message to calling routine.
 
-		return Message;
+		return message;
 }
 
 const char* QMXException::what() const throw()
 {
 	// Return nature of the exception to calling routine.
 
-		return Buffer;
+		return buffer;
 }
 
 } // 'QMXStdLib' Namespace

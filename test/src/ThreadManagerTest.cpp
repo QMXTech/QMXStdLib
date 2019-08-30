@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManagerTest.cpp
-// Robert M. Baker | Created : 26FEB16 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 26FEB16 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'ThreadManager' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,14 +34,14 @@ namespace ThreadManagerTest
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'VariableIndex' Enumeration
+// The 'Variableindex' Enumeration
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-enum VariableIndex : size_t
+enum Variableindex : size_t
 {
-	EnterCount,
-	WaitCount,
-	ExitCount
+	ENTER_COUNT,
+	WAIT_COUNT,
+	EXIT_COUNT
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ public:
 
 	// Public Type Definitions
 
-		typedef shared_ptr< Variables > PointerType;
+		typedef shared_ptr< Variables > InstancePtr;
 
 	// Public Constructors
 
@@ -62,9 +62,9 @@ public:
 		{
 			// Initialize fields.
 
-				EnterCountVar = Null;
-				WaitCountVar = Null;
-				ExitCountVar = Null;
+				enterCountVar = UNSET;
+				waitCountVar = UNSET;
+				exitCountVar = UNSET;
 		}
 
 	// Destructor
@@ -76,7 +76,7 @@ public:
 
 	// Public Methods
 
-		void IncCount( const VariableIndex Index )
+		void incCount( const Variableindex index )
 		{
 			// Obtain locks.
 
@@ -84,15 +84,32 @@ public:
 
 			// Increment variable based on specified index.
 
-				switch( Index )
+				switch( index )
 				{
-					case EnterCount: { EnterCountVar++;  break; }
-					case WaitCount: { WaitCountVar++;  break; }
-					case ExitCount: { ExitCountVar++;  break; }
+					case ENTER_COUNT:
+					{
+						enterCountVar++;
+
+						break;
+					}
+
+					case WAIT_COUNT:
+					{
+						waitCountVar++;
+
+						break;
+					}
+
+					case EXIT_COUNT:
+					{
+						exitCountVar++;
+
+						break;
+					}
 				}
 		}
 
-		size_t GetCount( const VariableIndex Index ) const
+		size_t getCount( const Variableindex index ) const
 		{
 			// Obtain locks.
 
@@ -100,148 +117,163 @@ public:
 
 			// Create local variables.
 
-				size_t Result = Null;
+				size_t result = UNSET;
 
 			// Get variable value based on specified index.
 
-				switch( Index )
+				switch( index )
 				{
-					case EnterCount: { Result = EnterCountVar;  break; }
-					case WaitCount: { Result = WaitCountVar;  break; }
-					case ExitCount: { Result = ExitCountVar;  break; }
+					case ENTER_COUNT:
+					{
+						result = enterCountVar;
+
+						break;
+					}
+
+					case WAIT_COUNT:
+					{
+						result = waitCountVar; 
+						break;
+					}
+
+					case EXIT_COUNT:
+					{
+						result = exitCountVar; 
+						break;
+					}
 				}
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 private:
 
 	// Private Fields
 
-		mutable SharedMutex LocalMutex;
-		size_t EnterCountVar;
-		size_t WaitCountVar;
-		size_t ExitCountVar;
+		mutable SharedMutexPair localMutex;
+		size_t enterCountVar;
+		size_t waitCountVar;
+		size_t exitCountVar;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Function Definitions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ThreadMainA( const string& GroupID, bool DoWait, Variables::PointerType Vars )
+void threadMainA( const string& groupID, bool doWait, Variables::InstancePtr vars )
 {
 	// Execute main code.
 
-		Vars->IncCount( EnterCount );
+		vars->incCount( ENTER_COUNT );
 
 		// Wait Scope
 		{
 			// Create scope variables.
 
-				DisableInterruption DIInstance;
+				DisableInterruption diInstance;
 
-			// Wait if 'DoWait' is 'true'.
+			// Wait if 'doWait' is 'true'.
 
-				if( DoWait )
+				if( doWait )
 				{
-					THREAD_MANAGER.Wait( GroupID );
-					Vars->IncCount( WaitCount );
+					THREAD_MANAGER.wait( groupID );
+					vars->incCount( WAIT_COUNT );
 				}
 		}
 
 		try
 		{
 			while( true )
-				THREAD_MANAGER.InterruptionPoint();
+				THREAD_MANAGER.interruptionPoint();
 		}
-		catch( const ThreadInterrupted& TargetException )
+		catch( const ThreadInterrupted& except )
 		{
-			Vars->IncCount( ExitCount );
+			vars->incCount( EXIT_COUNT );
 		}
 }
 
-void ThreadMainB( const string& GroupID, bool DoWait, Variables::PointerType Vars )
+void threadMainB( const string& groupID, bool doWait, Variables::InstancePtr vars )
 {
 	// Create local variables.
 
-		bool IsDone = false;
+		bool isDone = false;
 
 	// Execute main code.
 
-		Vars->IncCount( EnterCount );
+		vars->incCount( ENTER_COUNT );
 
 		// Wait Scope
 		{
 			// Create scope variables.
 
-				DisableInterruption DIInstance;
+				DisableInterruption diInstance;
 
-			// Wait if 'DoWait' is 'true'.
+			// Wait if 'doWait' is 'true'.
 
-				if( DoWait )
+				if( doWait )
 				{
-					THREAD_MANAGER.Wait( GroupID );
-					Vars->IncCount( WaitCount );
+					THREAD_MANAGER.wait( groupID );
+					vars->incCount( WAIT_COUNT );
 				}
 		}
 
-		while( !IsDone )
+		while( !isDone )
 		{
 			try
 			{
-				if( THREAD_MANAGER.InterruptionRequested() )
+				if( THREAD_MANAGER.interruptionRequested() )
 				{
-					Vars->IncCount( ExitCount );
-					IsDone = true;
+					vars->incCount( EXIT_COUNT );
+					isDone = true;
 				}
 			}
-			catch( const ThreadInterrupted& TargetException )
+			catch( const ThreadInterrupted& except )
 			{
 				// Do nothing.
 			}
 		}
 }
 
-void ThreadMainC( const string& GroupID, bool DoWait, Variables::PointerType Vars )
+void threadMainC( const string& groupID, bool doWait, Variables::InstancePtr vars )
 {
 	// Create local variables.
 
-		DisableInterruption DIInstance;
-		bool IsDone = false;
+		DisableInterruption diInstance;
+		bool isDone = false;
 
 	// Execute main code.
 
-		Vars->IncCount( EnterCount );
+		vars->incCount( ENTER_COUNT );
 
 		// Wait Scope
 		{
 			// Create scope variables.
 
-				DisableInterruption DIInstance;
+				DisableInterruption diInstance;
 
-			// Wait if 'DoWait' is 'true'.
+			// Wait if 'doWait' is 'true'.
 
-				if( DoWait )
+				if( doWait )
 				{
-					THREAD_MANAGER.Wait( GroupID );
-					Vars->IncCount( WaitCount );
+					THREAD_MANAGER.wait( groupID );
+					vars->incCount( WAIT_COUNT );
 				}
 		}
 
-		while( !IsDone )
+		while( !isDone )
 		{
-			THREAD_MANAGER.InterruptionPoint();
+			THREAD_MANAGER.interruptionPoint();
 
-			if( THREAD_MANAGER.InterruptionRequested() )
+			if( THREAD_MANAGER.interruptionRequested() )
 			{
-				Vars->IncCount( ExitCount );
-				IsDone = true;
+				vars->incCount( EXIT_COUNT );
+				isDone = true;
 			}
 		}
 }
-	
+
 } // 'ThreadManagerTest' Namespace
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,254 +288,311 @@ TEST( ThreadManagerTest, CreateGroupWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
 
-	// Perform unit test for 'CreateGroup' method.
+	// Perform unit test for 'createGroup' method.
 
-		THREAD_MANAGER.CreateGroup( "TestGroupA" );
-		THREAD_MANAGER.CreateGroup( "TestGroupB" );
-		THREAD_MANAGER.CreateGroup( "TestGroupC" );
-		ASSERT_THROW( THREAD_MANAGER.CreateGroup( "TestGroupA" ), QMXException );
-		ASSERT_THROW( THREAD_MANAGER.CreateGroup( "TestGroupB" ), QMXException );
-		ASSERT_THROW( THREAD_MANAGER.CreateGroup( "TestGroupC" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroupA" );
+		THREAD_MANAGER.createGroup( "TestGroupB" );
+		THREAD_MANAGER.createGroup( "TestGroupC" );
+		ASSERT_THROW( THREAD_MANAGER.createGroup( "TestGroupA" ), QMXException );
+		ASSERT_THROW( THREAD_MANAGER.createGroup( "TestGroupB" ), QMXException );
+		ASSERT_THROW( THREAD_MANAGER.createGroup( "TestGroupC" ), QMXException );
 }
 
-TEST( ThreadManagerTest, SetBarrierSizeWorks )
+TEST( ThreadManagerTest, GetGroupIDsWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		StringVector groupIDs;
 
-	// Perform unit test for 'SetBarrierSize' method.
+		string expectedResults[] = {
+			"TestGroupA",
+		   "TestGroupB",
+		   "TestGroupC"
+		};
 
-		ASSERT_THROW( THREAD_MANAGER.SetBarrierSize( "TestGroup", 5 ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.SetBarrierSize( "TestGroup", 5 );
+	// Perform unit test for 'getgroupIDs' method.
+
+		THREAD_MANAGER.createGroup( "TestGroupA" );
+		THREAD_MANAGER.createGroup( "TestGroupB" );
+		THREAD_MANAGER.createGroup( "TestGroupC" );
+		THREAD_MANAGER.getGroupIDs( groupIDs );
+		sort( groupIDs.begin(), groupIDs.end() );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
+		{
+			ASSERT_EQ( expectedResults[ index ], groupIDs[ index ] );
+		}
+}
+
+TEST( ThreadManagerTest, setBarrierSizeWorks )
+{
+	// Create local variables.
+
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+
+	// Perform unit test for 'setBarrierSize' method.
+
+		ASSERT_THROW( THREAD_MANAGER.setBarrierSize( "TestGroup", 5 ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.setBarrierSize( "TestGroup", 5 );
 }
 
 TEST( ThreadManagerTest, CreateThreadWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'CreateThread' method.
+	// Perform unit test for 'createThread' method.
 
-		ASSERT_THROW( THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		ASSERT_THROW( THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars ), QMXException );
-		ASSERT_THROW( THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars ), QMXException );
-		ASSERT_THROW( THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars ), QMXException );
+		ASSERT_THROW( THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		ASSERT_THROW( THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars ), QMXException );
+		ASSERT_THROW( THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars ), QMXException );
+		ASSERT_THROW( THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars ), QMXException );
 		boost::this_thread::sleep_for( DELAY );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::EnterCount ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::ENTER_COUNT ) );
+}
+
+TEST( ThreadManagerTest, GetThreadIDsWorks )
+{
+	// Create local variables.
+
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
+		StringVector threadIDs;
+
+		string expectedResults[] = {
+			"TestThreadA",
+		   "TestThreadB",
+		   "TestThreadC"
+		};
+
+	// Perform unit test for 'getThreadIDs' method.
+
+		ASSERT_THROW( THREAD_MANAGER.getThreadIDs( "NonExistent", threadIDs ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.getThreadIDs( "TestGroup", threadIDs );
+		sort( threadIDs.begin(), threadIDs.end() );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
+		{
+			ASSERT_EQ( expectedResults[ index ], threadIDs[ index ] );
+		}
 }
 
 TEST( ThreadManagerTest, JoinWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'Join' method.
+	// Perform unit test for 'join' method.
 
-		ASSERT_THROW( THREAD_MANAGER.Join( "TestGroup", "TestThreadA" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		ASSERT_THROW( THREAD_MANAGER.Join( "TestGroup", "TestThreadA" ), QMXException );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.InterruptAll( "TestGroup" );
-		THREAD_MANAGER.Join( "TestGroup", "TestThreadA" );
-		THREAD_MANAGER.Join( "TestGroup", "TestThreadB" );
-		THREAD_MANAGER.Join( "TestGroup", "TestThreadC" );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.join( "TestGroup", "TestThreadA" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		ASSERT_THROW( THREAD_MANAGER.join( "TestGroup", "TestThreadA" ), QMXException );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.interruptAll( "TestGroup" );
+		THREAD_MANAGER.join( "TestGroup", "TestThreadA" );
+		THREAD_MANAGER.join( "TestGroup", "TestThreadB" );
+		THREAD_MANAGER.join( "TestGroup", "TestThreadC" );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, TryJoinWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'TryJoin' method.
+	// Perform unit test for 'tryJoin' method.
 
-		ASSERT_THROW( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		ASSERT_THROW( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ), QMXException );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		ASSERT_FALSE( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ) );
-		ASSERT_FALSE( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadB", Seconds( 1 ) ) );
-		ASSERT_FALSE( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadC", Seconds( 1 ) ) );
-		THREAD_MANAGER.InterruptAll( "TestGroup" );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ) );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadB", Seconds( 1 ) ) );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoin( "TestGroup", "TestThreadC", Seconds( 1 ) ) );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		ASSERT_THROW( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ), QMXException );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		ASSERT_FALSE( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ) );
+		ASSERT_FALSE( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadB", Seconds( 1 ) ) );
+		ASSERT_FALSE( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadC", Seconds( 1 ) ) );
+		THREAD_MANAGER.interruptAll( "TestGroup" );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadA", Seconds( 1 ) ) );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadB", Seconds( 1 ) ) );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoin( "TestGroup", "TestThreadC", Seconds( 1 ) ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, JoinAllWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'JoinAll' method.
+	// Perform unit test for 'joinAll' method.
 
-		ASSERT_THROW( THREAD_MANAGER.JoinAll( "TestGroup" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.InterruptAll( "TestGroup" );
-		THREAD_MANAGER.JoinAll( "TestGroup" );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.joinAll( "TestGroup" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.interruptAll( "TestGroup" );
+		THREAD_MANAGER.joinAll( "TestGroup" );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, TryJoinAllWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'TryJoinAll' method.
+	// Perform unit test for 'tryJoinAll' method.
 
-		ASSERT_THROW( THREAD_MANAGER.TryJoinAll( "TestGroup", Seconds( 1 ) ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		ASSERT_FALSE( THREAD_MANAGER.TryJoinAll( "TestGroup", Seconds( 1 ) ) );
-		THREAD_MANAGER.InterruptAll( "TestGroup" );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoinAll( "TestGroup", Seconds( 1 ) ) );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.tryJoinAll( "TestGroup", Seconds( 1 ) ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		ASSERT_FALSE( THREAD_MANAGER.tryJoinAll( "TestGroup", Seconds( 1 ) ) );
+		THREAD_MANAGER.interruptAll( "TestGroup" );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoinAll( "TestGroup", Seconds( 1 ) ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, InterruptWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'Interrupt' method.
+	// Perform unit test for 'interrupt' method.
 
-		ASSERT_THROW( THREAD_MANAGER.Interrupt( "TestGroup", "TestThreadA" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		ASSERT_THROW( THREAD_MANAGER.Interrupt( "TestGroup", "TestThreadA" ), QMXException );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.Interrupt( "TestGroup", "TestThreadA" );
-		THREAD_MANAGER.Interrupt( "TestGroup", "TestThreadB" );
-		THREAD_MANAGER.Interrupt( "TestGroup", "TestThreadC" );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoinAll( "TestGroup", Seconds( 5 ) ) );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.interrupt( "TestGroup", "TestThreadA" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		ASSERT_THROW( THREAD_MANAGER.interrupt( "TestGroup", "TestThreadA" ), QMXException );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.interrupt( "TestGroup", "TestThreadA" );
+		THREAD_MANAGER.interrupt( "TestGroup", "TestThreadB" );
+		THREAD_MANAGER.interrupt( "TestGroup", "TestThreadC" );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoinAll( "TestGroup", Seconds( 5 ) ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, InterruptAllWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'InterruptAll' method.
+	// Perform unit test for 'interruptAll' method.
 
-		ASSERT_THROW( THREAD_MANAGER.InterruptAll( "TestGroup" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.InterruptAll( "TestGroup" );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoinAll( "TestGroup", Seconds( 5 ) ) );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.interruptAll( "TestGroup" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.interruptAll( "TestGroup" );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoinAll( "TestGroup", Seconds( 5 ) ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, WaitWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'Wait' method.
+	// Perform unit test for 'wait' method.
 
-		ASSERT_THROW( THREAD_MANAGER.Wait( "TestGroup" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.SetBarrierSize( "TestGroup", 3 );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", true, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", true, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", true, Vars );
-		THREAD_MANAGER.InterruptAll( "TestGroup" );
-		ASSERT_TRUE( THREAD_MANAGER.TryJoinAll( "TestGroup", Seconds( 5 ) ) );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::WaitCount ) );
+		ASSERT_THROW( THREAD_MANAGER.wait( "TestGroup" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.setBarrierSize( "TestGroup", 3 );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", true, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", true, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", true, vars );
+		THREAD_MANAGER.interruptAll( "TestGroup" );
+		ASSERT_TRUE( THREAD_MANAGER.tryJoinAll( "TestGroup", Seconds( 5 ) ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::WAIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, DestroyThreadWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'DestroyThread' method.
+	// Perform unit test for 'destroyThread' method.
 
-		ASSERT_THROW( THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadA" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		ASSERT_THROW( THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadA" ), QMXException );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadA", false );
-		THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadB", false );
-		THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadC", false );
+		ASSERT_THROW( THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadA" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		ASSERT_THROW( THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadA" ), QMXException );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadA", false );
+		THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadB", false );
+		THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadC", false );
 		boost::this_thread::sleep_for( DELAY );
-		ASSERT_EQ( 0, Vars->GetCount( ThreadManagerTest::ExitCount ) );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadA" );
-		THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadB" );
-		THREAD_MANAGER.DestroyThread( "TestGroup", "TestThreadC" );
+		ASSERT_EQ( 0, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadA" );
+		THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadB" );
+		THREAD_MANAGER.destroyThread( "TestGroup", "TestThreadC" );
 		boost::this_thread::sleep_for( DELAY );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 TEST( ThreadManagerTest, DestroyGroupWorks )
 {
 	// Create local variables.
 
-		ThreadManager::PointerType Instance = ThreadManager::Create();
-		ThreadManagerTest::Variables::PointerType Vars = make_shared< ThreadManagerTest::Variables >();
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
 
-	// Perform unit test for 'DestroyGroup' method.
+	// Perform unit test for 'destroyGroup' method.
 
-		ASSERT_THROW( THREAD_MANAGER.DestroyGroup( "TestGroup" ), QMXException );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		ASSERT_THROW( THREAD_MANAGER.DestroyGroup( "TestGroup" ), QMXException );
-		THREAD_MANAGER.DestroyGroup( "TestGroup", true, false );
+		ASSERT_THROW( THREAD_MANAGER.destroyGroup( "TestGroup" ), QMXException );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		ASSERT_THROW( THREAD_MANAGER.destroyGroup( "TestGroup" ), QMXException );
+		THREAD_MANAGER.destroyGroup( "TestGroup", true, false );
 		boost::this_thread::sleep_for( DELAY );
-		ASSERT_EQ( 0, Vars->GetCount( ThreadManagerTest::ExitCount ) );
-		THREAD_MANAGER.CreateGroup( "TestGroup" );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadA", ThreadManagerTest::ThreadMainA, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadB", ThreadManagerTest::ThreadMainB, "TestGroup", false, Vars );
-		THREAD_MANAGER.CreateThread( "TestGroup", "TestThreadC", ThreadManagerTest::ThreadMainC, "TestGroup", false, Vars );
-		THREAD_MANAGER.DestroyGroup( "TestGroup", true );
+		ASSERT_EQ( 0, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
+		THREAD_MANAGER.createGroup( "TestGroup" );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadA", ThreadManagerTest::threadMainA, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadB", ThreadManagerTest::threadMainB, "TestGroup", false, vars );
+		THREAD_MANAGER.createThread( "TestGroup", "TestThreadC", ThreadManagerTest::threadMainC, "TestGroup", false, vars );
+		THREAD_MANAGER.destroyGroup( "TestGroup", true );
 		boost::this_thread::sleep_for( DELAY );
-		ASSERT_EQ( 3, Vars->GetCount( ThreadManagerTest::ExitCount ) );
+		ASSERT_EQ( 3, vars->getCount( ThreadManagerTest::EXIT_COUNT ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

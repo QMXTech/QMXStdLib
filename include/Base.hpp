@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is the base header file for 'QMXStdLib'; it defines data common to all modules.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This base header file defines data common to all modules.
   *
-  * @section Description
+  * @section BaseH0000 Description
   *
   * This base header file defines data common to all modules.
   *
-  * @section License
+  * @section BaseH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -52,36 +52,36 @@
 // Control Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define QMX_PLATFORM_LINUX    1
-#define QMX_PLATFORM_OSX      2
-#define QMX_PLATFORM_WINDOWS  3
+#define QMX_PLATFORM_LINUX   1
+#define QMX_PLATFORM_MACOS   2
+#define QMX_PLATFORM_WINDOWS 3
 
-#define QMX_COMPILER_CLANG    1
-#define QMX_COMPILER_GCC      2
-#define QMX_COMPILER_MINGW    3
+#define QMX_COMPILER_CLANG   1
+#define QMX_COMPILER_GCC     2
+#define QMX_COMPILER_MINGW   3
 
-#ifndef __LP64__
-#	define QMX_32BIT
-#else
+#if ( defined( __x86_64__ ) || defined( __ia64__ ) || defined( __ppc64__ ) || defined( __sparc_v9__ ) || defined( __mips64 ) || defined( __aarch64__ ) )
 #	define QMX_64BIT
-#endif // QMX_32BIT & QMX64BIT
+#else
+#	define QMX_32BIT
+#endif // QMX_64BIT & QMX32BIT
 
 #ifdef __linux__
-#	define QMX_PLATFORM        QMX_PLATFORM_LINUX
+#	define QMX_PLATFORM       QMX_PLATFORM_LINUX
 #elif __MACH__
-#	define QMX_PLATFORM        QMX_PLATFORM_OSX
+#	define QMX_PLATFORM       QMX_PLATFORM_MACOS
 #elif _WIN32
-#	define QMX_PLATFORM        QMX_PLATFORM_WINDOWS
+#	define QMX_PLATFORM       QMX_PLATFORM_WINDOWS
 #else
 #	error "Unsupported platform; aborting compile!"
 #endif // QMX_PLATFORM
 
 #if ( defined( __clang__ ) )
-#  define QMX_COMPILER        QMX_COMPILER_CLANG
+#  define QMX_COMPILER       QMX_COMPILER_CLANG
 #elif( defined( __GNUC__ ) && !defined( __MINGW32__ ) )
-#	define QMX_COMPILER        QMX_COMPILER_GCC
+#	define QMX_COMPILER       QMX_COMPILER_GCC
 #elif( defined( __MINGW32__ ) )
-#	define QMX_COMPILER        QMX_COMPILER_MINGW
+#	define QMX_COMPILER       QMX_COMPILER_MINGW
 #else
 #	error "Unsupported compiler; aborting compile!"
 #endif // QMX_COMPILER
@@ -94,7 +94,7 @@
 #	ifdef _WIN32_WINNT
 #		undef _WIN32_WINNT
 #	endif // _WIN32_WINNT
-#	define _WIN32_WINNT        0x0600
+#	define _WIN32_WINNT       0x0600
 #	define WIN32_LEAN_AND_MEAN
 #endif // _WIN32_WINNT & WIN32_LEAN_AND_MEAN
 
@@ -102,42 +102,26 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <cctype>
-#include <cstdint>
-#include <cstdio>
 #include <cstring>
-#include <ctime>
 #include <algorithm>
 #include <deque>
-#include <exception>
-#include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <limits>
-#include <locale>
 #include <memory>
-#include <random>
 #include <sstream>
 #include <string>
-#include <typeinfo>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/locale.hpp>
 #include <boost/timer/timer.hpp>
 
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #	include <boost/thread.hpp>
 #pragma GCC diagnostic pop
-
-#if ( ( QMX_PLATFORM == QMX_PLATFORM_LINUX ) || ( QMX_PLATFORM == QMX_PLATFORM_OSX ) )
-#	include <dlfcn.h>
-#elif( QMX_PLATFORM == QMX_PLATFORM_WINDOWS )
-#	include <windows.h>
-#endif // Platform Headers
 
 #ifdef QMXSTDLIB_INTERNAL_BUILD
 #	include "../build/Config.hpp"
@@ -149,47 +133,36 @@
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define DEPRECATED                 __attribute__ ((deprecated))
 #define SINGLE_STATEMENT(x)        do{ x }while( false )
+#define NOT_A_THREAD               boost::thread::id()
+#define THIS_THREAD_HASH           boost::this_thread::get_id()
 #define STRINGIZE_IMP(x)           #x
 #define STRINGIZE(x)               STRINGIZE_IMP( x )
 #define PURE_VIRTUAL               0
 #define BIT_FLAG(x)                1ull<<( x##ull - 1ull )
 #define BIT_FLAG_ALL               0xFFFFFFFFFFFFFFFFull
-#define ZERO_MEMORY(x,y)           memset( x, QMXStdLib::Null, y )
-#define ZERO_ARRAY(x)              memset( x, QMXStdLib::Null, sizeof( x ) )
+#define ZERO_MEMORY(x,y)           memset( x, UNSET, y )
+#define ZERO_ARRAY(x)              memset( x, UNSET, sizeof( x ) )
 #define ARRAY_SIZE(x)              ( sizeof( x ) / sizeof( *x ) )
 #define SAFE_DELETE(x)             SINGLE_STATEMENT( delete x;  x = nullptr; )
 #define SAFE_DELETE_ARRAY(x)       SINGLE_STATEMENT( delete[] x;  x = nullptr; )
 #define FLUSH_ISTREAM(x)           x.ignore( std::numeric_limits< std::streamsize >::max(), '\n' )
-#define WAIT_FOR_ENTER             SINGLE_STATEMENT( COUT << "Press 'Enter' to continue...";  std::cin.peek();  FLUSH_ISTREAM( std::cin ); )
 #define STRIP_ALL_WHITESPACE(x)    x.erase( std::remove_if( x.begin(), x.end(), boost::algorithm::is_space() ), x.end() )
-#define QMX_THROW(w,x,y,z)         SINGLE_STATEMENT(\
-                                     std::ostringstream EventDataBuffer;\
-                                     EventDataBuffer << z;\
-                                     throw QMXStdLib::QMXException( w, x, y, EventDataBuffer.str().c_str(), STACK_TRACE.c_str() );\
-                                   )
-#define QMX_THROW_X(w,x,y,z)       SINGLE_STATEMENT(\
-                                     std::ostringstream EventDataBuffer;\
-                                     EventDataBuffer << z;\
-                                     throw QMXStdLib::QMXException( w, x, y, EventDataBuffer.str().c_str() );\
-                                   )
-#define QMX_ASSERT(v,w,x,y,z)      SINGLE_STATEMENT( if( !v ) QMX_THROW( w, x, y, z ); )
-#define QMX_ASSERT_X(v,w,x,y,z)    SINGLE_STATEMENT( if( !v ) QMX_THROW_X( w, x, y, z ); )
-#define QMX_ASSERT_E(u,v,w,x,y,z)  SINGLE_STATEMENT( if( !u ) v;  QMX_THROW( w, x, y, z ); )
-#define QMX_ASSERT_EX(u,v,w,x,y,z) SINGLE_STATEMENT( if( !u ) v;  QMX_THROW_X( w, x, y, z ); )
-#define STANDARD_TYPEDEFS(x)       typedef std::shared_ptr< x > PointerType;\
+
+#define STANDARD_TYPEDEFS(x)       typedef std::shared_ptr< x > InstancePtr;\
                                    typedef std::pair< std::string, x > InstancePair;\
                                    typedef std::vector< x > InstanceVector;\
                                    typedef std::deque< x > InstanceDeque;\
                                    typedef std::unordered_set< x > InstanceSet;\
                                    typedef std::unordered_map< std::string, x > InstanceMap;\
-                                   typedef std::pair< std::string, PointerType > PointerPair;\
-                                   typedef std::vector< PointerType > PointerVector;\
-                                   typedef std::deque< PointerType > PointerDeque;\
-                                   typedef std::unordered_set< PointerType > PointerSet;\
-                                   typedef std::unordered_map< std::string, PointerType > PointerMap;\
-                                   typedef boost::thread_specific_ptr< x > ThreadLocalStorage;
+                                   typedef boost::thread_specific_ptr< x > InstanceTLS;\
+                                   typedef std::pair< std::string, InstancePtr > InstancePtrPair;\
+                                   typedef std::vector< InstancePtr > InstancePtrVector;\
+                                   typedef std::deque< InstancePtr > InstancePtrDeque;\
+                                   typedef std::unordered_set< InstancePtr > InstancePtrSet;\
+                                   typedef std::unordered_map< std::string, InstancePtr > InstancePtrMap;\
+                                   typedef boost::thread_specific_ptr< InstancePtr > InstancePtrTLS;
+
 #define STANDARD_TYPEDEFS_X(x,y)   typedef std::shared_ptr< x > y##Ptr;\
                                    typedef std::pair< std::string, x > y##Pair;\
                                    typedef std::vector< x > y##Vector;\
@@ -206,19 +179,19 @@
 
 #if ( QMX_PLATFORM == QMX_PLATFORM_LINUX )
 #	define IS_LINUX                 true
-#	define IS_OSX                   false
+#	define IS_MACOS                 false
 #	define IS_WINDOWS               false
-#elif( QMX_PLATFORM == QMX_PLATFORM_OSX )
+#elif( QMX_PLATFORM == QMX_PLATFORM_MACOS )
 #	define IS_LINUX                 false
-#	define IS_OSX                   true
+#	define IS_MACOS                 true
 #	define IS_WINDOWS               false
 #elif( QMX_PLATFORM == QMX_PLATFORM_WINDOWS )
 #	define IS_LINUX                 false
-#	define IS_OSX                   false
+#	define IS_MACOS                 false
 #	define IS_WINDOWS               true
 #else
 #	error "Unsupported value for 'QMX_PLATFORM'; aborting compile!"
-#endif // IS_LINUX, IS_OSX, & IS_WINDOWS
+#endif // IS_LINUX, IS_MACOS, & IS_WINDOWS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -235,47 +208,48 @@ namespace QMXStdLib
 // Type Definitions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef long double                               real_t;
-typedef uint64_t                                  BitField;
-typedef boost::chrono::nanoseconds                Nanoseconds;
-typedef boost::chrono::microseconds               Microseconds;
-typedef boost::chrono::milliseconds               Milliseconds;
-typedef boost::chrono::seconds                    Seconds;
-typedef boost::chrono::minutes                    Minutes;
-typedef boost::chrono::hours                      Hours;
-typedef boost::thread                             Thread;
-typedef boost::barrier                            Barrier;
-typedef boost::this_thread::disable_interruption  DisableInterruption;
-typedef boost::thread_interrupted                 ThreadInterrupted;
-typedef boost::shared_mutex                       SharedMutex;
-typedef boost::shared_lock< boost::shared_mutex > SharedLock;
-typedef boost::unique_lock< boost::shared_mutex > UniqueLock;
-typedef boost::filesystem::path                   Path;
-typedef boost::filesystem::directory_iterator     DirectoryIterator;
+typedef long double                              real_t;
+typedef uint64_t                                 bit_field_t;
+typedef boost::chrono::nanoseconds               Nanoseconds;
+typedef boost::chrono::microseconds              Microseconds;
+typedef boost::chrono::milliseconds              Milliseconds;
+typedef boost::chrono::seconds                   Seconds;
+typedef boost::chrono::minutes                   Minutes;
+typedef boost::chrono::hours                     Hours;
+typedef boost::thread                            Thread;
+typedef boost::thread::id                        ThreadHash;
+typedef boost::barrier                           Barrier;
+typedef boost::this_thread::disable_interruption DisableInterruption;
+typedef boost::thread_interrupted                ThreadInterrupted;
+typedef boost::shared_mutex                      SharedMutex;
+typedef std::pair< ThreadHash, SharedMutex >     SharedMutexPair;
+typedef boost::filesystem::path                  Path;
+typedef boost::filesystem::directory_iterator    DirectoryIterator;
 
 #ifdef QMX_32BIT
-	typedef uint32_t                               PointerSize;
+	typedef uint32_t                              ptr_size_t;
 #else
-	typedef uint64_t                               PointerSize;
+	typedef uint64_t                              ptr_size_t;
 #endif // PointerSize
 
-STANDARD_TYPEDEFS_X( void*,                       Void )
-STANDARD_TYPEDEFS_X( bool,                        Bool )
-STANDARD_TYPEDEFS_X( int,                         Int )
-STANDARD_TYPEDEFS_X( int8_t,                      Int8 )
-STANDARD_TYPEDEFS_X( int16_t,                     Int16 )
-STANDARD_TYPEDEFS_X( int32_t,                     Int32 )
-STANDARD_TYPEDEFS_X( int64_t,                     Int64 )
-STANDARD_TYPEDEFS_X( uint8_t,                     UInt8 )
-STANDARD_TYPEDEFS_X( uint16_t,                    UInt16 )
-STANDARD_TYPEDEFS_X( uint32_t,                    UInt32 )
-STANDARD_TYPEDEFS_X( uint64_t,                    UInt64 )
-STANDARD_TYPEDEFS_X( float,                       Float )
-STANDARD_TYPEDEFS_X( double,                      Double )
-STANDARD_TYPEDEFS_X( real_t,                      Real )
-STANDARD_TYPEDEFS_X( std::string,                 String )
-STANDARD_TYPEDEFS_X( Thread,                      Thread );
-STANDARD_TYPEDEFS_X( Barrier,                     Barrier );
+STANDARD_TYPEDEFS_X( void*,                      Void )
+STANDARD_TYPEDEFS_X( bool,                       Bool )
+STANDARD_TYPEDEFS_X( int,                        Int )
+STANDARD_TYPEDEFS_X( int8_t,                     Int8 )
+STANDARD_TYPEDEFS_X( int16_t,                    Int16 )
+STANDARD_TYPEDEFS_X( int32_t,                    Int32 )
+STANDARD_TYPEDEFS_X( int64_t,                    Int64 )
+STANDARD_TYPEDEFS_X( uint8_t,                    UInt8 )
+STANDARD_TYPEDEFS_X( uint16_t,                   UInt16 )
+STANDARD_TYPEDEFS_X( uint32_t,                   UInt32 )
+STANDARD_TYPEDEFS_X( uint64_t,                   UInt64 )
+STANDARD_TYPEDEFS_X( float,                      Float )
+STANDARD_TYPEDEFS_X( double,                     Double )
+STANDARD_TYPEDEFS_X( real_t,                     Real )
+STANDARD_TYPEDEFS_X( std::string,                String )
+STANDARD_TYPEDEFS_X( Thread,                     Thread );
+STANDARD_TYPEDEFS_X( Barrier,                    Barrier );
+STANDARD_TYPEDEFS_X( Path,                       Path );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Anonymous Enumerations
@@ -283,16 +257,16 @@ STANDARD_TYPEDEFS_X( Barrier,                     Barrier );
 
 enum
 {
-	Null = 0,
-	Toggle = -1,
-	True = 1,
-	False = 0,
-	On = 1,
-	Off = 0,
-	Yes = 1,
-	No = 0,
-	Active = 1,
-	Inactive = 0
+  UNSET = 0,
+	TOGGLE = -1,
+	TRUE = 1,
+	FALSE = 0,
+	ON = 1,
+	OFF = 0,
+	YES = 1,
+	NO = 0,
+	ACTIVE = 1,
+	INACTIVE = 0
 };
 
 } // 'QMXStdLib' Namespace

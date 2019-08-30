@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystem.cpp
-// Robert M. Baker | Created : 17DEC14 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 17DEC14 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a set of file system functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 17DEC14
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for a set of file system functions.
   *
-  * @section Description
+  * @section FileSystemS0000 Description
   *
   * This source file defines the implementation for a set of file system functions.
   *
-  * @section License
+  * @section FileSystemS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -71,52 +71,52 @@ namespace FileSystem
 // Function Definitions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Parse( Path& Target )
+void parse( Path& target )
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "FileSystem::Parse", 0000 );
+		SCOPED_STACK_TRACE( "FileSystem::parse", 0000 );
 
 	// Create local variables.
 
-		bool IsDone = false;
-		size_t StartIndex = Null;
-		size_t EndIndex = Null;
-		char* ExpandedSymbol = nullptr;
-		string ParsedPath = Target.string();
+		bool isDone = false;
+		size_t startIndex = UNSET;
+		size_t endIndex = UNSET;
+		char* expandedSymbol = nullptr;
+		string parsedPath = target.string();
 
 	// Parse the specified path and expand any embedded symbols.
 
 		do
 		{
-			StartIndex = ParsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_LEFT, 0 );
+			startIndex = parsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_LEFT, 0 );
 
-			if( StartIndex != string::npos )
+			if( startIndex != string::npos )
 			{
-				EndIndex = ParsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_RIGHT, 0 );
-				QMX_ASSERT( ( ( EndIndex != string::npos ) && ( EndIndex > StartIndex ) ), "QMXStdLib", "FileSystem::Parse", "00000008", Target );
-				ExpandedSymbol = getenv( ParsedPath.substr( ( StartIndex + 1 ), ( EndIndex - StartIndex - 1 ) ).c_str() );
-				QMX_ASSERT( ExpandedSymbol, "QMXStdLib", "FileSystem::Parse", "00000009", Target );
-				String::FindReplace( ParsedPath, ParsedPath.substr( StartIndex, ( EndIndex - StartIndex + 1 ) ), ExpandedSymbol, true );
+				endIndex = parsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_RIGHT, 0 );
+				QMX_ASSERT( ( ( endIndex != string::npos ) && ( endIndex > startIndex ) ), "QMXStdLib", "FileSystem::parse", "00000008", target );
+				expandedSymbol = getenv( parsedPath.substr( ( startIndex + 1 ), ( endIndex - startIndex - 1 ) ).c_str() );
+				QMX_ASSERT( expandedSymbol, "QMXStdLib", "FileSystem::parse", "00000009", target );
+				String::findReplace( parsedPath, parsedPath.substr( startIndex, ( endIndex - startIndex + 1 ) ), expandedSymbol, true );
 			}
-			else if( ParsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_RIGHT, 0 ) != string::npos )
-				QMX_THROW( "QMXStdLib", "FileSystem::Parse", "00000008", Target );
+			else if( parsedPath.find( FILESYSTEM_SYMBOL_DELIMITER_RIGHT, 0 ) != string::npos )
+				QMX_THROW( "QMXStdLib", "FileSystem::parse", "00000008", target );
 			else
-				IsDone = true;
-		} while( !IsDone );
+				isDone = true;
+		} while( !isDone );
 
-		Target = ParsedPath;
+		target = parsedPath;
 }
 
-Path MakeCanonical( const Path& Target, const Path& Base )
+Path makeCanonical( const Path& source, const Path& base )
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "FileSystem::MakeCanonical", 0000 );
+		SCOPED_STACK_TRACE( "FileSystem::makeCanonical", 0000 );
 
 	// Create local variables.
 
-		Path Result;
+		Path result;
 
 	// Convert specified path into a canonical path.
 
@@ -124,25 +124,25 @@ Path MakeCanonical( const Path& Target, const Path& Base )
 		{
 			FSMC_MAKE_CANONICAL;
 		}
-		catch( const boost::filesystem::filesystem_error& TargetException )
+		catch( const boost::filesystem::filesystem_error& except )
 		{
-			QMX_THROW( "QMXStdLib", "FileSystem::MakeCanonical", "0000000A", Target << ", " << Base );
+			QMX_THROW( "QMXStdLib", "FileSystem::makeCanonical", "0000000A", source << ", " << base );
 		}
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
-Path ReadSymlink( const Path& Target )
+Path readSymlink( const Path& source )
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "FileSystem::ReadSymlink", 0000 );
+		SCOPED_STACK_TRACE( "FileSystem::readSymlink", 0000 );
 
 	// Create local variables.
 
-		Path Result;
+		Path result;
 
 	// Retrieve the contents of the symlink at the specified path.
 
@@ -150,25 +150,25 @@ Path ReadSymlink( const Path& Target )
 		{
 			FSRS_READ_SYMLINK;
 		}
-		catch( const boost::filesystem::filesystem_error& TargetException )
+		catch( const boost::filesystem::filesystem_error& except )
 		{
-			QMX_THROW( "QMXStdLib", "FileSystem::ReadSymlink", "0000000B", Target );
+			QMX_THROW( "QMXStdLib", "FileSystem::readSymlink", "0000000B", source );
 		}
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
-void CreateLink( const Path& Source, const Path& Link, bool IsHardlink )
+void createLink( const Path& source, const Path& link, bool isHardlink )
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "FileSystem::CreateLink", 0000 );
+		SCOPED_STACK_TRACE( "FileSystem::createLink", 0000 );
 
 	// Create local variables.
 
-		bool WasSuccessful = true;
+		bool wasSuccessful = true;
 		FSCL_CREATE_BUFFERS;
 
 	// Create a hardlink/symlink at the specified destination path from the specified source path.
@@ -177,116 +177,121 @@ void CreateLink( const Path& Source, const Path& Link, bool IsHardlink )
 		{
 			FSCL_FILL_BUFFERS;
 
-			if( IsHardlink && boost::filesystem::is_regular_file( Source ) )
+			if( isHardlink && boost::filesystem::is_regular_file( source ) )
 				FSCL_CREATE_HARDLINK;
-			else if( !IsHardlink && boost::filesystem::is_directory( Source ) )
+			else if( !isHardlink && boost::filesystem::is_directory( source ) )
 				FSCL_CREATE_DIRECTORY_SYMLINK;
-			else if( !IsHardlink )
+			else if( !isHardlink )
 				FSCL_CREATE_SYMLINK;
 			else
-				QMX_THROW( "QMXStdLib", "FileSystem::CreateLink", "0000000C", Source << ", " << Link << ", " << boolalpha << IsHardlink );
+				QMX_THROW( "QMXStdLib", "FileSystem::createLink", "0000000C", source << ", " << link << ", " << boolalpha << isHardlink );
 
-			QMX_ASSERT( WasSuccessful, "QMXStdLib", "FileSystem::CreateLink", "0000000D", Source << ", " << Link << ", " << boolalpha << IsHardlink );
+			QMX_ASSERT( wasSuccessful, "QMXStdLib", "FileSystem::createLink", "0000000D", source << ", " << link << ", " << boolalpha << isHardlink );
 		}
-		catch( const boost::filesystem::filesystem_error& TargetException )
+		catch( const boost::filesystem::filesystem_error& except )
 		{
-			QMX_THROW( "QMXStdLib", "FileSystem::CreateLink", "0000000D", Source << ", " << Link << ", " << boolalpha << IsHardlink );
+			QMX_THROW( "QMXStdLib", "FileSystem::createLink", "0000000D", source << ", " << link << ", " << boolalpha << isHardlink );
 		}
 }
 
-void Copy( const Path& Source, const Path& Destination, bool IsRecursive, CopyOption TargetCopyOption )
+void copy( const Path& source, const Path& destination, bool isRecursive, CopyOption targetCopyOption )
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "FileSystem::Copy", 0000 );
+		SCOPED_STACK_TRACE( "FileSystem::copy", 0000 );
 
 	// Create local variables.
 
-		boost::filesystem::file_status Status;
-		Path RecursionSource;
-		Path RecursionDestination;
+		boost::filesystem::file_status status;
+		Path recursionSource;
+		Path recursionDestination;
 
 	// Copy the specified source path to the specified destination path with optional recursion and overwriting.
 
 		try
 		{
-			Status = boost::filesystem::symlink_status( Source );
+			status = boost::filesystem::symlink_status( source );
 
-			if( boost::filesystem::is_directory( Status ) )
+			if( boost::filesystem::is_directory( status ) )
 			{
-				if( !boost::filesystem::exists( Destination ) )
-					boost::filesystem::copy_directory( Source, Destination );
-				else if( TargetCopyOption == FailIfExists )
-					QMX_THROW( "QMXStdLib",
-					           "FileSystem::Copy",
-					           "0000000F",
-					           Source << ", " << Destination << ", " << boolalpha << IsRecursive << ", " << TargetCopyOption );
+				if( !boost::filesystem::exists( destination ) )
+					boost::filesystem::copy_directory( source, destination );
+				else if( targetCopyOption == FAIL_IF_EXISTS )
+					QMX_THROW(
+						"QMXStdLib",
+						"FileSystem::copy",
+						"0000000F",
+						source << ", " << destination << ", " << boolalpha << isRecursive << ", " << targetCopyOption
+					);
 
-				if( IsRecursive )
+				if( isRecursive )
 				{
-					for( DirectoryIterator Index( Source ); Index != DIRECTORY_END; Index++ )
+					for( DirectoryIterator index( source ); index != DIRECTORY_END; index++ )
 					{
-						RecursionSource = Index->path();
-						RecursionDestination = Destination.string() + '/' + Index->path().filename().string();
-						Copy( RecursionSource, RecursionDestination, true, TargetCopyOption );
+						recursionSource = index->path();
+						recursionDestination = destination.string() + '/' + index->path().filename().string();
+						copy( recursionSource, recursionDestination, true, targetCopyOption );
 					}
 				}
 			}
 			else
 			{
-				switch( TargetCopyOption )
+				switch( targetCopyOption )
 				{
-					case SkipIfExists:
+					case SKIP_IF_EXISTS:
 					{
-						if( !boost::filesystem::exists( Destination ) )
-							boost::filesystem::copy( Source, Destination );
+						if( !boost::filesystem::exists( destination ) )
+							boost::filesystem::copy( source, destination );
 
 						break;
 					}
 
-					case FailIfExists:
+					case FAIL_IF_EXISTS:
 					{
-						boost::filesystem::copy( Source, Destination );
+						boost::filesystem::copy( source, destination );
 
 						break;
 					}
 
-					case OverwriteIfExists:
+					case OVERWRITE_IF_EXISTS:
 					{
-						if( boost::filesystem::is_regular_file( Status ) )
-							boost::filesystem::copy_file( Source, Destination, boost::filesystem::copy_option::overwrite_if_exists );
-						else if( boost::filesystem::is_symlink( Status ) )
+						if( boost::filesystem::is_regular_file( status ) )
+							boost::filesystem::copy_file( source, destination, boost::filesystem::copy_option::overwrite_if_exists );
+						else if( boost::filesystem::is_symlink( status ) )
 						{
-							if( boost::filesystem::exists( Destination ) )
-								boost::filesystem::remove( Destination );
+							if( boost::filesystem::exists( destination ) )
+								boost::filesystem::remove( destination );
 
-							boost::filesystem::copy_symlink( Source, Destination );
+							boost::filesystem::copy_symlink( source, destination );
 						}
 						else
-							QMX_THROW( "QMXStdLib",
-							           "FileSystem::Copy",
-							           "0000000E",
-							           Source << ", " << Destination << ", " << boolalpha << IsRecursive << ", " << TargetCopyOption );
+							QMX_THROW(
+								"QMXStdLib",
+								"FileSystem::copy",
+								"0000000E",
+								source << ", " << destination << ", " << boolalpha << isRecursive << ", " << targetCopyOption
+							);
 
 						break;
 					}
 				}
 			}
 		}
-		catch( const boost::filesystem::filesystem_error& TargetException )
+		catch( const boost::filesystem::filesystem_error& except )
 		{
-			QMX_THROW( "QMXStdLib",
-			           "FileSystem::Copy",
-			           "0000000F",
-			           Source << ", " << Destination << ", " << boolalpha << IsRecursive << ", " << TargetCopyOption );
+			QMX_THROW(
+				"QMXStdLib",
+				"FileSystem::Copy",
+				"0000000F",
+				source << ", " << destination << ", " << boolalpha << isRecursive << ", " << targetCopyOption );
 		}
 }
 
-bool RunCommand( const char* Command, int SuccessValue )
+bool runCommand( const char* command, int successValue )
 {
 	// Return result of running specified console command to calling routine.
 
-		return( Command ? ( system( Command ) == SuccessValue ) : static_cast< bool >( system( Command ) ) );
+		return( command ? ( system( command ) == successValue ) : static_cast< bool >( system( command ) ) );
 }
 
 } // 'FileSystem' Namespace

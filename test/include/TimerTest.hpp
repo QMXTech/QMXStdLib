@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TimerTest.hpp
-// Robert M. Baker | Created : 19FEB12 | Last Modified : 15FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 19FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Timer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //

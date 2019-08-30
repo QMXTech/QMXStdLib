@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UniqueRandomTest.cpp
-// Robert M. Baker | Created : 10FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
-// This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::UniqueRandom' class.
+// Robert M. Baker | Created : 10FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
+// This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::UniqueRandom' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,42 +34,42 @@ TEST( UniqueRandomTest, GenerateIntegralWorks )
 {
 	// Create local variables.
 
-		set< int64_t > Numbers;
-		UniqueRandomI< int64_t >::PointerType Instance = UniqueRandomI< int64_t >::Create();
+		Int64Vector result;
+		set< int64_t > numbers;
 
 	// Initialize random number generator using the current time for the seed.
 
-		Utility::SetRandomSeed();
+		Utility::setRandomSeed();
 
-	// Perform unit test for 'Generator' method using integral values.
+	// Perform unit test for 'generate' function using integral values.
 
-		Instance->Generate( 10, 0, 100 );
+		UniqueRandom::generateInt< int64_t >( result, 10, 0, 100 );
 
-		for( const auto& Index : Instance->GetNumbers() )
-			Numbers.insert( Index );
+		for( const auto& index : result )
+			numbers.insert( index );
 
-		ASSERT_EQ( 10u, Numbers.size() );
+		ASSERT_EQ( 10u, numbers.size() );
 }
 
 TEST( UniqueRandomTest, GenerateFloatingPointWorks )
 {
 	// Create local variables.
 
-		set< real_t > Numbers;
-		UniqueRandomF< real_t >::PointerType Instance = UniqueRandomF< real_t >::Create();
+		RealVector result;
+		set< real_t > numbers;
 
 	// Initialize random number generator using the current time for the seed.
 
-		Utility::SetRandomSeed();
+		Utility::setRandomSeed();
 
-	// Perform unit test for 'Generator' method using floating point values.
+	// Perform unit test for 'generate' function using floating point values.
 
-		Instance->Generate( 10, 0.0, 100.0 );
+		UniqueRandom::generateFloat< real_t >( result, 10, 0.0, 100.0 );
 
-		for( const auto& Index : Instance->GetNumbers() )
-			Numbers.insert( Index );
+		for( const auto& index : result )
+			numbers.insert( index );
 
-		ASSERT_EQ( 10u, Numbers.size() );
+		ASSERT_EQ( 10u, numbers.size() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

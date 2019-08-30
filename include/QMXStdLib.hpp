@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXStdLib.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 24FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is the main header file for 'QMXStdLib'; it is for users of the library as a convenient way to include all headers.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 24FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This is the main header file for 'QMXStdLib' which includes all the other necessary headers.
   *
-  * @section Description
+  * @section QMXStdLibH0000 Description
   *
   * This is the main header file for 'QMXStdLib' which includes all the other necessary headers.
   *
-  * @section License
+  * @section QMXStdLibH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -46,14 +46,14 @@
   */
 
 /**
-  * @mainpage QMX Standard Library API Documentation (V1.1.2)
+  * @mainpage QMX Standard Library API Documentation (V2.0.0)
   *
-  * @section Section0000 About QMX Standard Library
+  * @section QMXStdLibH0002 About QMX Standard Library
   * 	This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for
   *   its specific usefulness to be determined.
   *
-  * @subsection Subsection0000_0000 Contact Info
-  * 	For more information about this library, check out the <a href="https://software.qmxtech.com/">QMX Software</a> web site.
+  * @subsection QMXStdLibH0002_0000 Contact Info
+  * 	For more information about this library, check out the <a href="https://git.qmx-software.com/open-source/qmxstdlib/">QMXStdLib</a> web site.
   */
 
 #ifndef __QMX_QMXSTDLIB_QMXSTDLIB_HPP_
@@ -67,10 +67,10 @@
 #include "ConsoleIO.hpp"
 #include "DynamicLibrary.hpp"
 #include "FileSystem.hpp"
+#include "Iterators.hpp"
 #include "Mixins.hpp"
 #include "Numeric.hpp"
 #include "Object.hpp"
-#include "PluginManager.hpp"
 #include "ProgramOptions.hpp"
 #include "QMXException.hpp"
 #include "RAII.hpp"

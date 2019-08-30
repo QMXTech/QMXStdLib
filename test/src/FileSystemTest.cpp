@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystemTest.cpp
-// Robert M. Baker | Created : 12MAR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 12MAR12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::FileSystem' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,40 +34,49 @@ TEST( FileSystemTest, ParseWorks )
 {
 	// Create local variables.
 
-		string DelimiterLeft( 1, FILESYSTEM_SYMBOL_DELIMITER_LEFT );
-		string DelimiterRight( 1, FILESYSTEM_SYMBOL_DELIMITER_RIGHT );
-		Path TestPathsBad[] = { ( DelimiterLeft + "QMX_TEST_HOME/directory/file.ext" ),
-		                        ( DelimiterRight + "QMX_TEST_HOME" + DelimiterLeft + "/directory/file.ext" ),
-		                        ( "QMX_TEST_HOME" + DelimiterRight + "/directory/file.ext" ),
-		                        ( DelimiterLeft + "NON_EXISTENT_VAR" + DelimiterRight + "/directory/file.ext" ) };
-		Path TestPathsGood[] = { ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_ALPHA" + DelimiterRight + "/file.ext" ),
-		                         ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_BETA" + DelimiterRight + "/file.ext" ),
-		                         ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_GAMMA" + DelimiterRight + "/file.ext" ),
-		                         ( DelimiterLeft + "QMX_TEST_HOME" + DelimiterRight + "/" + DelimiterLeft + "QMX_TEST_DELTA" + DelimiterRight + "/file.ext" ) };
-		Path ExpectedResults[] = { "/home/jdoe/foo/file.ext",
-		                           "/home/jdoe/bar/file.ext",
-		                           "/home/jdoe/baz/file.ext",
-		                           "/home/jdoe/xyzzy/file.ext" };
+		string delimiterLeft( 1, FILESYSTEM_SYMBOL_DELIMITER_LEFT );
+		string delimiterRight( 1, FILESYSTEM_SYMBOL_DELIMITER_RIGHT );
+
+		Path testPathsBad[] = {
+			( delimiterLeft + "QMX_TEST_HOME/directory/file.ext" ),
+			( delimiterRight + "QMX_TEST_HOME" + delimiterLeft + "/directory/file.ext" ),
+			( "QMX_TEST_HOME" + delimiterRight + "/directory/file.ext" ),
+			( delimiterLeft + "NON_EXISTENT_VAR" + delimiterRight + "/directory/file.ext" )
+		};
+
+		Path testPathsGood[] = {
+			( delimiterLeft + "QMX_TEST_HOME" + delimiterRight + "/" + delimiterLeft + "QMX_TEST_ALPHA" + delimiterRight + "/file.ext" ),
+			( delimiterLeft + "QMX_TEST_HOME" + delimiterRight + "/" + delimiterLeft + "QMX_TEST_BETA" + delimiterRight + "/file.ext" ),
+			( delimiterLeft + "QMX_TEST_HOME" + delimiterRight + "/" + delimiterLeft + "QMX_TEST_GAMMA" + delimiterRight + "/file.ext" ),
+			( delimiterLeft + "QMX_TEST_HOME" + delimiterRight + "/" + delimiterLeft + "QMX_TEST_DELTA" + delimiterRight + "/file.ext" )
+		};
+
+		Path expectedResults[] = {
+			"/home/jdoe/foo/file.ext",
+			"/home/jdoe/bar/file.ext",
+			"/home/jdoe/baz/file.ext",
+			"/home/jdoe/xyzzy/file.ext"
+		};
 
 	// Set test environment variables.
 
-		setenv( "QMX_TEST_HOME", "/home/jdoe", False );
-		setenv( "QMX_TEST_ALPHA", "foo", False );
-		setenv( "QMX_TEST_BETA", "bar", False );
-		setenv( "QMX_TEST_GAMMA", "baz", False );
-		setenv( "QMX_TEST_DELTA", "xyzzy", False );
+		setenv( "QMX_TEST_HOME", "/home/jdoe", FALSE );
+		setenv( "QMX_TEST_ALPHA", "foo", FALSE );
+		setenv( "QMX_TEST_BETA", "bar", FALSE );
+		setenv( "QMX_TEST_GAMMA", "baz", FALSE );
+		setenv( "QMX_TEST_DELTA", "xyzzy", FALSE );
 
-	// Perform unit test for 'Parse' function.
+	// Perform unit test for 'parse' function.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsBad ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::Parse( TestPathsBad[ Index ] ), QMXException );
+			ASSERT_THROW( FileSystem::parse( testPathsBad[ index ] ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsGood ); index++ )
 		{
-			FileSystem::Parse( TestPathsGood[ Index ] );
-			ASSERT_EQ( ExpectedResults[ Index ].string(), TestPathsGood[ Index ].string() );
+			FileSystem::parse( testPathsGood[ index ] );
+			ASSERT_EQ( expectedResults[ index ].string(), testPathsGood[ index ].string() );
 		}
 
 	// Clear test environment variables.
@@ -83,278 +92,298 @@ TEST( FileSystemTest, MakeCanonicalWorks )
 {
 	// Create local variables.
 
-		Path InitialPath = boost::filesystem::current_path();
-		Path TestPathsBad[] = { "NonExistent" };
-		Path TestPathsGood[] = { ".",
-		                         "TestFileHardlink",
-		                         "TestDirectorySymlink",
-		                         "TestFileSymlink" };
-		Path ExpectedResults[] = { ".",
-		                           "TestFileHardlink",
-		                           "NonEmptyTestDirectory",
-		                           "NonEmptyTestFile.txt" };
+		ScopedPathChange testPath( BASE_PATH );
 
-	// Change current working directory to 'BASE_PATH'.
+		Path testPathsBad[] = {
+			"NonExistent"
+		};
 
-		boost::filesystem::current_path( BASE_PATH );
+		Path testPathsGood[] = {
+			".",
+			"TestFileHardlink",
+			"TestDirectorySymlink",
+			"TestFileSymlink"
+		};
 
-	// Perform unit test for 'MakeCanonical' function.
+		Path expectedResults[] = {
+			".",
+			"TestFileHardlink",
+			"NonEmptyTestDirectory",
+			"NonEmptyTestFile.txt"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsBad ); Index++ )
+	// Perform unit test for 'makeCanonical' function.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::MakeCanonical( TestPathsBad[ Index ] ), QMXException );
+			ASSERT_THROW( FileSystem::makeCanonical( testPathsBad[ index ] ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsGood ); index++ )
 		{
-			ASSERT_EQ( boost::filesystem::canonical( ExpectedResults[ Index ] ).make_preferred().string(),
-			           FileSystem::MakeCanonical( TestPathsGood[ Index ] ).string() );
+			ASSERT_EQ(
+				boost::filesystem::canonical( expectedResults[ index ] ).make_preferred().string(),
+			   FileSystem::makeCanonical( testPathsGood[ index ] ).string()
+			);
 		}
-
-	// Restore original working directory.
-
-		boost::filesystem::current_path( InitialPath );
 }
 
 TEST( FileSystemTest, ReadSymlinkWorks )
 {
 	// Create local variables.
 
-		Path InitialPath = boost::filesystem::current_path();
-		Path TestPathsBad[] = { "NonExistent",
-		                        "NonEmptyTestDirectory",
-		                        "NonEmptyTestFile.txt" };
-		Path TestPathsGood[] = { "TestDirectorySymlink",
-		                         "TestFileSymlink" };
-		Path ExpectedResults[] = { "NonEmptyTestDirectory",
-		                           "NonEmptyTestFile.txt" };
+		ScopedPathChange testPath( BASE_PATH );
 
-	// Change current working directory to 'BASE_PATH'.
+		Path testPathsBad[] = {
+			"NonExistent",
+			"NonEmptyTestDirectory",
+			"NonEmptyTestFile.txt"
+		};
 
-		boost::filesystem::current_path( BASE_PATH );
+		Path testPathsGood[] = {
+			"TestDirectorySymlink",
+		   "TestFileSymlink"
+		};
 
-	// Perform unit test for 'ReadSymlink' function.
+		Path expectedResults[] = {
+			"NonEmptyTestDirectory",
+		   "NonEmptyTestFile.txt"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsBad ); Index++ )
+	// Perform unit test for 'readSymlink' function.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::ReadSymlink( TestPathsBad[ Index ] ), QMXException );
+			ASSERT_THROW( FileSystem::readSymlink( testPathsBad[ index ] ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsGood ); index++ )
 		{
 			if( !IS_WINDOWS )
 			{
-				ASSERT_EQ( ExpectedResults[ Index ].string(), FileSystem::ReadSymlink( TestPathsGood[ Index ] ).string() );
+				ASSERT_EQ( expectedResults[ index ].string(), FileSystem::readSymlink( testPathsGood[ index ] ).string() );
 			}
 			else
 			{
-				ASSERT_EQ( boost::filesystem::canonical( ExpectedResults[ Index ] ).make_preferred().string(),
-				           FileSystem::ReadSymlink( TestPathsGood[ Index ] ).string() );
+				ASSERT_EQ(
+					boost::filesystem::canonical( expectedResults[ index ] ).make_preferred().string(),
+				   FileSystem::readSymlink( testPathsGood[ index ] ).string()
+				);
 			}
 		}
-
-	// Restore original working directory.
-
-		boost::filesystem::current_path( InitialPath );
 }
 
 TEST( FileSystemTest, CreateLinkSymlinkWorks )
 {
 	// Create local variables.
 
-		Path InitialPath = boost::filesystem::current_path();
-		Path TestPathsSourceBad[] = { "NonEmptyTestFile.txt" };
-		Path TestPathsLinkBad[] = { "TestFileSymlink" };
-		Path TestPathsSourceGood[] = { "NonEmptyTestDirectory",
-		                               "NonEmptyTestFile.txt",
-		                               "TestFileHardlink",
-		                               "TestDirectorySymlink",
-		                               "TestFileSymlink" };
-		Path TestPathsLinkGood[] = { "TestSymlinkDirectory1",
-		                             "TestSymlinkFile1",
-		                             "TestSymlinkFile2",
-		                             "TestSymlinkDirectory2",
-		                             "TestSymlinkFile3" };
+		ScopedPathChange testPath( BASE_PATH );
 
-	// Change current working directory to 'BASE_PATH'.
+		Path testPathsSourceBad[] = {
+			"NonEmptyTestFile.txt"
+		};
 
-		boost::filesystem::current_path( BASE_PATH );
+		Path testPathsLinkBad[] = {
+			"TestFileSymlink"
+		};
 
-	// Perform unit test for 'CreateLink' function using symlinks.
+		Path testPathsSourceGood[] = {
+			"NonEmptyTestDirectory",
+		   "TestFileHardlink",
+		   "NonEmptyTestFile.txt",
+		   "TestDirectorySymlink",
+		   "TestFileSymlink"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsSourceBad ); Index++ )
+		Path testPathsLinkGood[] = {
+			"TestSymlinkDirectory1",
+		   "TestSymlinkFile1",
+		   "TestSymlinkFile2",
+		   "TestSymlinkDirectory2",
+		   "TestSymlinkFile3"
+		};
+
+	// Perform unit test for 'createLink' function using symlinks.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsSourceBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::CreateLink( TestPathsSourceBad[ Index ], TestPathsLinkBad[ Index ] ), QMXException );
+			ASSERT_THROW( FileSystem::createLink( testPathsSourceBad[ index ], testPathsLinkBad[ index ] ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsSourceGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsSourceGood ); index++ )
 		{
-			FileSystem::CreateLink( TestPathsSourceGood[ Index ], TestPathsLinkGood[ Index ] );
-			boost::filesystem::remove( TestPathsLinkGood[ Index ] );
+			FileSystem::createLink( testPathsSourceGood[ index ], testPathsLinkGood[ index ] );
+			boost::filesystem::remove( testPathsLinkGood[ index ] );
 		}
-
-	// Restore original working directory.
-
-		boost::filesystem::current_path( InitialPath );
 }
 
 TEST( FileSystemTest, CreateLinkHardlinkWorks )
 {
 	// Create local variables.
 
-		Path InitialPath = boost::filesystem::current_path();
-		Path TestPathsSourceBad[] = { "EmptyTestDirectory",
-		                              TEST_OTHER,
-		                              "TestFileSymlink",
-		                              "EmptyTestFile.txt" };
-		Path TestPathsLinkBad[] = { "TestHardlinkDirectory1",
-		                            "TestHardlinkOther1",
-		                            "TestHardlinkSymlink1",
-                                  "TestFileHardlink" };
-		Path TestPathsSourceGood[] = { "NonEmptyTestFile.txt",
-		                               "TestFileHardlink" };
-		Path TestPathsLinkGood[] = { "TestHardlinkFile1",
-		                             "TestHardlinkFile2" };
+		ScopedPathChange testPath( BASE_PATH );
 
-	// Change current working directory to 'BASE_PATH'.
+		Path testPathsSourceBad[] = {
+			"EmptyTestDirectory",
+		   TEST_OTHER,
+		   "EmptyTestFile.txt"
+		};
 
-		boost::filesystem::current_path( BASE_PATH );
+		Path testPathsLinkBad[] = {
+			"TestHardlinkDirectory1",
+		   "TestHardlinkOther1",
+		   "TestFileHardlink"
+		};
 
-	// Perform unit test for 'CreateLink' function using hardlinks.
+		Path testPathsSourceGood[] = {
+			"NonEmptyTestFile.txt",
+		   "TestFileHardlink"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsSourceBad ); Index++ )
+		Path testPathsLinkGood[] = {
+			"TestHardlinkFile1",
+		   "TestHardlinkFile2"
+		};
+
+	// Perform unit test for 'createLink' function using hardlinks.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsSourceBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::CreateLink( TestPathsSourceBad[ Index ], TestPathsLinkBad[ Index ], true ), QMXException );
+			ASSERT_THROW( FileSystem::createLink( testPathsSourceBad[ index ], testPathsLinkBad[ index ], true ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestPathsSourceGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( testPathsSourceGood ); index++ )
 		{
-			FileSystem::CreateLink( TestPathsSourceGood[ Index ], TestPathsLinkGood[ Index ], true );
-			boost::filesystem::remove( TestPathsLinkGood[ Index ] );
+			FileSystem::createLink( testPathsSourceGood[ index ], testPathsLinkGood[ index ], true );
+			boost::filesystem::remove( testPathsLinkGood[ index ] );
 		}
-
-	// Restore original working directory.
-
-		boost::filesystem::current_path( InitialPath );
 }
 
 TEST( FileSystemTest, CopyRecursiveWorks )
 {
 	// Create local variables.
 
-		Path InitialPath = boost::filesystem::current_path();
-		Path SourcePathsBad[] = { TEST_OTHER,
-		                          "NonEmptyTestDirectory",
-										  "NonEmptyTestFile.txt",
-										  "TestFileHardlink",
-										  "TestDirectorySymlink",
-										  "TestFileSymlink" };
-		Path DestinationPathsBad[] = { "TestOtherCopy",
-		                               "EmptyTestDirectory",
-												 "EmptyTestFile.txt",
-												 "TestFileSymlink",
-												 "EmptyTestDirectory",
-												 "TestFileHardlink" };
-		Path SourcePathsGood[] = { "NonEmptyTestDirectory",
-		                           "NonEmptyTestFile.txt",
-		                           "TestFileHardlink",
-		                           "TestDirectorySymlink",
-		                           "TestFileSymlink" };
-		Path DestinationPathsGood[] = { "NonEmptyTestDirectoryCopy",
-		                                "NonEmptyTestFileCopy.txt",
-		                                "TestFileHardlinkCopy",
-		                                "TestDirectorySymlinkCopy",
-		                                "TestFileSymlinkCopy" };
+		ScopedPathChange testPath( BASE_PATH );
 
-	// Change current working directory to 'BASE_PATH'.
+		Path sourcePathsBad[] = {
+			TEST_OTHER,
+		   "NonEmptyTestDirectory",
+			"NonEmptyTestFile.txt",
+			"TestFileHardlink",
+			"TestDirectorySymlink",
+			"TestFileSymlink"
+		};
 
-		boost::filesystem::current_path( BASE_PATH );
+		Path destinationPathsBad[] = {
+			"TestOtherCopy",
+		   "EmptyTestDirectory",
+			"EmptyTestFile.txt",
+			"TestFileSymlink",
+			"EmptyTestDirectory",
+			"TestFileHardlink"
+		};
 
-	// Perform unit test for 'Copy' function using recursion.
+		Path sourcePathsGood[] = {
+			"NonEmptyTestDirectory",
+		   "NonEmptyTestFile.txt",
+		   "TestFileHardlink",
+		   "TestDirectorySymlink",
+		   "TestFileSymlink"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( SourcePathsBad ); Index++ )
+		Path destinationPathsGood[] = {
+			"NonEmptyTestDirectoryCopy",
+		   "NonEmptyTestFileCopy.txt",
+		   "TestFileHardlinkCopy",
+		   "TestDirectorySymlinkCopy",
+		   "TestFileSymlinkCopy"
+		};
+
+	// Perform unit test for 'copy' function using recursion.
+
+		for( size_t index = 0; index < ARRAY_SIZE( sourcePathsBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::Copy( SourcePathsBad[ Index ], DestinationPathsBad[ Index ], true, FileSystem::FailIfExists ), QMXException );
+			ASSERT_THROW( FileSystem::copy( sourcePathsBad[ index ], destinationPathsBad[ index ], true, FileSystem::FAIL_IF_EXISTS ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( SourcePathsGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( sourcePathsGood ); index++ )
 		{
-			FileSystem::Copy( SourcePathsGood[ Index ], DestinationPathsGood[ Index ] );
-			FileSystem::Copy( SourcePathsGood[ Index ], DestinationPathsGood[ Index ] );
-			FileSystem::Copy( SourcePathsGood[ Index ], DestinationPathsGood[ Index ], true, FileSystem::OverwriteIfExists );
-			boost::filesystem::remove_all( DestinationPathsGood[ Index ] );
+			FileSystem::copy( sourcePathsGood[ index ], destinationPathsGood[ index ] );
+			FileSystem::copy( sourcePathsGood[ index ], destinationPathsGood[ index ] );
+			FileSystem::copy( sourcePathsGood[ index ], destinationPathsGood[ index ], true, FileSystem::OVERWRITE_IF_EXISTS );
+			boost::filesystem::remove_all( destinationPathsGood[ index ] );
 		}
-
-	// Restore original working directory.
-
-		boost::filesystem::current_path( InitialPath );
 }
 
 TEST( FileSystemTest, CopyNonRecursiveWorks )
 {
 	// Create local variables.
 
-		Path InitialPath = boost::filesystem::current_path();
-		Path SourcePathsBad[] = { TEST_OTHER,
-		                          "NonEmptyTestDirectory",
-										  "NonEmptyTestFile.txt",
-										  "TestFileHardlink",
-										  "TestDirectorySymlink",
-										  "TestFileSymlink" };
-		Path DestinationPathsBad[] = { "TestOtherCopy",
-		                               "EmptyTestDirectory",
-												 "EmptyTestFile.txt",
-												 "TestFileSymlink",
-												 "EmptyTestDirectory",
-												 "TestFileHardlink" };
-		Path SourcePathsGood[] = { "NonEmptyTestDirectory",
-		                           "NonEmptyTestFile.txt",
-		                           "TestFileHardlink",
-		                           "TestDirectorySymlink",
-		                           "TestFileSymlink" };
-		Path DestinationPathsGood[] = { "NonEmptyTestDirectoryCopy",
-		                                "NonEmptyTestFileCopy.txt",
-		                                "TestFileHardlinkCopy",
-		                                "TestDirectorySymlinkCopy",
-		                                "TestFileSymlinkCopy" };
+		ScopedPathChange testPath( BASE_PATH );
 
-	// Change current working directory to 'BASE_PATH'.
+		Path sourcePathsBad[] = {
+			TEST_OTHER,
+		   "NonEmptyTestDirectory",
+			"NonEmptyTestFile.txt",
+			"TestFileHardlink",
+			"TestDirectorySymlink",
+			"TestFileSymlink"
+		};
 
-		boost::filesystem::current_path( BASE_PATH );
+		Path destinationPathsBad[] = {
+			"TestOtherCopy",
+		   "EmptyTestDirectory",
+			"EmptyTestFile.txt",
+			"TestFileSymlink",
+			"EmptyTestDirectory",
+			"TestFileHardlink"
+		};
 
-	// Perform unit test for 'Copy' function without recursion.
+		Path sourcePathsGood[] = {
+			"NonEmptyTestDirectory",
+		   "NonEmptyTestFile.txt",
+		   "TestFileHardlink",
+		   "TestDirectorySymlink",
+		   "TestFileSymlink"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( SourcePathsBad ); Index++ )
+		Path destinationPathsGood[] = {
+			"NonEmptyTestDirectoryCopy",
+			"NonEmptyTestFileCopy.txt",
+			"TestFileHardlinkCopy",
+			"TestDirectorySymlinkCopy",
+			"TestFileSymlinkCopy"
+		};
+
+	// Perform unit test for 'copy' function without recursion.
+
+		for( size_t index = 0; index < ARRAY_SIZE( sourcePathsBad ); index++ )
 		{
-			ASSERT_THROW( FileSystem::Copy( SourcePathsBad[ Index ], DestinationPathsBad[ Index ], false, FileSystem::FailIfExists ), QMXException );
+			ASSERT_THROW( FileSystem::copy( sourcePathsBad[ index ], destinationPathsBad[ index ], false, FileSystem::FAIL_IF_EXISTS ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( SourcePathsGood ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( sourcePathsGood ); index++ )
 		{
-			FileSystem::Copy( SourcePathsGood[ Index ], DestinationPathsGood[ Index ], false );
-			FileSystem::Copy( SourcePathsGood[ Index ], DestinationPathsGood[ Index ], false );
-			FileSystem::Copy( SourcePathsGood[ Index ], DestinationPathsGood[ Index ], false, FileSystem::OverwriteIfExists );
-			boost::filesystem::remove( DestinationPathsGood[ Index ] );
+			FileSystem::copy( sourcePathsGood[ index ], destinationPathsGood[ index ], false );
+			FileSystem::copy( sourcePathsGood[ index ], destinationPathsGood[ index ], false );
+			FileSystem::copy( sourcePathsGood[ index ], destinationPathsGood[ index ], false, FileSystem::OVERWRITE_IF_EXISTS );
+			boost::filesystem::remove( destinationPathsGood[ index ] );
 		}
-
-	// Restore original working directory.
-
-		boost::filesystem::current_path( InitialPath );
 }
 
 TEST( FileSystemTest, RunCommandWorks )
 {
-	// Perform unit test for 'RunCommand' function.
+	// Perform unit test for 'runCommand' function.
 
-		if( FileSystem::RunCommand() )
+		if( FileSystem::runCommand() )
 		{
 			if( !IS_WINDOWS )
 			{
-				ASSERT_TRUE( FileSystem::RunCommand( "ls > /dev/null 2>&1" ) );
+				ASSERT_TRUE( FileSystem::runCommand( "ls > /dev/null 2>&1" ) );
 			}
 			else
 			{
-				ASSERT_TRUE( FileSystem::RunCommand( "dir > nul 2>&1" ) );
+				ASSERT_TRUE( FileSystem::runCommand( "dir > nul 2>&1" ) );
 			}
 		}
 }

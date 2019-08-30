@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManager.cpp
-// Robert M. Baker | Created : 24FEB16 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 24FEB16 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 24FEB16
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
   *
-  * @section Description
+  * @section ThreadManagerS0000 Description
   *
   * This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
   *
-  * @section License
+  * @section ThreadManagerS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -64,7 +64,7 @@ namespace QMXStdLib
 // Static Field Initializers for the 'ThreadManager' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<> ThreadManager* Singleton< ThreadManager >::SingletonInstance = nullptr;
+template<> ThreadManager* Singleton< ThreadManager >::singletonInstance = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Public Methods for the 'ThreadManager' Class
@@ -72,13 +72,20 @@ template<> ThreadManager* Singleton< ThreadManager >::SingletonInstance = nullpt
 
 ThreadManager::~ThreadManager()
 {
-	// Perform necessary cleanup.
+	try
+	{
+		// Perform necessary cleanup.
 
-		if( Initialized )
-			Deallocate();
+			if( initialized )
+				deallocate();
+	}
+	catch( const exception& except )
+	{
+		// Do nothing.
+	}
 }
 
-void ThreadManager::CreateGroup( const string& GroupID )
+void ThreadManager::createGroup( const string& groupID )
 {
 	// Obtain locks.
 
@@ -86,18 +93,20 @@ void ThreadManager::CreateGroup( const string& GroupID )
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::CreateGroup", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::createGroup", 0000 );
 
 	// Create specified group, if it does not already exist.
 
-		QMX_ASSERT( Groups.insert( GroupMap::value_type( GroupID, { ThreadPtrMap(), BarrierPtr() } ) ).second,
-		            "QMXStdLib",
-		            "ThreadManager::CreateGroup",
-		            "00000026",
-		            GroupID );
+		QMX_ASSERT(
+			groups.insert( GroupMap::value_type( groupID, { ThreadPtrMap(), BarrierPtr() } ) ).second,
+			"QMXStdLib",
+			"ThreadManager::createGroup",
+			"00000017",
+			groupID
+		);
 }
 
-void ThreadManager::DestroyGroup( const string& GroupID, const bool DoDestroyThreads, const bool DoInterrupt )
+void ThreadManager::destroyGroup( const string& groupID, const bool doDestroyThreads, const bool doInterrupt )
 {
 	// Obtain locks.
 
@@ -105,41 +114,57 @@ void ThreadManager::DestroyGroup( const string& GroupID, const bool DoDestroyThr
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::DestroyGroup", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::destroyGroup", 0000 );
 
 	// Create local variables.
 
-		auto GroupMapIterator = Groups.find( GroupID );
+		auto groupMapIterator = groups.find( groupID );
 
 	// Destroy specified group, with optional thread destruction/interruption, if it exists.
 
-		QMX_ASSERT( ( GroupMapIterator != Groups.end() ),
-		            "QMXStdLib",
-		            "ThreadManager::DestroyGroup",
-		            "00000027",
-		            GroupID << ", " << DoDestroyThreads << ", " << DoInterrupt );
+		QMX_ASSERT(
+			( groupMapIterator != groups.end() ),
+			"QMXStdLib",
+			"ThreadManager::destroyGroup",
+			"00000018",
+			groupID << ", " << boolalpha << doDestroyThreads << ", " << doInterrupt
+		);
 
-		if( DoDestroyThreads )
+		if( doDestroyThreads )
 		{
-			for( auto& Index : GroupMapIterator->second.Threads )
+			for( auto& index : groupMapIterator->second.threads )
 			{
-				if( DoInterrupt )
-					Index.second->interrupt();
-				else if( Index.second->joinable() )
-					Index.second->detach();
+				if( doInterrupt )
+					index.second->interrupt();
+				else if( index.second->joinable() )
+					index.second->detach();
 			}
 		}
 		else
-			QMX_ASSERT( GroupMapIterator->second.Threads.empty(),
-			            "QMXStdLib",
-			            "ThreadManager::DestroyGroup",
-			            "00000028",
-			            GroupID << ", " << DoDestroyThreads << ", " << DoInterrupt );
+			QMX_ASSERT(
+				groupMapIterator->second.threads.empty(),
+				"QMXStdLib",
+				"ThreadManager::destroyGroup",
+				"00000019",
+				groupID << ", " << boolalpha << doDestroyThreads << ", " << doInterrupt
+			);
 
-		Groups.erase( GroupMapIterator );
+		groups.erase( groupMapIterator );
 }
 
-void ThreadManager::SetBarrierSize( const string& GroupID, const size_t TargetSize )
+void ThreadManager::getGroupIDs( StringVector& target ) const
+{
+	// Obtain locks.
+
+		SCOPED_READ_LOCK;
+
+	// Retrieve all group IDs, if any exist.
+
+		for( const auto& index : groups )
+			target.push_back( index.first );
+}
+
+void ThreadManager::setBarrierSize( const string& groupID, const size_t newSize )
 {
 	// Obtain locks.
 
@@ -147,23 +172,23 @@ void ThreadManager::SetBarrierSize( const string& GroupID, const size_t TargetSi
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::SetBarrierSize", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::setBarrierSize", 0000 );
 
 	// Create local variables.
 
-		auto GroupMapIterator = Groups.find( GroupID );
+		auto groupMapIterator = groups.find( groupID );
 
 	// Set barrier to specified size for specified group, if it exists.
 
-		QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::SetBarrierSize", "00000029", GroupID << ", " << TargetSize );
+		QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::setBarrierSize", "0000001A", groupID << ", " << newSize );
 
-		if( TargetSize )
-			GroupMapIterator->second.GroupBarrier = make_shared< Barrier >( TargetSize );
+		if( newSize )
+			groupMapIterator->second.groupBarrier = make_shared< Barrier >( newSize );
 		else
-			GroupMapIterator->second.GroupBarrier = nullptr;
+			groupMapIterator->second.groupBarrier = nullptr;
 }
 
-void ThreadManager::DestroyThread( const string& GroupID, const string& ThreadID, const bool DoInterrupt )
+void ThreadManager::destroyThread( const string& groupID, const string& threadID, const bool doInterrupt )
 {
 	// Obtain locks.
 
@@ -171,44 +196,72 @@ void ThreadManager::DestroyThread( const string& GroupID, const string& ThreadID
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::DestroyThread", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::destroyThread", 0000 );
 
 	// Create local variables.
 
-		auto GroupMapIterator = Groups.find( GroupID );
-		ThreadPtrMap::iterator ThreadPtrMapIterator;
+		auto groupMapIterator = groups.find( groupID );
+		ThreadPtrMap::iterator threadPtrMapIterator;
 
 	// Destroy specified thread in specified group, with optional interruption, if both group and thread exist.
 
-		QMX_ASSERT( ( GroupMapIterator != Groups.end() ),
-		            "QMXStdLib",
-		            "ThreadManager::DestroyThread",
-		            "0000002A",
-		            GroupID << ", " << ThreadID << ", " << DoInterrupt );
-		ThreadPtrMapIterator = GroupMapIterator->second.Threads.find( ThreadID );
-		QMX_ASSERT( ( ThreadPtrMapIterator != GroupMapIterator->second.Threads.end() ),
-		            "QMXStdLib",
-		            "ThreadManager::DestroyThread",
-		            "0000002B",
-		            GroupID << ", " << ThreadID << ", " << DoInterrupt );
+		QMX_ASSERT(
+			( groupMapIterator != groups.end() ),
+			"QMXStdLib",
+			"ThreadManager::destroyThread",
+			"0000001B",
+			groupID << ", " << threadID << ", " << boolalpha << doInterrupt
+		);
 
-		if( DoInterrupt )
-			ThreadPtrMapIterator->second->interrupt();
-		else if( ThreadPtrMapIterator->second->joinable() )
-			ThreadPtrMapIterator->second->detach();
+		threadPtrMapIterator = groupMapIterator->second.threads.find( threadID );
 
-		GroupMapIterator->second.Threads.erase( ThreadPtrMapIterator );
+		QMX_ASSERT(
+			( threadPtrMapIterator != groupMapIterator->second.threads.end() ),
+			"QMXStdLib",
+			"ThreadManager::destroyThread",
+			"0000001C",
+			groupID << ", " << threadID << ", " << boolalpha << doInterrupt
+		);
+
+		if( doInterrupt )
+			threadPtrMapIterator->second->interrupt();
+		else if( threadPtrMapIterator->second->joinable() )
+			threadPtrMapIterator->second->detach();
+
+		groupMapIterator->second.threads.erase( threadPtrMapIterator );
 }
 
-void ThreadManager::Wait( const string& GroupID )
+void ThreadManager::getThreadIDs( const string& groupID, StringVector& target ) const
 {
-	// Create local variables.
+	// Obtain locks.
 
-		BarrierPtr TargetBarrier;
+		SCOPED_READ_LOCK;
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::Wait", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::getThreadIDs", 0000 );
+
+	// Create local variables.
+
+		const auto groupMapIterator = groups.find( groupID );
+
+	// Retrieve all thread IDs, if any exist.
+
+		QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::getThreadIDs", "0000001D", groupID );
+
+		for( const auto& Index : groupMapIterator->second.threads )
+			target.push_back( Index.first );
+}
+
+void ThreadManager::wait( const string& groupID )
+{
+	// Create local variables.
+
+		BarrierPtr targetBarrier;
+
+	// Create scoped stack traces.
+
+		SCOPED_STACK_TRACE( "ThreadManager::wait", 0000 );
 
 	// Read Scope
 	{
@@ -218,29 +271,29 @@ void ThreadManager::Wait( const string& GroupID )
 
 		// Create scope variables.
 
-			auto GroupMapIterator = Groups.find( GroupID );
+			auto groupMapIterator = groups.find( groupID );
 
 		// Obtain the specified group's thread barrier, if it exists.
 
-			QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::Wait", "0000002C", GroupID );
-			TargetBarrier = GroupMapIterator->second.GroupBarrier;
+			QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::wait", "0000001E", groupID );
+			targetBarrier = groupMapIterator->second.groupBarrier;
 	}
 
 	// Call 'wait' on thread barrier, if valid.
 
-		if( TargetBarrier )
-			TargetBarrier->wait();
+		if( targetBarrier )
+			targetBarrier->wait();
 }
 
-void ThreadManager::Join( const string& GroupID, const string& ThreadID )
+void ThreadManager::join( const string& groupID, const string& threadID )
 {
 	// Create local variables.
 
-		ThreadPtr TargetThread;
+		ThreadPtr targetThread;
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::Join", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::join", 0000 );
 
 	// Read Scope
 	{
@@ -250,36 +303,40 @@ void ThreadManager::Join( const string& GroupID, const string& ThreadID )
 
 		// Create local variables.
 
-			auto GroupMapIterator = Groups.find( GroupID );
-			ThreadPtrMap::iterator ThreadPtrMapIterator;
+			auto groupMapIterator = groups.find( groupID );
+			ThreadPtrMap::iterator threadPtrMapIterator;
 
 		// Obtain specified thread in specified group, if both group and thread exist.
 
-			QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::Join", "0000002D", GroupID << ", " << ThreadID );
-			ThreadPtrMapIterator = GroupMapIterator->second.Threads.find( ThreadID );
-			QMX_ASSERT( ( ThreadPtrMapIterator != GroupMapIterator->second.Threads.end() ),
-		               "QMXStdLib",
-		               "ThreadManager::Join",
-		               "0000002E",
-		               GroupID << ", " << ThreadID );
-			TargetThread = ThreadPtrMapIterator->second;
+			QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::join", "0000001F", groupID << ", " << threadID );
+			threadPtrMapIterator = groupMapIterator->second.threads.find( threadID );
+
+			QMX_ASSERT(
+				( threadPtrMapIterator != groupMapIterator->second.threads.end() ),
+				"QMXStdLib",
+				"ThreadManager::join",
+				"00000020",
+				groupID << ", " << threadID
+			);
+
+			targetThread = threadPtrMapIterator->second;
 	}
 
 	// Join thread, if possible.
 
-		if( TargetThread->joinable() )
-			TargetThread->join();
+		if( targetThread->joinable() )
+			targetThread->join();
 }
 
-void ThreadManager::JoinAll( const string& GroupID )
+void ThreadManager::joinAll( const string& groupID )
 {
 	// Create local variables.
 
-		ThreadPtrMap TargetThreads;
+		ThreadPtrMap targetThreads;
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::JoinAll", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::joinAll", 0000 );
 
 	// Read Scope
 	{
@@ -289,24 +346,24 @@ void ThreadManager::JoinAll( const string& GroupID )
 
 		// Create local variables.
 
-			auto GroupMapIterator = Groups.find( GroupID );
+			auto groupMapIterator = groups.find( groupID );
 
 		// Obtain all spawned threads for specified group, if it exists.
 
-			QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::JoinAll", "0000002F", GroupID );
-			TargetThreads = GroupMapIterator->second.Threads;
+			QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::joinAll", "00000021", groupID );
+			targetThreads = groupMapIterator->second.threads;
 	}
 
 	// Join threads, if possible.
 
-		for( auto& Index : TargetThreads )
+		for( auto& index : targetThreads )
 		{
-			if( Index.second->joinable() )
-				Index.second->join();
+			if( index.second->joinable() )
+				index.second->join();
 		}
 }
 
-void ThreadManager::Interrupt( const string& GroupID, const string& ThreadID )
+void ThreadManager::interrupt( const string& groupID, const string& threadID )
 {
 	// Obtain locks.
 
@@ -314,26 +371,30 @@ void ThreadManager::Interrupt( const string& GroupID, const string& ThreadID )
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::Interrupt", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::interrupt", 0000 );
 
 	// Create local variables.
 
-		auto GroupMapIterator = Groups.find( GroupID );
-		ThreadPtrMap::iterator ThreadPtrMapIterator;
+		auto groupMapIterator = groups.find( groupID );
+		ThreadPtrMap::iterator threadPtrMapIterator;
 
 	// Interrupt specified thread in specified group, if both group and thread exist.
 
-		QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::Interrupt", "00000030", GroupID << ", " << ThreadID );
-		ThreadPtrMapIterator = GroupMapIterator->second.Threads.find( ThreadID );
-		QMX_ASSERT( ( ThreadPtrMapIterator != GroupMapIterator->second.Threads.end() ),
-		            "QMXStdLib",
-		            "ThreadManager::Interrupt",
-		            "00000031",
-		            GroupID << ", " << ThreadID );
-		ThreadPtrMapIterator->second->interrupt();
+		QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::interrupt", "00000022", groupID << ", " << threadID );
+		threadPtrMapIterator = groupMapIterator->second.threads.find( threadID );
+
+		QMX_ASSERT(
+			( threadPtrMapIterator != groupMapIterator->second.threads.end() ),
+			"QMXStdLib",
+			"ThreadManager::interrupt",
+			"00000023",
+			groupID << ", " << threadID
+		);
+
+		threadPtrMapIterator->second->interrupt();
 }
 
-void ThreadManager::InterruptAll( const string& GroupID )
+void ThreadManager::interruptAll( const string& groupID )
 {
 	// Obtain locks.
 
@@ -341,42 +402,42 @@ void ThreadManager::InterruptAll( const string& GroupID )
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ThreadManager::InterruptAll", 0000 );
+		SCOPED_STACK_TRACE( "ThreadManager::interruptAll", 0000 );
 
 	// Create local variables.
 
-		auto GroupMapIterator = Groups.find( GroupID );
+		auto groupMapIterator = groups.find( groupID );
 
 	// Interrupt all spawned threads for specified group, if it exists.
 
-		QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::InterruptAll", "00000032", GroupID );
+		QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::interruptAll", "00000024", groupID );
 
-		for( auto& Index : GroupMapIterator->second.Threads )
-			Index.second->interrupt();
+		for( auto& index : groupMapIterator->second.threads )
+			index.second->interrupt();
 }
 
-bool ThreadManager::InterruptionRequested()
+bool ThreadManager::interruptionRequested() const
 {
 	// Report wether or not a request has been made to interrupt the current thread to calling routine.
 
 		return boost::this_thread::interruption_requested();
 }
 
-void ThreadManager::InterruptionPoint()
+void ThreadManager::interruptionPoint() const
 {
 	// Throw an exception if the current thread has been interrupted.
 
 		boost::this_thread::interruption_point();
 }
 
-uint32_t ThreadManager::GetLogicalCoreCount()
+uint32_t ThreadManager::getLogicalCoreCount() const
 {
 	// Report the number of logical cores available on the current system to calling routine.
 
 		return boost::thread::hardware_concurrency();
 }
 
-uint32_t ThreadManager::GetPhysicalCoreCount()
+uint32_t ThreadManager::getPhysicalCoreCount() const
 {
 	// Report the number of physical cores available on the current system to calling routine.
 
@@ -392,22 +453,22 @@ ThreadManager::ThreadManager()
 	// Do nothing.
 }
 
-void ThreadManager::DeallocateImp()
+void ThreadManager::deallocateImp()
 {
 	// Perform necessary cleanup.
 
-		if( !Groups.empty() )
+		if( !groups.empty() )
 		{
-			for( auto& IndexA : Groups )
+			for( auto& indexA : groups )
 			{
-				for( auto& IndexB : IndexA.second.Threads )
+				for( auto& indexB : indexA.second.threads )
 				{
-					if( IndexB.second->joinable() )
-						IndexB.second->detach();
+					if( indexB.second->joinable() )
+						indexB.second->detach();
 				}
 			}
 
-			Groups.clear();
+			groups.clear();
 		}
 }
 

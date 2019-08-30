@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibrary.hpp
-// Robert M. Baker | Created : 14APR12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 14APR12 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a dynamically-loaded library class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 14APR12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a dynamically-loaded library class.
   *
-  * @section Description
+  * @section DynamicLibraryH0000 Description
   *
   * This header file defines the interface for a dynamically-loaded library class.
   *
-  * @section License
+  * @section DynamicLibraryH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -55,7 +55,14 @@
 #include "Base.hpp"
 #include "Object.hpp"
 #include "FileSystem.hpp"
+#include "RAII/ScopedLock.hpp"
 #include "RAII/ScopedStackTrace.hpp"
+
+#if ( ( QMX_PLATFORM == QMX_PLATFORM_LINUX ) || ( QMX_PLATFORM == QMX_PLATFORM_MACOS ) )
+#	include <dlfcn.h>
+#elif( QMX_PLATFORM == QMX_PLATFORM_WINDOWS )
+#	include <windows.h>
+#endif // Platform Headers
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
@@ -67,7 +74,7 @@
 #	define DYNLIB_LOAD(x)        dlopen( x, ( RTLD_LAZY | RTLD_GLOBAL ) )
 #	define DYNLIB_UNLOAD(x)      dlclose( x )
 #	define DYNLIB_GETSYMBOL(x,y) dlsym( x, y )
-#elif( QMX_PLATFORM == QMX_PLATFORM_OSX )
+#elif( QMX_PLATFORM == QMX_PLATFORM_MACOS )
 #	define DYNLIB_EXTENSION      ".dylib"
 #	define DYNLIB_HANDLE         void*
 #	define DYNLIB_LOAD(x)        dlopen( x, ( RTLD_LAZY | RTLD_GLOBAL ) )
@@ -110,7 +117,7 @@ class DynamicLibrary : public Object< DynamicLibrary >
 {
 	// Friend Classes
 
-		friend class Object;
+		friend class Object< DynamicLibrary >;
 
 public:
 
@@ -120,7 +127,7 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		virtual ~DynamicLibrary();
+		~DynamicLibrary();
 
 	// Public Methods
 
@@ -129,7 +136,7 @@ public:
 		  *
 		  * If a dynamic library is already loaded, it will first be unloaded before proceeding.
 		  *
-		  * @param Target
+		  * @param source
 		  * 	This is the path to use when loading the dynamic library.
 		  *
 		  * @exception QMXException
@@ -137,7 +144,7 @@ public:
 		  * 	If the specified dynamic library could not be loaded.
 		  */
 
-		void Load( const Path& Target );
+		void load( const Path& source );
 
 		/**
 		  * @brief This method unloads the dynamic library.
@@ -147,7 +154,7 @@ public:
 		  * 	If the dynamic library could not be unloaded.
 		  */
 
-		void Unload();
+		void unload();
 
 		/**
 		  * @brief This method gets the dynamic library path.
@@ -156,12 +163,12 @@ public:
 		  * 	A non-mutable reference to the dynamic library path.
 		  */
 
-		const Path& GetPath() const;
+		const Path& getPath() const;
 
 		/**
 		  * @brief This method retrieves the specified symbol from the dynamic library.
 		  *
-		  * @param Target
+		  * @param symbol
 		  * 	This is the symbol to retrieve from the dynamic library.
 		  *
 		  * @return
@@ -172,7 +179,7 @@ public:
 		  * 	If the symbol could not be retrieved.
 		  */
 
-		void* GetSymbol( const std::string& Target ) const;
+		void* getSymbol( const std::string& symbol ) const;
 
 private:
 
@@ -182,13 +189,13 @@ private:
 		  * @brief This is the handle to the dynamic library.
 		  */
 
-		DYNLIB_HANDLE Handle;
+		DYNLIB_HANDLE handle;
 
 		/**
 		  * @brief This is the path to the dyanmic library.
 		  */
 
-		Path DynLibTarget;
+		Path dynLibPath;
 
 	// Private Constructors
 
@@ -207,25 +214,7 @@ private:
 		  * 	If the dynamic library could not be unloaded.
 		  */
 
-		void DeallocateImp();
-
-		/**
-		  * @brief This is the overridden implementation for the 'operator=' method.
-		  *
-		  * @param Instance
-		  * 	This is the 'Object' pointer with which to set 'this'.
-		  */
-
-		void OperatorAssignImp( const Object* Instance );
-
-		/**
-		  * @brief This is the overridden implementation for the 'Clone' method.
-		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
-		  */
-
-		CLONE_IMP( DynamicLibrary )
+		void deallocateImp();
 
 		/**
 		  * @brief This method unloads the dynamic library.
@@ -235,7 +224,7 @@ private:
 		  * 	If the dynamic library could not be unloaded.
 		  */
 
-		void UnloadImp();
+		void unloadImp();
 };
 
 } // 'QMXStdLib' Namespace

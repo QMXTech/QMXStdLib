@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UtilityTest.cpp
-// Robert M. Baker | Created : 22FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 22FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Utility' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,39 +34,52 @@ TEST( UtilityTest, GetVersionNumberWorks )
 {
 	// Create local variables.
 
-		Utility::VersionData Version = Utility::GetVersionNumber();
+		Utility::VersionData version = Utility::getVersionNumber();
 
-	// Perform unit test for 'GerVersionNumber' method.
+	// Perform unit test for 'getVersionNumber' method.
 
-		ASSERT_EQ( QMXSTDLIB_VER_MAJOR, Version.Major );
-		ASSERT_EQ( QMXSTDLIB_VER_MINOR, Version.Minor );
-		ASSERT_EQ( QMXSTDLIB_VER_PATCH, Version.Patch );
+		ASSERT_EQ( QMXSTDLIB_VER_MAJOR, version.major );
+		ASSERT_EQ( QMXSTDLIB_VER_MINOR, version.minor );
+		ASSERT_EQ( QMXSTDLIB_VER_PATCH, version.patch );
 }
 
 TEST( UtilityTest, GetVersionStringWorks )
 {
 	// Create local variables.
 
-		ostringstream ExpectedResult;
+		ostringstream expectedResult;
 
-	// Perform unit test for 'GerVersionString' method.
+	// Perform unit test for 'getVersionString' method.
 
-		ExpectedResult << QMXSTDLIB_VER_MAJOR << '.' << QMXSTDLIB_VER_MINOR << '.' << QMXSTDLIB_VER_PATCH;
-		ASSERT_EQ( ExpectedResult.str(), Utility::GetVersionString() );
+		expectedResult << QMXSTDLIB_VER_MAJOR << '.' << QMXSTDLIB_VER_MINOR << '.' << QMXSTDLIB_VER_PATCH;
+		ASSERT_EQ( expectedResult.str(), Utility::getVersionString() );
 }
 
 TEST( UtilityTest, GetLanguageCodeWorks )
 {
 	// Create local variables.
 
-		string TestValues[] = { "English", "Japanese", "Russian", "Spanish", "French" };
-		string ExpectedResults[] = { "en", "ja", "ru", "es", "fr" };
+		string testValues[] = {
+			"English",
+			"Japanese",
+			"Russian",
+			"Spanish",
+			"French"
+		};
 
-	// Perform unit test for 'GetLanguageCode' method.
+		string expectedResults[] = {
+			"en",
+			"ja",
+			"ru",
+			"es",
+			"fr"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestValues ); Index++ )
+	// Perform unit test for 'getLanguageCode' method.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValues ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Utility::GetLanguageCode( TestValues[ Index ] ) );
+			ASSERT_EQ( expectedResults[ index ], Utility::getLanguageCode( testValues[ index ] ) );
 		}
 }
 
@@ -74,14 +87,27 @@ TEST( UtilityTest, GetCountryCodeWorks )
 {
 	// Create local variables.
 
-		string TestValues[] = { "United States", "Japan", "Russia", "Spain", "France" };
-		string ExpectedResults[] = { "US", "JP", "RU", "ES", "FR" };
+		string testValues[] = {
+			"United States",
+			"Japan",
+			"Russia",
+			"Spain",
+			"France"
+		};
 
-	// Perform unit test for 'GetCountryCode' method.
+		string expectedResults[] = {
+			"US",
+			"JP",
+			"RU",
+			"ES",
+			"FR"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestValues ); Index++ )
+	// Perform unit test for 'getCountryCode' method.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValues ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Utility::GetCountryCode( TestValues[ Index ] ) );
+			ASSERT_EQ( expectedResults[ index ], Utility::getCountryCode( testValues[ index ] ) );
 		}
 }
 
@@ -89,25 +115,25 @@ TEST( UtilityTest, GenerateLocaleWorks )
 {
 	// Create local variables.
 
-		vector< Utility::LocaleData > TestValues;
-		locale TestLocale;
+		vector< Utility::LocaleData > testValues;
+		locale testLocale;
 
-	// Perform unit test for 'GenerateLocale' method.
+	// Perform unit test for 'generateLocale' method.
 
-		TestValues.push_back( { "en_US.UTF-8@currency=USD", "en", "US", "utf-8", "currency=usd" } );
-		TestValues.push_back( { "fr_CA.UTF-16@currency=CAD", "fr", "CA", "utf-16", "currency=cad" } );
-		TestValues.push_back( { "es_ES.UTF-32@currency=EUR", "es", "ES", "utf-32", "currency=eur" } );
-		TestValues.push_back( { "sw_MZ.UTF-8@currency=MZN", "sw", "MZ", "utf-8", "currency=mzn" } );
-		TestValues.push_back( { "ja_JP.UTF-16@currency=JPY", "ja", "JP", "utf-16", "currency=jpy" } );
+		testValues.push_back( { "en_US.UTF-8@currency=USD", "en", "US", "utf-8", "currency=usd" } );
+		testValues.push_back( { "fr_CA.UTF-16@currency=CAD", "fr", "CA", "utf-16", "currency=cad" } );
+		testValues.push_back( { "es_ES.UTF-32@currency=EUR", "es", "ES", "utf-32", "currency=eur" } );
+		testValues.push_back( { "sw_MZ.UTF-8@currency=MZN", "sw", "MZ", "utf-8", "currency=mzn" } );
+		testValues.push_back( { "ja_JP.UTF-16@currency=JPY", "ja", "JP", "utf-16", "currency=jpy" } );
 
-		for( const auto& Index : TestValues )
+		for( const auto& index : testValues )
 		{
-			TestLocale = Utility::GenerateLocale( Index.Name );
-			ASSERT_EQ( Index.Name, use_facet< boost::locale::info >( TestLocale ).name() );
-			ASSERT_EQ( Index.Language, use_facet< boost::locale::info >( TestLocale ).language() );
-			ASSERT_EQ( Index.Country, use_facet< boost::locale::info >( TestLocale ).country() );
-			ASSERT_EQ( Index.Encoding, use_facet< boost::locale::info >( TestLocale ).encoding() );
-			ASSERT_EQ( Index.Variant, use_facet< boost::locale::info >( TestLocale ).variant() );
+			testLocale = Utility::generateLocale( index.name );
+			ASSERT_EQ( index.name, use_facet< boost::locale::info >( testLocale ).name() );
+			ASSERT_EQ( index.language, use_facet< boost::locale::info >( testLocale ).language() );
+			ASSERT_EQ( index.country, use_facet< boost::locale::info >( testLocale ).country() );
+			ASSERT_EQ( index.encoding, use_facet< boost::locale::info >( testLocale ).encoding() );
+			ASSERT_EQ( index.variant, use_facet< boost::locale::info >( testLocale ).variant() );
 		}
 }
 
@@ -115,32 +141,35 @@ TEST( UtilityTest, GetLocaleDataWorks )
 {
 	// Create local variables.
 
-		string TestValues[] = { "en_US.UTF-8@currency=USD",
-		                        "fr_CA.UTF-16@currency=CAD",
-		                        "es_ES.UTF-32@currency=EUR",
-		                        "sw_MZ.UTF-8@currency=MZN",
-		                        "ja_JP.UTF-16@currency=JPY" };
-		locale TestLocale;
-		Utility::LocaleData TestData;
-		vector< Utility::LocaleData > ExpectedResults;
+		string testValues[] = {
+			"en_US.UTF-8@currency=USD",
+		   "fr_CA.UTF-16@currency=CAD",
+		   "es_ES.UTF-32@currency=EUR",
+		   "sw_MZ.UTF-8@currency=MZN",
+		   "ja_JP.UTF-16@currency=JPY"
+		};
 
-	// Perform unit test for 'GetLocaleData' method.
+		locale testLocale;
+		Utility::LocaleData testData;
+		vector< Utility::LocaleData > expectedResults;
 
-		ExpectedResults.push_back( { "en_US.UTF-8@currency=USD", "en", "US", "utf-8", "currency=usd" } );
-		ExpectedResults.push_back( { "fr_CA.UTF-16@currency=CAD", "fr", "CA", "utf-16", "currency=cad" } );
-		ExpectedResults.push_back( { "es_ES.UTF-32@currency=EUR", "es", "ES", "utf-32", "currency=eur" } );
-		ExpectedResults.push_back( { "sw_MZ.UTF-8@currency=MZN", "sw", "MZ", "utf-8", "currency=mzn" } );
-		ExpectedResults.push_back( { "ja_JP.UTF-16@currency=JPY", "ja", "JP", "utf-16", "currency=jpy" } );
+	// Perform unit test for 'getLocaleData' method.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestValues ); Index++ )
+		expectedResults.push_back( { "en_US.UTF-8@currency=USD", "en", "US", "utf-8", "currency=usd" } );
+		expectedResults.push_back( { "fr_CA.UTF-16@currency=CAD", "fr", "CA", "utf-16", "currency=cad" } );
+		expectedResults.push_back( { "es_ES.UTF-32@currency=EUR", "es", "ES", "utf-32", "currency=eur" } );
+		expectedResults.push_back( { "sw_MZ.UTF-8@currency=MZN", "sw", "MZ", "utf-8", "currency=mzn" } );
+		expectedResults.push_back( { "ja_JP.UTF-16@currency=JPY", "ja", "JP", "utf-16", "currency=jpy" } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValues ); index++ )
 		{
-			TestLocale = Utility::GenerateLocale( TestValues[ Index ] );
-			Utility::GetLocaleData( TestData, TestLocale );
-			ASSERT_EQ( ExpectedResults[ Index ].Name, TestData.Name );
-			ASSERT_EQ( ExpectedResults[ Index ].Language, TestData.Language );
-			ASSERT_EQ( ExpectedResults[ Index ].Country, TestData.Country );
-			ASSERT_EQ( ExpectedResults[ Index ].Encoding, TestData.Encoding );
-			ASSERT_EQ( ExpectedResults[ Index ].Variant, TestData.Variant );
+			testLocale = Utility::generateLocale( testValues[ index ] );
+			Utility::getLocaleData( testData, testLocale );
+			ASSERT_EQ( expectedResults[ index ].name, testData.name );
+			ASSERT_EQ( expectedResults[ index ].language, testData.language );
+			ASSERT_EQ( expectedResults[ index ].country, testData.country );
+			ASSERT_EQ( expectedResults[ index ].encoding, testData.encoding );
+			ASSERT_EQ( expectedResults[ index ].variant, testData.variant );
 		}
 }
 
@@ -148,42 +177,42 @@ TEST( UtilityTest, TimeStampWorks )
 {
 	// Create local variables.
 
-		string TestTimeStamp = Utility::TimeStamp();
-		time_t CurrentTime = time( nullptr );
-		tm* SystemTime = localtime( &CurrentTime );
+		string testTimeStamp = Utility::timeStamp();
+		time_t currentTime = time( nullptr );
+		tm* systemTime = localtime( &currentTime );
 
-	// Perform unit test for 'TimeStamp' method.
+	// Perform unit test for 'timeStamp' method.
 
-		ASSERT_EQ( SystemTime->tm_hour, String::ToValue< int >( TestTimeStamp.substr( 0, 2 ) ) );
-		ASSERT_EQ( SystemTime->tm_min, String::ToValue< int >( TestTimeStamp.substr( 3, 2 ) ) );
-		ASSERT_EQ( SystemTime->tm_sec, String::ToValue< int >( TestTimeStamp.substr( 6, 2 ) ) );
+		ASSERT_EQ( systemTime->tm_hour, String::toValue< int >( testTimeStamp.substr( 0, 2 ) ) );
+		ASSERT_EQ( systemTime->tm_min, String::toValue< int >( testTimeStamp.substr( 3, 2 ) ) );
+		ASSERT_EQ( systemTime->tm_sec, String::toValue< int >( testTimeStamp.substr( 6, 2 ) ) );
 }
 
 TEST( UtilityTest, PauseWorks )
 {
 	// Create local variables.
 
-		time_t BaseTime = Null;
-		time_t CurrentTime = Null;
+		time_t baseTime = UNSET;
+		time_t currentTime = UNSET;
 
-	// Perform unit test for 'Pause' method.
+	// Perform unit test for 'pause' method.
 
-		BaseTime = time( nullptr );
-		Utility::Pause( 1000.0, Timer::Milliseconds );
-		CurrentTime = time( nullptr );
-		ASSERT_NEAR( 1, ( CurrentTime - BaseTime ), 1 );
-		BaseTime = time( nullptr );
-		Utility::Pause( 1.0, Timer::Seconds );
-		CurrentTime = time( nullptr );
-		ASSERT_NEAR( 1, ( CurrentTime - BaseTime ), 1 );
-		BaseTime = time( nullptr );
-		Utility::Pause( 0.01667, Timer::Minutes );
-		CurrentTime = time( nullptr );
-		ASSERT_NEAR( 1, ( CurrentTime - BaseTime ), 1 );
-		BaseTime = time( nullptr );
-		Utility::Pause( 0.0002778, Timer::Hours );
-		CurrentTime = time( nullptr );
-		ASSERT_NEAR( 1, ( CurrentTime - BaseTime ), 1 );
+		baseTime = time( nullptr );
+		Utility::pause( 1000.0, Timer::MILLISECONDS );
+		currentTime = time( nullptr );
+		ASSERT_NEAR( 1, ( currentTime - baseTime ), 1 );
+		baseTime = time( nullptr );
+		Utility::pause( 1.0, Timer::SECONDS );
+		currentTime = time( nullptr );
+		ASSERT_NEAR( 1, ( currentTime - baseTime ), 1 );
+		baseTime = time( nullptr );
+		Utility::pause( 0.01667, Timer::MINUTES );
+		currentTime = time( nullptr );
+		ASSERT_NEAR( 1, ( currentTime - baseTime ), 1 );
+		baseTime = time( nullptr );
+		Utility::pause( 0.0002778, Timer::HOURS );
+		currentTime = time( nullptr );
+		ASSERT_NEAR( 1, ( currentTime - baseTime ), 1 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

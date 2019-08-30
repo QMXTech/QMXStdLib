@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sequencer.hpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a numeric sequencer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a numeric sequencer class.
   *
-  * @section Description
+  * @section SequencerH0000 Description
   *
   * This header file defines the interface for a numeric sequencer class.
   *
-  * @section License
+  * @section SequencerH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -54,6 +54,7 @@
 
 #include "Base.hpp"
 #include "Object.hpp"
+#include "RAII/ScopedLock.hpp"
 #include "RAII/ScopedStackTrace.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,37 +82,37 @@ public:
 		  * @brief This is the flag which determines if the sequencer will loop upon reaching the end of the sequence.
 		  */
 
-		bool IsLooped;
+		bool isLooped;
 
 		/**
 		  * @brief This is the current sequencer mode.
 		  */
 
-		int SequenceMode;
+		int sequenceMode;
 
 		/**
 		  * @brief This is the minimum value of the sequencer.
 		  */
 
-		NType Minimum;
+		NType minimum;
 
 		/**
 		  * @brief This is the maximum value of the sequencer.
 		  */
 
-		NType Maximum;
+		NType maximum;
 
 		/**
 		  * @brief This is the amount to step the sequencer each time it is incremented or decremented.
 		  */
 
-		NType Step;
+		NType step;
 
 		/**
 		  * @brief This is the current value of the sequencer.
 		  */
 
-		NType Value;
+		NType value;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,8 +147,8 @@ public:
 
 		enum Mode
 		{
-			Linear,
-			Oscillate
+			LINEAR,
+			OSCILLATE
 		};
 
 	// Destructor
@@ -156,12 +157,39 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		virtual ~Sequencer()
+		~Sequencer()
 		{
-			// Perform necessary cleanup.
+			try
+			{
+				// Perform necessary cleanup.
 
-				if( this->Initialized )
-					this->Deallocate();
+					if( this->initialized )
+						this->deallocate();
+			}
+			catch( const std::exception& except )
+			{
+				// Do nothing.
+			}
+		}
+
+	// Public Methods
+
+		/**
+		  * @brief This method gets the current sequencer value.
+		  *
+		  * @return
+		  * 	The current sequencer value.
+		  */
+
+		NType getValue() const
+		{
+			// Obtain locks.
+
+				SCOPED_READ_LOCK;
+
+			// Return current sequencer value to calling routine.
+
+				return this->properties.value;
 		}
 
 	// Public Overloaded Operators
@@ -169,7 +197,7 @@ public:
 		/**
 		  * @brief This is the overloaded post-increment operator, which will step the sequencer forward.
 		  *
-		  * If the 'SequenceMode' property is set to an out-of-range value, this operation will have no effect.
+		  * If the 'sequenceMode' property is set to an out-of-range value, this operation will have no effect.
 		  */
 
 		void operator++( int )
@@ -180,52 +208,52 @@ public:
 
 			// Create local variables.
 
-				SequencerProperties< NType >* PP = &(this->Properties);
+				SequencerProperties< NType >* PP = &this->properties;
 
 			// Perform post-increment operator logic.
 
-				switch( PP->SequenceMode )
+				switch( PP->sequenceMode )
 				{
-					case Linear:
+					case LINEAR:
 					{
-						if( PP->Value < PP->Maximum )
-							PP->Value += PP->Step;
-						else if( PP->IsLooped && ( PP->Value == PP->Maximum ) )
-							PP->Value = PP->Minimum;
+						if( PP->value < PP->maximum )
+							PP->value += PP->step;
+						else if( PP->isLooped && ( PP->value == PP->maximum ) )
+							PP->value = PP->minimum;
 
-						if( PP->Value > PP->Maximum )
-							PP->Value = PP->Maximum;
+						if( PP->value > PP->maximum )
+							PP->value = PP->maximum;
 
 						break;
 					}
 
-					case Oscillate:
+					case OSCILLATE:
 					{
-						if( !OscillationFlag )
+						if( !oscillationFlag )
 						{
-							if( PP->Value < PP->Maximum )
-								PP->Value += PP->Step;
-							else if( PP->Value == PP->Maximum )
+							if( PP->value < PP->maximum )
+								PP->value += PP->step;
+							else if( PP->value == PP->maximum )
 							{
-								PP->Value -= PP->Step;
-								OscillationFlag = true;
+								PP->value -= PP->step;
+								oscillationFlag = true;
 							}
 
-							if( PP->Value > PP->Maximum )
-								PP->Value = PP->Maximum;
+							if( PP->value > PP->maximum )
+								PP->value = PP->maximum;
 						}
 						else
 						{
-							if( PP->Value > PP->Minimum )
-								PP->Value -= PP->Step;
-							else if( PP->IsLooped && ( PP->Value == PP->Minimum ) )
+							if( PP->value > PP->minimum )
+								PP->value -= PP->step;
+							else if( PP->isLooped && ( PP->value == PP->minimum ) )
 							{
-								PP->Value += PP->Step;
-								OscillationFlag = false;
+								PP->value += PP->step;
+								oscillationFlag = false;
 							}
 
-							if( PP->Value < PP->Minimum )
-								PP->Value = PP->Minimum;
+							if( PP->value < PP->minimum )
+								PP->value = PP->minimum;
 						}
 
 						break;
@@ -252,52 +280,52 @@ public:
 
 			// Create local variables.
 
-				SequencerProperties< NType >* PP = &(this->Properties);
+				SequencerProperties< NType >* PP = &this->properties;
 
 			// Perform post-decrement operator logic.
 
-				switch( PP->SequenceMode )
+				switch( PP->sequenceMode )
 				{
-					case Linear:
+					case LINEAR:
 					{
-						if( PP->Value > PP->Minimum )
-							PP->Value -= PP->Step;
-						else if( PP->IsLooped && ( PP->Value == PP->Minimum ) )
-							PP->Value = PP->Maximum;
+						if( PP->value > PP->minimum )
+							PP->value -= PP->step;
+						else if( PP->isLooped && ( PP->value == PP->minimum ) )
+							PP->value = PP->maximum;
 
-						if( PP->Value < PP->Minimum )
-							PP->Value = PP->Minimum;
+						if( PP->value < PP->minimum )
+							PP->value = PP->minimum;
 
 						break;
 					}
 
-					case Oscillate:
+					case OSCILLATE:
 					{
-						if( !OscillationFlag )
+						if( !oscillationFlag )
 						{
-							if( PP->Value > PP->Minimum )
-								PP->Value -= PP->Step;
-							else if( PP->Value == PP->Minimum )
+							if( PP->value > PP->minimum )
+								PP->value -= PP->step;
+							else if( PP->value == PP->minimum )
 							{
-								PP->Value += PP->Step;
-								OscillationFlag = true;
+								PP->value += PP->step;
+								oscillationFlag = true;
 							}
 
-							if( PP->Value < PP->Minimum )
-								PP->Value = PP->Minimum;
+							if( PP->value < PP->minimum )
+								PP->value = PP->minimum;
 						}
 						else
 						{
-							if( PP->Value < PP->Maximum )
-								PP->Value += PP->Step;
-							else if( PP->IsLooped && ( PP->Value == PP->Maximum ) )
+							if( PP->value < PP->maximum )
+								PP->value += PP->step;
+							else if( PP->isLooped && ( PP->value == PP->maximum ) )
 							{
-								PP->Value -= PP->Step;
-								OscillationFlag = false;
+								PP->value -= PP->step;
+								oscillationFlag = false;
 							}
 
-							if( PP->Value > PP->Maximum )
-								PP->Value = PP->Maximum;
+							if( PP->value > PP->maximum )
+								PP->value = PP->maximum;
 						}
 
 						break;
@@ -310,24 +338,6 @@ public:
 				}
 		}
 
-		/**
-		  * @brief This method gets the current sequencer value.
-		  *
-		  * @return
-		  * 	The current sequencer value.
-		  */
-
-		NType GetValue() const
-		{
-			// Obtain locks.
-
-				SCOPED_READ_LOCK;
-
-			// Return current sequencer value to calling routine.
-
-				return this->Properties.Value;
-		}
-
 private:
 
 	// Private Fields
@@ -336,7 +346,7 @@ private:
 		  * @brief This is a state flag used by the ocillation algorithms.
 		  */
 
-		bool OscillationFlag;
+		bool oscillationFlag;
 
 	// Private Constructors
 
@@ -348,38 +358,25 @@ private:
 		{
 			// Initialize fields.
 
-				ZERO_MEMORY( &(this->Properties), sizeof( SequencerProperties< NType > ) );
-				OscillationFlag = false;
+				ZERO_MEMORY( &this->properties, sizeof( SequencerProperties< NType > ) );
+				oscillationFlag = false;
 		}
 
 	// Private Methods
 
 		/**
-		  * @brief This is the overridden implementation for the 'operator=' method.
-		  *
-		  * @param Instance
-		  * 	This is the 'Object' pointer with which to set 'this'.
-		  */
-
-		void OperatorAssignImp( const Object< Sequencer< NType >, SequencerProperties< NType > >* Instance )
-		{
-			// Create local variables.
-
-				const Sequencer* DInstance = dynamic_cast< const Sequencer* >( Instance );
-
-			// Assign specified object to 'this'.
-
-				OscillationFlag = DInstance->OscillationFlag;
-		}
-
-		/**
 		  * @brief This is the overridden implementation for the 'Clone' method.
 		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
+		  * @param target
+		  * 	This is the object pointer to use when setting.
 		  */
 
-		CLONE_IMP_T( Sequencer< NType > )
+		void cloneImp( typename Sequencer< NType >::InstancePtr& target ) const
+		{
+			// Assign data of 'this' to specified object.
+
+				target->oscillationFlag = oscillationFlag;
+		}
 };
 
 } // 'QMXStdLib' Namespace

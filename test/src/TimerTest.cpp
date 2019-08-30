@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TimerTest.cpp
-// Robert M. Baker | Created : 19FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 19FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Timer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,65 +34,65 @@ TEST( TimerTest, IsRunningWorks )
 {
 	// Create local variables.
 
-		Timer::PointerType Instance = Timer::Create();
+		Timer::InstancePtr instance = Timer::create();
 
-	// Perform unit test for 'IsRunning' method.
+	// Perform unit test for 'isRunning' method.
 
-		ASSERT_FALSE( Instance->IsRunning() );
+		ASSERT_FALSE( instance->isRunning() );
 }
 
 TEST( TimerTest, ToggleWorks )
 {
 	// Create local variables.
 
-		Timer::PointerType Instance = Timer::Create();
+		Timer::InstancePtr instance = Timer::create();
 
-	// Perform unit test for 'Toggle' method.
+	// Perform unit test for 'toggle' method.
 
- 		ASSERT_FALSE( Instance->IsRunning() );
-		Instance->Toggle();
-		ASSERT_TRUE( Instance->IsRunning() );
-		Instance->Toggle();
- 		ASSERT_FALSE( Instance->IsRunning() );
+ 		ASSERT_FALSE( instance->isRunning() );
+		instance->toggle();
+		ASSERT_TRUE( instance->isRunning() );
+		instance->toggle();
+ 		ASSERT_FALSE( instance->isRunning() );
 }
 
 TEST( TimerTest, GetTimeWorks )
 {
 	// Create local variables.
 
-		Timer::PointerType Instance = Timer::Create();
+		Timer::InstancePtr instance = Timer::create();
 
-	// Perform unit test for 'GetTime' method.
+	// Perform unit test for 'getTime' method.
 
-		Instance->Toggle();
+		instance->toggle();
 
-		while( Instance->GetTime() < 0.25 );
+		while( instance->getTime() < 0.25 );
 			// Empty Loop
 
-		Instance->Toggle();
-		ASSERT_NEAR( 250.0, Instance->GetTime( Timer::Milliseconds ), 50.0 );
-		ASSERT_NEAR( 0.25, Instance->GetTime( Timer::Seconds ), 0.05 );
-		ASSERT_NEAR( 0.004167, Instance->GetTime( Timer::Minutes ), 0.0008333 );
-		ASSERT_NEAR( 0.00006944, Instance->GetTime( Timer::Hours ), 0.00001389 );
+		instance->toggle();
+		ASSERT_NEAR( 250.0, instance->getTime( Timer::MILLISECONDS ), 50.0 );
+		ASSERT_NEAR( 0.25, instance->getTime( Timer::SECONDS ), 0.05 );
+		ASSERT_NEAR( 0.004167, instance->getTime( Timer::MINUTES ), 0.0008333 );
+		ASSERT_NEAR( 0.00006944, instance->getTime( Timer::HOURS ), 0.00001389 );
 }
 
 TEST( TimerTest, ResetWorks )
 {
 	// Create local variables.
 
-		Timer::PointerType Instance = Timer::Create();
+		Timer::InstancePtr instance = Timer::create();
 
-	// Perform unit test for 'Reset' method.
+	// Perform unit test for 'reset' method.
 
-		Instance->Toggle();
+		instance->toggle();
 
-		while( Instance->GetTime() < 0.25 );
+		while( instance->getTime() < 0.25 );
 			// Empty Loop
 
-		Instance->Toggle();
-		ASSERT_NEAR( 0.25, Instance->GetTime(), 0.05 );
-		Instance->Reset();
-		ASSERT_NEAR( 0.0, Instance->GetTime(), 0.05 );
+		instance->toggle();
+		ASSERT_NEAR( 0.25, instance->getTime(), 0.05 );
+		instance->reset();
+		ASSERT_NEAR( 0.0, instance->getTime(), 0.05 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

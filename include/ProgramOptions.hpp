@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptions.hpp
-// Robert M. Baker | Created : 23OCT13 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 23OCT13 | Last Modified : 28AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a program options class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -17,24 +17,22 @@
 // You should have received a copy of the GNU Lesser General Public License along with 'QMXStdLib'.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// TODO (Robert M. Baker - Priority 50): Modify all '*ConfigOption' methods to use a separate parameter for group ID.
-
 /**
   * @file
   * @author  Robert M. Baker
   * @date    Created : 23OCT13
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 28AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a program options class.
   *
-  * @section Description
+  * @section ProgramOptionsH0000 Description
   *
   * This header file defines the interface for a program options class.
   *
-  * @section License
+  * @section ProgramOptionsH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -58,13 +56,14 @@
 #include "Object.hpp"
 #include "FileSystem.hpp"
 #include "Mixins/Singleton.hpp"
+#include "RAII/ScopedLock.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define PROGRAM_OPTIONS   QMXStdLib::ProgramOptions::GetSingleton()
-#define PROGRAM_OPTIONS_P QMXStdLib::ProgramOptions::GetSingletonPointer()
+#define PROGRAM_OPTIONS   QMXStdLib::ProgramOptions::getSingleton()
+#define PROGRAM_OPTIONS_P QMXStdLib::ProgramOptions::getSingletonPointer()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -94,9 +93,13 @@ class ProgramOptions : public Object< ProgramOptions >, public Singleton< Progra
 {
 	// Friend Classes
 
-		friend class Object;
+		friend class Object< ProgramOptions >;
 
 public:
+
+	// Public Type Definitions
+
+		typedef std::unordered_map< std::string, StringMap > ConfigMap;
 
 	// Destructor
 
@@ -104,7 +107,7 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		virtual ~ProgramOptions();
+		~ProgramOptions();
 
 	// Public Methods
 
@@ -112,18 +115,18 @@ public:
 		  * @brief This method parses the specified command line arguments.
 		  *
 		  * Any config options parsed may be overridden by a config file, depending on the order in which the methods are called (i.e. If a call is made to
-		  * 'ParseCommandLine' and then to 'ParseConfigFile', any identical entries in the config file will override those on the command line.).
+		  * 'parseCommandLine' and then to 'parseConfigFile', any identical entries in the config file will override those on the command line.).
 		  *
 		  * Refer to the various option retrieval methods for more information on the different option types.
 		  *
-		  * @param ArgumentCount
+		  * @param argumentCount
 		  * 	This is the number of arguments which have been passed to the application via the 'main' function.
 		  *
-		  * @param ArgumentValues
+		  * @param argumentValues
 		  * 	This is an array containing all argument values which have been passed to the application via the 'main' function.
 		  */
 
-		void ParseCommandLine( int ArgumentCount, char* ArgumentValues[] );
+		void parseCommandLine( int argumentCount, char* argumentValues[] );
 
 		/**
 		  * @brief This method parses the specified config file.
@@ -136,28 +139,28 @@ public:
 		  * discarded.  Any config options parsed may be overridden by the command line, depending on the order in which the methods are called (i.e. If a call is
 		  * made to 'ParseConfigFile' and then to 'ParseCommandLine', any identical entries on the command line will override those in the config file.).
 		  *
-		  * Refer to the 'GetConfigOption' method for more information on the config option type.
+		  * Refer to the 'getConfigOption' method for more information on the config option type.
 		  *
-		  * @param ConfigPath
+		  * @param configPath
 		  * 	This is the config file path to be parsed.
 		  *
 		  * @exception QMXException
 		  * 	If the specified config file could not be opened for reading.
 		  */
 
-		void ParseConfigFile( const Path& ConfigPath );
+		void parseConfigFile( const Path& configPath );
 
 		/**
 		  * @brief This method saves the current config options to the specified file.
 		  *
-		  * @param ConfigPath
+		  * @param configPath
 		  * 	This is the config file path to use when saving.
 		  *
 		  * @exception QMXException
 		  * 	If the specified config file could not be opened for writing.
 		  */
 
-		void SaveConfigFile( const Path& ConfigPath ) const;
+		void saveConfigFile( const Path& configPath ) const;
 
 		/**
 		  * @brief This method determines if the specified toggle option is present.
@@ -165,14 +168,14 @@ public:
 		  * A toggle option is one formed with the configurable prefix, which by default is the dash ('-'), followed by any number of characters (usually
 		  * alphanumeric), and is usually meant to toggle a certain behavior.
 		  *
-		  * @param TargetOption
+		  * @param targetOption
 		  * 	This is the name of the toggle option whose presence is to be determined.
 		  *
 		  * @return
 		  * 	A boolean value of 'true' if the specified toggle option is present, and 'false' otherwise.
 		  */
 
-		bool IsToggleOptionPresent( const std::string& TargetOption ) const;
+		bool isToggleOptionPresent( const std::string& targetOption ) const;
 
 		/**
 		  * @brief This method determines if the specified command option is present.
@@ -180,14 +183,14 @@ public:
 		  * A command option is one formed with the configurable prefix, which by default is two dashes ('--'), followed by a string of characters (usually
 		  * descriptive of its function), and is usually meant to invoke a function.
 		  *
-		  * @param TargetOption
+		  * @param targetOption
 		  * 	This is the name of the command option whose presence is to be determined.
 		  *
 		  * @return
 		  * 	A boolean value of 'true' if the specified command option is present, and 'false' otherwise.
 		  */
 
-		bool IsCommandOptionPresent( const std::string& TargetOption ) const;
+		bool isCommandOptionPresent( const std::string& targetOption ) const;
 
 		/**
 		  * @brief This method retrieves the value of the specified config option, with optional group, if it exists.
@@ -195,68 +198,86 @@ public:
 		  * A config option is one formed with the configurable prefix, which by default is two dashes ('--'), followed by a string of characters (usually a
 		  * word), followed by the configurable assignment operator, which by default is the equal sign ('='), and then followed by another string of characters
 		  * (usually a logical value for the preceding word), and is usually meant to define key/value pairs.  An optional group can be specified by placing it
-		  * immediately after the prefix and then separating it from the key with the configurable group/key seperator, which by default is the period ('.').  If
+		  * immediately after the prefix and then separating it from the key with the configurable group/key separator, which by default is the period ('.').  If
 		  * no group is specified, the configurable default is used, which by default is 'Global'.  Assuming all default configurable values, a full example would
 		  * be '--Group.Key=Value'.
 		  *
-		  * @param TargetOption
+		  * @param targetOption
 		  * 	This is the name of the config option, with optional group, whose value is to be retrieved.
 		  *
 		  * @return
 		  * 	A string containing the value of the specified config option, or an empty string if it does not exist.
 		  */
 
-		std::string GetConfigOption( const std::string& TargetOption ) const;
+		std::string getConfigOption( const std::string& targetOption ) const;
+
+		/**
+		  * @brief This method retrieves the underlying config map.
+		  *
+		  * 	Refer to the 'getConfigOption' method for more information on the config option type.
+		  *
+		  * @return
+		  * 	A non-mutable reference to the underlying config map.
+		  */
+
+		const ConfigMap& getConfigOptions() const;
 
 		/**
 		  * @brief This method sets the specified config option, with optional group, to the specified value.
 		  *
-		  * If the specified group or key do not exist, this method will have no effect unless 'DoCreate' is set to 'true'; in which case, the group and/or the
+		  * If the specified group or key do not exist, this method will have no effect unless 'doCreate' is set to 'true'; in which case, the group and/or the
 		  * key will be created and the value assigned.
 		  *
-		  * @param TargetOption
+		  * @param targetOption
 		  * 	This is the name of the config option, with optional group, whose value is to be set.
 		  *
-		  * @param TargetValue
+		  * @param newValue
 		  * 	This is the value to use when settings the config option.
 		  *
-		  * @param DoCreate
+		  * @param doCreate
 		  * 	If set to 'true' and the group and/or the key do not exist, they will first be created and then the value assigned.
 		  */
 
-		void SetConfigOption( const std::string& TargetOption, const std::string& TargetValue, const bool DoCreate = false );
+		void setConfigOption( const std::string& targetOption, const std::string& newValue, const bool doCreate = false );
+
+		/**
+		  * @brief This method sets the underlying config map to the specified config map.
+		  *
+		  * 	Refer to the 'GetConfigOption' method for more information on the config option type.
+		  *
+		  * @param targetOptions
+		  * 	This is the config map with which to set the underlying config map.
+		  */
+
+		void setConfigOptions( const ConfigMap& targetOptions );
 
 		/**
 		  * @brief This method removes the specified config option, with optional group, if it exists.
 		  *
 		  * If a removed config option is the last one in its group, the group will also be removed.
 		  *
-		  * @param TargetOption
+		  * @param targetOption
 		  * 	This is the name of the config option, with optional group, to be removed.
-		  * 	
+		  *
 		  */
 
-		void RemoveConfigOption( const std::string& TargetOption );
+		void removeConfigOption( const std::string& targetOption );
 
 		/**
 		  * @brief This method retrieves the positional option at the specified index, if it exists.
 		  *
 		  * A positional option is one which does not fit the form of any other option and whose purpose depends on its position in the argument list.
 		  *
-		  * @param TargetIndex
+		  * @param targetIndex
 		  * 	This is the positional option index used in retrieval.
 		  *
 		  * @return
 		  * 	A string containing the positional option at the specified index, or an empty string if it does not exist.
 		  */
 
-		std::string GetPositionalOption( size_t TargetIndex ) const;
+		std::string getPositionalOption( size_t targetIndex ) const;
 
 private:
-
-	// Private Type Definitions
-
-		typedef std::unordered_map< std::string, StringMap > ConfigMap;
 
 	// Private Fields
 
@@ -264,25 +285,25 @@ private:
 		  * @brief This is the set of strings containing all parsed toggle options.
 		  */
 
-		StringSet ToggleOptions;
+		StringSet toggleOptions;
 
 		/**
 		  * @brief This is the set of strings containing all parsed command options.
 		  */
 
-		StringSet CommandOptions;
+		StringSet commandOptions;
 
 		/**
 		  * @brief This is the map containing all parsed config options.
 		  */
 
-		ConfigMap ConfigOptions;
+		ConfigMap configOptions;
 
 		/**
 		  * @brief This is the vector of strings containing all parsed positional options.
 		  */
 
-		StringVector PositionalOptions;
+		StringVector positionalOptions;
 
 	// Private Constructors
 
@@ -295,22 +316,22 @@ private:
 	// Private Methods
 
 		/**
-		  * @brief This is the overridden implementation for the 'Deallocate' method.
+		  * @brief This is the overridden implementation for the 'deallocate' method.
 		  */
 
-		void DeallocateImp();
+		void deallocateImp();
 
 		/**
 		  * @brief This method extracts the embedded group ID from the specified string, if there is one.
 		  *
-		  * @param Target
-		  * 	This is string used for group ID extraction.
+		  * @param target
+		  * 	This is the string used for group ID extraction.
 		  *
 		  * @return
 		  * 	A string containing the extracted group ID, or the default group ID if there was none.
 		  */
 
-		std::string ExtractGroup( std::string& Target ) const;
+		std::string extractGroup( std::string& Target ) const;
 };
 
 } // 'QMXStdLib' Namespace

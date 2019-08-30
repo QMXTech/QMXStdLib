@@ -1,10 +1,10 @@
 ################################################################################################################################################################
 # ProjectConfig.cmake
-# Robert M. Baker | Created : 27FEB16 | Last Modified : 27FEB16 by Robert M. Baker
-# Version : 1.1.2
+# Robert M. Baker | Created : 27FEB16 | Last Modified : 26AUG19 by Robert M. Baker
+# Version : 2.0.0
 # This is a CMake package configuration script for 'QMXStdLib'.
 ################################################################################################################################################################
-# Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+# Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 #
 # This file is part of 'QMXStdLib'.
 #

@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIOTest.hpp
-// Robert M. Baker | Created : 30JAN12 | Last Modified : 29JAN16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 30JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::ConsoleIO' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -35,7 +35,7 @@
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SET_TEST_DATA(x) ResultBuffer.str( "" );  ResultBuffer << x;  InputBuffer.str( ( ResultBuffer.str() + '\n' ) );
+#define SET_TEST_DATA(x) resultBuffer.str( "" );  resultBuffer << x;  inputBuffer.str( ( resultBuffer.str() + '\n' ) );
 
 #endif // __QMX_QMXSTDLIBTEST_CONSOLEIOTEST_HPP_
 

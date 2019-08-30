@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a general utility class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a general utility class.
   *
-  * @section Description
+  * @section UtilityH0000 Description
   *
   * This header file defines the interface for a general utility class.
   *
-  * @section License
+  * @section UtilityH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -52,6 +52,9 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <random>
+#include <boost/locale.hpp>
+
 #include "Base.hpp"
 #include "Timer.hpp"
 
@@ -59,8 +62,8 @@
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define UTILITY_LANGUAGES        187
-#define UTILITY_COUNTRIES        249
+#define UTILITY_LANGUAGES 187
+#define UTILITY_COUNTRIES 249
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -105,19 +108,19 @@ public:
 				  * @brief This is the major version.
 				  */
 
-				uint64_t Major;
+				uint64_t major;
 
 				/**
 				  * @brief This is the minor version.
 				  */
 
-				uint64_t Minor;
+				uint64_t minor;
 
 				/**
 				  * @brief This is the patch version.
 				  */
 
-				uint64_t Patch;
+				uint64_t patch;
 		};
 
 		/**
@@ -134,31 +137,31 @@ public:
 				  * @brief This is the full name of the locale (e.g. "en_US.UTF-8@currency=USD").
 				  */
 
-				std::string Name;
+				std::string name;
 
 				/**
 				  * @brief This is the ISO 639-1 language code of the locale (e.g. "en").
 				  */
 
-				std::string Language;
+				std::string language;
 
 				/**
 				  * @brief This is the ISO 3166-1 alpha-2 country code of the locale (e.g. "US").
 				  */
 
-				std::string Country;
+				std::string country;
 
 				/**
 				  * @brief This is the character encoding of the locale (e.g. "UTF-8").
 				  */
 
-				std::string Encoding;
+				std::string encoding;
 
 				/**
 				  * @brief This is the variant of the locale (e.g. "currency=USD").
 				  */
 
-				std::string Variant;
+				std::string variant;
 		};
 
 		/**
@@ -175,13 +178,13 @@ public:
 				  * @brief This is the dword data.
 				  */
 
-				DWType DWordData;
+				DWType dword;
 
 				/**
 				  * @brief This is the array to access the upper and lower words.
 				  */
 
-				WType WordData[ 2 ];
+				WType word[ 2 ];
 		};
 
 	// Public Fields
@@ -190,13 +193,13 @@ public:
 		  * @brief This is the array of languages paired with their ISO 639-1 code.
 		  */
 
-		static const StringPair Languages[ UTILITY_LANGUAGES ];
+		static const StringPair languages[ UTILITY_LANGUAGES ];
 
 		/**
 		  * @brief This is the array of countries paired with their ISO 3166-1 alpha-2 code.
 		  */
 
-		static const StringPair Countries[ UTILITY_COUNTRIES ];
+		static const StringPair countries[ UTILITY_COUNTRIES ];
 
 	// Public Methods
 
@@ -207,7 +210,7 @@ public:
 		  * 	A 'VersionData' instance containing the version data for this library.
 		  */
 
-		static VersionData GetVersionNumber()
+		static VersionData getVersionNumber()
 		{
 			// Return version data for this library to calling routine.
 
@@ -215,143 +218,145 @@ public:
 		}
 
 		/**
-		  * @brief This method gets the current version data for this library.
+		  * @brief This method gets the current version string for this library.
 		  *
 		  * @return
 		  * 	A string representing the current version data for this library.
 		  */
 
-		static std::string GetVersionString()
+		static std::string getVersionString()
 		{
 			// Create local variables.
 
-				std::ostringstream Result;
+				std::ostringstream result;
 
 			// Construct a string representation of the current version data for this library.
 
-				Result << QMXSTDLIB_VER_MAJOR << '.' << QMXSTDLIB_VER_MINOR << '.' << QMXSTDLIB_VER_PATCH;
+				result << QMXSTDLIB_VER_MAJOR << '.' << QMXSTDLIB_VER_MINOR << '.' << QMXSTDLIB_VER_PATCH;
 
 			// Return result to calling routine.
 
-				return Result.str();
+				return result.str();
 		}
 
 		/**
 		  * @brief This method gets the ISO 639-1 code for the specified language.
 		  *
-		  * @param Language
+		  * @param language
 		  * 	This is the language from which to get the ISO 639-1 code.
 		  *
 		  * @return
 		  * 	The ISO 639-1 code for the specified language, if it exists, or an empty string otherwise.
 		  */
 
-		static std::string GetLanguageCode( const std::string& Language )
+		static std::string getLanguageCode( const std::string& language )
 		{
 			// Create local variables.
 
-				std::string Result;
-				bool IsDone = false;
-				const StringPair* LanguagesIterator = &Languages[ 0 ];
-				const StringPair* LanguagesEnd = &Languages[ ( UTILITY_LANGUAGES - 1 ) ] + 1;
+				std::string result;
+				bool isDone = false;
+				const StringPair* languagesIterator = &languages[ 0 ];
+				const StringPair* languagesEnd = &languages[ ( UTILITY_LANGUAGES - 1 ) ] + 1;
 
 			// Get ISO 639-1 Code for specified language, if it exists.
 
-				while( !IsDone && ( LanguagesIterator != LanguagesEnd ) )
+				while( !isDone && ( languagesIterator != languagesEnd ) )
 				{
-					if( LanguagesIterator->first == Language )
+					if( languagesIterator->first == language )
 					{
-						Result = LanguagesIterator->second;
-						IsDone = true;
+						result = languagesIterator->second;
+						isDone = true;
 					}
 
-					LanguagesIterator++;
+					languagesIterator++;
 				}
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 		/**
 		  * @brief This method gets the ISO 3166-1 alpha-2 code for the specified country.
 		  *
-		  * @param Country
+		  * @param country
 		  * 	This is the country from which to get the ISO 3166-1 alpha-2 code.
 		  *
 		  * @return
 		  * 	The ISO 3166-1 alpha-2 code for the specified country, if it exists, or an empty string otherwise.
 		  */
 
-		static std::string GetCountryCode( const std::string& Country )
+		static std::string getCountryCode( const std::string& country )
 		{
 			// Create local variables.
 
-				std::string Result;
-				bool IsDone = false;
-				const StringPair* CountriesIterator = &Countries[ 0 ];
-				const StringPair* CountriesEnd = &Countries[ ( UTILITY_COUNTRIES - 1 ) ] + 1;
+				std::string result;
+				bool isDone = false;
+				const StringPair* countriesIterator = &countries[ 0 ];
+				const StringPair* countriesEnd = &countries[ ( UTILITY_COUNTRIES - 1 ) ] + 1;
 
 			// Get ISO 3166-1 alpha-2 Code for specified country, if it exists.
 
-				while( !IsDone && ( CountriesIterator != CountriesEnd ) )
+				while( !isDone && ( countriesIterator != countriesEnd ) )
 				{
-					if( CountriesIterator->first == Country )
+					if( countriesIterator->first == country )
 					{
-						Result = CountriesIterator->second;
-						IsDone = true;
+						result = countriesIterator->second;
+						isDone = true;
 					}
 
-					CountriesIterator++;
+					countriesIterator++;
 				}
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 		/**
 		  * @brief This method generates a locale based on the specified ID.
 		  *
-		  * @param ID
+		  * @param id
 		  * 	This is the ID to use when generating the locale.
 		  *
 		  * @return
 		  * 	A locale object generated using the specified ID.
 		  */
 
-		static std::locale GenerateLocale( const std::string& ID )
+		static std::locale generateLocale( const std::string& id )
 		{
 			// Create local variables.
 
-				boost::locale::generator LocaleGenerator;
+				boost::locale::generator localeGenerator;
 
 			// Return generated locale to calling routine.
 
-				return LocaleGenerator( ID );
+				return localeGenerator( id );
 		}
 
 		/**
 		  * @brief This method gets data about the specified locale, if it is valid.
 		  *
-		  * @param Data
+		  * @param target
 		  * 	This is a 'LocaleData' structure reference which will receive the data for the specified locale; if the specified locale is invalid, this will not
 		  * 	be modified.
 		  *
-		  * @param TargetLocale
+		  * @param source
 		  * 	This is the locale from which to retrieve data.
 		  */
 
-		static void GetLocaleData( LocaleData& Data, const std::locale& TargetLocale )
+		static void getLocaleData( LocaleData& target, const std::locale& source )
 		{
 			// Get locale data for specified locale, if it is valid.
 
-				if( std::has_facet< boost::locale::info >( TargetLocale ) )
-					Data = { std::use_facet< boost::locale::info >( TargetLocale ).name(),
-					         std::use_facet< boost::locale::info >( TargetLocale ).language(),
-					         std::use_facet< boost::locale::info >( TargetLocale ).country(),
-					         std::use_facet< boost::locale::info >( TargetLocale ).encoding(),
-					         std::use_facet< boost::locale::info >( TargetLocale ).variant() };
+				if( std::has_facet< boost::locale::info >( source ) )
+					target = {
+						std::use_facet< boost::locale::info >( source ).name(),
+						std::use_facet< boost::locale::info >( source ).language(),
+						std::use_facet< boost::locale::info >( source ).country(),
+						std::use_facet< boost::locale::info >( source ).encoding(),
+						std::use_facet< boost::locale::info >( source ).variant()
+					};
 		}
 
 		/**
@@ -361,23 +366,23 @@ public:
 		  * 	A string representing the time stamp.
 		  */
 
-		static std::string TimeStamp()
+		static std::string timeStamp()
 		{
 			// Create local variables.
 
-				std::ostringstream Result;
-				time_t CurrentTime = time( nullptr );
-				tm* SystemTime = localtime( &CurrentTime );
+				std::ostringstream result;
+				time_t currentTime = time( nullptr );
+				tm* systemTime = localtime( &currentTime );
 
 			// Construct a string representation of the time stamp using the current time.
 
-				Result << std::setfill( '0' ) << std::setw( 2 ) << SystemTime->tm_hour << ':' <<
-				          std::setw( 2 ) << SystemTime->tm_min << ':' <<
-				          std::setw( 2 ) << SystemTime->tm_sec << 'h';
+				result << std::setfill( '0' ) << std::setw( 2 ) << systemTime->tm_hour << ':' <<
+					std::setw( 2 ) << systemTime->tm_min << ':' <<
+					std::setw( 2 ) << systemTime->tm_sec << 'h';
 
 			// Return result to calling routine.
 
-				return Result.str();
+				return result.str();
 		}
 
 		/**
@@ -385,24 +390,24 @@ public:
 		  *
 		  * This method will block any further execution during the period it is in effect.  This should only be used when constant logic processing is unneeded.
 		  *
-		  * @param Interval
+		  * @param interval
 		  * 	This is the time interval that the application will be halted.
 		  *
-		  * @param Units
+		  * @param units
 		  * 	These are the units to use with the specified time interval.
 		  */
 
-		static void Pause( real_t Interval, Timer::TimeUnits Units = Timer::Milliseconds )
+		static void pause( real_t interval, Timer::TimeUnits units = Timer::MILLISECONDS )
 		{
 			// Create local variables.
 
-				Timer::PointerType DelayTimer = Timer::Create();
+				Timer::InstancePtr delayTimer = Timer::create();
 
 			// Pause for the specified time interval.
 
-				DelayTimer->Toggle();
+				delayTimer->toggle();
 
-				while( DelayTimer->GetTime( Units ) < Interval );
+				while( delayTimer->getTime( units ) < interval );
 					// Empty Loop
 		}
 
@@ -410,62 +415,62 @@ public:
 		  * @brief This method sets the seed for the random number generator.
 		  *
 		  * @param Seed
-		  * 	This is the seed to use; if it is set to 'Null', the current time will be used instead.
+		  * 	This is the seed to use; if it is set to 'UNSET', the current time will be used instead.
 		  */
 
-		static void SetRandomSeed( uint32_t Seed = Null )
+		static void setRandomSeed( uint32_t seed = UNSET )
 		{
-			// Seed random number generator with specified value, or use current time if specified value is 'Null'.
+			// Seed random number generator with specified value, or use current time if specified value is 'UNSET'.
 
-				Generator.seed( ( !Seed ? time( nullptr ) : Seed ) );
+				generator.seed( ( !seed ? time( nullptr ) : seed ) );
 		}
 
 		/**
 		  * @brief This method defines the structure for a random integral number generator.
 		  *
-		  * @param Min
+		  * @param min
 		  * 	This is the minimum value of the random number.
 		  *
-		  * @param Max
+		  * @param max
 		  * 	This is the maximum value of the random number.
 		  *
 		  * @return
 		  * 	The random number generated.
 		  */
 
-		template< typename IType > static IType RandomI( IType Min, IType Max )
+		template< typename IType > static IType randInt( IType min, IType max )
 		{
 			// Create local variables.
 
-				std::uniform_int_distribution< IType > Distro( Min, Max );
+				std::uniform_int_distribution< IType > distro( min, max );
 
 			// Return a random number within the specified range to calling routine.
 
-				return Distro( Generator );
+				return distro( generator );
 		}
 
 		/**
 		  * @brief This method defines the structure for a random floating point number generator.
 		  *
-		  * @param Min
+		  * @param min
 		  * 	This is the minimum value of the random number.
 		  *
-		  * @param Max
+		  * @param max
 		  * 	This is the maximum value of the random number.
 		  *
 		  * @return
 		  * 	The random number generated.
 		  */
 
-		template< typename FType > static FType RandomF( FType Min, FType Max )
+		template< typename FType > static FType randFloat( FType min, FType max )
 		{
 			// Create local variables.
 
-				std::uniform_real_distribution< FType > Distro( Min, Max );
+				std::uniform_real_distribution< FType > distro( min, max );
 
 			// Return a random number within the specified range to calling routine.
 
-				return Distro( Generator );
+				return distro( generator );
 		}
 
 private:
@@ -476,7 +481,7 @@ private:
 		  * @brief This is the generator to use for the random number generation methods.
 		  */
 
-		static std::mt19937 Generator;
+		static std::mt19937 generator;
 
 	// Private Constructors
 

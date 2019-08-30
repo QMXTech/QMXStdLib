@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXException.hpp
-// Robert M. Baker | Created : 28FEB12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 28FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for an exception class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 28FEB12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for an exception class.
   *
-  * @section Description
+  * @section QMXExceptionH0000 Description
   *
   * This header file defines the interface for an exception class.
   *
-  * @section License
+  * @section QMXExceptionH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -52,7 +52,32 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <cstdio>
+#include <cstring>
+#include <exception>
+
 #include "Base.hpp"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Static Macros
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define QMX_THROW(w,x,y,z)         SINGLE_STATEMENT(\
+                                     std::ostringstream eventDataBuffer;\
+                                     eventDataBuffer << z;\
+                                     throw QMXStdLib::QMXException( w, x, y, eventDataBuffer.str().c_str(), STACK_TRACE.c_str() );\
+                                   )
+
+#define QMX_THROW_X(w,x,y,z)       SINGLE_STATEMENT(\
+                                     std::ostringstream eventDataBuffer;\
+                                     eventDataBuffer << z;\
+                                     throw QMXStdLib::QMXException( w, x, y, eventDataBuffer.str().c_str() );\
+                                   )
+
+#define QMX_ASSERT(v,w,x,y,z)      SINGLE_STATEMENT( if( !v ) QMX_THROW( w, x, y, z ); )
+#define QMX_ASSERT_X(v,w,x,y,z)    SINGLE_STATEMENT( if( !v ) QMX_THROW_X( w, x, y, z ); )
+#define QMX_ASSERT_E(u,v,w,x,y,z)  SINGLE_STATEMENT( if( !u ) v;  QMX_THROW( w, x, y, z ); )
+#define QMX_ASSERT_EX(u,v,w,x,y,z) SINGLE_STATEMENT( if( !u ) v;  QMX_THROW_X( w, x, y, z ); )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -92,27 +117,29 @@ public:
 		/**
 		  * @brief This is the constructor which accepts the initialization data.
 		  *
-		  * @param TargetRootID
+		  * @param sourceRootID
 		  * 	This is a string containing the root ID of the exception.
 		  *
-		  * @param TargetModuleID
+		  * @param sourceModuleID
 		  *  	This is a string containing the module ID of the exception.
 		  *
-		  * @param TargetEventIndex
+		  * @param sourceEventIndex
 		  * 	This is a string containing the event index of the exception.
 		  *
-		  * @param TargetEventData
+		  * @param sourceEventData
 		  * 	This is a string containing the event data of the exception.
 		  *
-		  * @param TargetStackTrace
+		  * @param sourceStackTrace
 		  * 	This is a string containing the stack trace of the exception.
 		  */
 
-		QMXException( const char* TargetRootID,
-		              const char* TargetModuleID,
-		              const char* TargetEventIndex,
-		              const char* TargetEventData = "",
-		              const char* TargetStackTrace = "" );
+		QMXException(
+			const char* sourceRootID,
+			const char* sourceModuleID,
+			const char* sourceEventIndex,
+			const char* sourceEventData = "",
+			const char* sourceStackTrace = ""
+		);
 
 	// Destructor
 
@@ -131,7 +158,7 @@ public:
 		  * 	A string containing the exception's root ID.
 		  */
 
-		const char* GetRootID() const;
+		const char* getRootID() const;
 
 		/**
 		  * @brief This method gets the exception's module ID.
@@ -140,7 +167,7 @@ public:
 		  * 	A string containing the exception's module ID.
 		  */
 
-		const char* GetModuleID() const;
+		const char* getModuleID() const;
 
 		/**
 		  * @brief This method gets the exception's event index.
@@ -149,7 +176,7 @@ public:
 		  * 	A string containing the exception's event index.
 		  */
 
-		const char* GetEventIndex() const;
+		const char* getEventIndex() const;
 
 		/**
 		  * @brief This method gets the exception's event data.
@@ -158,7 +185,7 @@ public:
 		  * 	A string containing the exception's event data.
 		  */
 
-		const char* GetEventData() const;
+		const char* getEventData() const;
 
 		/**
 		  * @brief This method gets the exception's stack trace.
@@ -167,7 +194,7 @@ public:
 		  * 	A string containing the exception's stack trace.
 		  */
 
-		const char* GetStackTrace() const;
+		const char* getStackTrace() const;
 
 		/**
 		  * @brief This method gets the exception's message, which will be in an unlocalized format.
@@ -176,7 +203,7 @@ public:
 		  * 	A string containing the exception's message.
 		  */
 
-		const char* GetMessage() const;
+		const char* getMessage() const;
 
 		/**
 		  * @brief This is the overridden implementation of the 'what' method.
@@ -195,43 +222,43 @@ private:
 		  * @brief This is the root ID of the exception.
 		  */
 
-		char RootID[ MAX_BUFFER_SIZE ];
+		char rootID[ MAX_BUFFER_SIZE ];
 
 		/**
 		  * @brief This is the module ID in which the exception occurred.
 		  */
 
-		char ModuleID[ MAX_BUFFER_SIZE ];
+		char moduleID[ MAX_BUFFER_SIZE ];
 
 		/**
 		  * @brief This is the event index of the exception.
 		  */
 
-		char EventIndex[ MAX_BUFFER_SIZE ];
+		char eventIndex[ MAX_BUFFER_SIZE ];
 
 		/**
 		  * @brief This is the event data for the exception.
 		  */
 
-		char EventData[ MAX_BUFFER_SIZE ];
+		char eventData[ MAX_BUFFER_SIZE ];
 
 		/**
 		  * @brief This is the stack trace of the exception.
 		  */
 
-		char StackTrace[ MAX_BUFFER_SIZE ];
+		char stackTrace[ MAX_BUFFER_SIZE ];
 
 		/**
 		  * @brief This is the unlocalized message for the exception.
 		  */
 
-		char Message[ MAX_BUFFER_SIZE ];
+		char message[ ( MAX_BUFFER_SIZE * 3 ) ];
 
 		/**
 		  * @brief This is a buffer used to format the string representing the nature of the exception.
 		  */
 
-		char Buffer[ MAX_BUFFER_SIZE ];
+		char buffer[ ( MAX_BUFFER_SIZE * 9 ) ];
 };
 
 } // 'QMXStdLib' Namespace

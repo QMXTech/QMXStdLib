@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystem.hpp
-// Robert M. Baker | Created : 05MAR12 | Last Modified : 20FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 05MAR12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of file system functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 05MAR12
-  * @date    Last Modified : 20FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a set of file system functions.
   *
-  * @section Description
+  * @section FileSystemH0000 Description
   *
   * This header file defines the interface for a set of file system functions.
   *
-  * @section License
+  * @section FileSystemH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -56,6 +56,10 @@
 #include "String.hpp"
 #include "RAII/ScopedStackTrace.hpp"
 
+#if( QMX_PLATFORM == QMX_PLATFORM_WINDOWS )
+#	include <windows.h>
+#endif // Platform Headers
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,49 +67,57 @@
 #define DIRECTORY_END                   DirectoryIterator()
 
 #if ( QMX_PLATFORM != QMX_PLATFORM_WINDOWS )
-#	define FSMC_MAKE_CANONICAL           Result = boost::filesystem::canonical( Target, ( Base.empty() ? boost::filesystem::current_path() : Base ) );
-#	define FSRS_READ_SYMLINK             Result = boost::filesystem::read_symlink( Target );
+#	define FSMC_MAKE_CANONICAL           result = boost::filesystem::canonical( source, ( base.empty() ? boost::filesystem::current_path() : base ) );
+#	define FSRS_READ_SYMLINK             result = boost::filesystem::read_symlink( source );
 #	define FSCL_CREATE_BUFFERS
 #	define FSCL_FILL_BUFFERS
-#	define FSCL_CREATE_HARDLINK          boost::filesystem::create_hard_link( Source, Link )
-#	define FSCL_CREATE_DIRECTORY_SYMLINK boost::filesystem::create_directory_symlink( Source, Link )
-#	define FSCL_CREATE_SYMLINK           boost::filesystem::create_symlink( Source, Link )
+#	define FSCL_CREATE_HARDLINK          boost::filesystem::create_hard_link( source, link )
+#	define FSCL_CREATE_DIRECTORY_SYMLINK boost::filesystem::create_directory_symlink( source, link )
+#	define FSCL_CREATE_SYMLINK           boost::filesystem::create_symlink( source, link )
 #else
-#	define FSMC_MAKE_CANONICAL           char Buffer[ MAX_BUFFER_SIZE ];\
-                                        HANDLE Handle = CreateFile( Target.string().c_str(),\
-                                                                    FILE_READ_ATTRIBUTES,\
-                                                                    ( FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE ),\
-                                                                    nullptr,\
-                                                                    OPEN_EXISTING,\
-                                                                    FILE_FLAG_BACKUP_SEMANTICS,\
-                                                                    nullptr );\
-                                        QMX_ASSERT( ( Handle != INVALID_HANDLE_VALUE ),\
-                                                    "QMXStdLib",\
-                                                    "FileSystem::MakeCanonical",\
-                                                    "0000000A",\
-                                                    Target << ", " << Base );\
-                                        GetFinalPathNameByHandle( Handle, Buffer, MAX_BUFFER_SIZE, FILE_NAME_NORMALIZED );\
-                                        Result = Buffer;\
-                                        Result = Result.string().substr( 4 );
-#	define FSRS_READ_SYMLINK             char Buffer[ MAX_BUFFER_SIZE ];\
-                                        HANDLE Handle = CreateFile( Target.string().c_str(),\
-                                                                    FILE_READ_ATTRIBUTES,\
-                                                                    ( FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE ),\
-                                                                    nullptr,\
-                                                                    OPEN_EXISTING,\
-                                                                    FILE_FLAG_BACKUP_SEMANTICS,\
-                                                                    nullptr );\
-                                        QMX_ASSERT( ( Handle != INVALID_HANDLE_VALUE ), "QMXStdLib", "FileSystem::ReadSymlink", "0000000B", Target );\
-                                        GetFinalPathNameByHandle( Handle, Buffer, MAX_BUFFER_SIZE, FILE_NAME_NORMALIZED );\
-                                        Result = Buffer;\
-                                        Result = Result.string().substr( 4 );
-#	define FSCL_CREATE_BUFFERS           char SourceBuffer[ MAX_BUFFER_SIZE ];\
-                                        char LinkBuffer[ MAX_BUFFER_SIZE ];
-#	define FSCL_FILL_BUFFERS             strcpy( SourceBuffer, Source.string().c_str() );\
-                                        strcpy( LinkBuffer, Link.string().c_str() );
-#	define FSCL_CREATE_HARDLINK          WasSuccessful = CreateHardLink( LinkBuffer, SourceBuffer, nullptr )
-#	define FSCL_CREATE_DIRECTORY_SYMLINK WasSuccessful = CreateSymbolicLink( LinkBuffer, SourceBuffer, SYMBOLIC_LINK_FLAG_DIRECTORY )
-#	define FSCL_CREATE_SYMLINK           WasSuccessful = CreateSymbolicLink( LinkBuffer, SourceBuffer, SYMBOLIC_LINK_FLAG_FILE )
+#	define FSMC_MAKE_CANONICAL           char buffer[ MAX_BUFFER_SIZE ];\
+	                                     HANDLE handle = CreateFile(\
+	                                       source.string().c_str(),\
+	                                       FILE_READ_ATTRIBUTES,\
+	                                       ( FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE ),\
+	                                       nullptr,\
+	                                       OPEN_EXISTING,\
+	                                       FILE_FLAG_BACKUP_SEMANTICS,\
+	                                       nullptr\
+	                                     );\
+	                                     QMX_ASSERT(\
+	                                       ( handle != INVALID_HANDLE_VALUE ),\
+	                                       "QMXStdLib",\
+	                                       "FileSystem::makeCanonical",\
+	                                       "0000000A",\
+	                                       source << ", " << base\
+	                                     );\
+	                                     GetFinalPathNameByHandle( handle, buffer, MAX_BUFFER_SIZE, FILE_NAME_NORMALIZED );\
+	                                     result = buffer;\
+	                                     result = result.string().substr( 4 );
+
+#	define FSRS_READ_SYMLINK             char buffer[ MAX_BUFFER_SIZE ];\
+	                                     HANDLE handle = CreateFile(\
+	                                       source.string().c_str(),\
+	                                       FILE_READ_ATTRIBUTES,\
+	                                       ( FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE ),\
+	                                       nullptr,\
+	                                       OPEN_EXISTING,\
+	                                       FILE_FLAG_BACKUP_SEMANTICS,\
+	                                       nullptr\
+	                                     );\
+	                                     QMX_ASSERT( ( handle != INVALID_HANDLE_VALUE ), "QMXStdLib", "FileSystem::readSymlink", "0000000B", source );\
+	                                     GetFinalPathNameByHandle( handle, buffer, MAX_BUFFER_SIZE, FILE_NAME_NORMALIZED );\
+	                                     result = buffer;\
+	                                     result = result.string().substr( 4 );
+
+#	define FSCL_CREATE_BUFFERS           char sourceBuffer[ MAX_BUFFER_SIZE ];\
+	                                     char linkBuffer[ MAX_BUFFER_SIZE ];
+#	define FSCL_FILL_BUFFERS             strcpy( sourceBuffer, source.string().c_str() );\
+	                                     strcpy( linkBuffer, link.string().c_str() );
+#	define FSCL_CREATE_HARDLINK          wasSuccessful = CreateHardLink( linkBuffer, sourceBuffer, nullptr )
+#	define FSCL_CREATE_DIRECTORY_SYMLINK wasSuccessful = CreateSymbolicLink( linkBuffer, sourceBuffer, 0x1 )
+#	define FSCL_CREATE_SYMLINK           wasSuccessful = CreateSymbolicLink( linkBuffer, sourceBuffer, 0x0 )
 #endif // Platform dependent macros.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +130,10 @@ namespace QMXStdLib
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'FileSystem' Namespace
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+  * @brief This is the namespace for all file system functions.
+  */
 
 namespace FileSystem
 {
@@ -132,9 +148,9 @@ namespace FileSystem
 
 enum CopyOption
 {
-	SkipIfExists,
-	FailIfExists,
-	OverwriteIfExists
+	SKIP_IF_EXISTS,
+	FAIL_IF_EXISTS,
+	OVERWRITE_IF_EXISTS
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,9 +161,9 @@ enum CopyOption
   * @brief This function parses the specified path to expand any embedded symbols.
   *
   * The default delimiters for embedded symbols are angled brackets (e.g. "<HOME>/projects/<PROJECT_NAME>"); though, they can be configured to something else.
-  * All functions/methods in QMXStdLib making use of paths will assume they have already been parsed.
+  * All functions/methods in QMX libraries making use of paths will assume they have already been parsed.
   *
-  * @param Target
+  * @param target
   * 	This is the path to be parsed.
   *
   * @exception QMXException
@@ -155,15 +171,15 @@ enum CopyOption
   * 	If a non-existent symbol was found in the path.
   */
 
-void Parse( Path& Target );
+void parse( Path& target );
 
 /**
   * @brief This function converts the specified path into a canonical path (i.e. an absolute path with no symlinks, '.', or '..' elements ).
   *
-  * @param Target
+  * @param source
   * 	This is the path to be converted.
   *
-  * @param Base
+  * @param base
   * 	This is the base path to use when converting.  If empty, the current working directory will be used.
   *
   * @return
@@ -173,12 +189,12 @@ void Parse( Path& Target );
   * 	If the specified path could not be converted into a canonical path.
   */
 
-Path MakeCanonical( const Path& Target, const Path& Base = "" );
+Path makeCanonical( const Path& source, const Path& base = "" );
 
 /**
   * @brief This function retrieves the contents of a symlink at the specified path.
   *
-  * @param Target
+  * @param source
   * 	This is the path from which to retrieve the symlink contents.
   *
   * @return
@@ -188,18 +204,18 @@ Path MakeCanonical( const Path& Target, const Path& Base = "" );
   * 	If the specified path's symlink contents could not be retrieved.
   */
 
-Path ReadSymlink( const Path& Target );
+Path readSymlink( const Path& source );
 
 /**
   * @brief This function creates a hardlink/symlink at the specified destination path from the specified source path.
   *
-  * @param Source
+  * @param source
   * 	This is the path from which to create the link.
   *
-  * @param Link
+  * @param link
   * 	This is the path where the link will be created.
   *
-  * @param IsHardlink
+  * @param isHardlink
   * 	This is the boolean flag which determines if the link is a hardlink or symlink.
   *
   * @exception QMXException
@@ -207,21 +223,21 @@ Path ReadSymlink( const Path& Target );
   * 	If the specified hardlink/symlink could not be created using the specified arguments.
   */
 
-void CreateLink( const Path& Source, const Path& Link, bool IsHardlink = false );
+void createLink( const Path& source, const Path& link, bool isHardlink = false );
 
 /**
   * @brief This function copies the specified source path to the specified destination path with optional recursion and overwriting.
   *
-  * @param Source
+  * @param source
   * 	This is the path from which to copy.
   *
-  * @param Destination
+  * @param destination
   * 	This is the path to which to copy.
   *
-  * @param IsRecursive
+  * @param isRecursive
   * 	This is the boolean flag which determines if the copying will be recursive.
   *
-  * @param TargetCopyOption
+  * @param targetCopyOption
   * 	This value determines what actions to take if a target already exists during copying.
   *
   * @exception QMXException
@@ -229,15 +245,15 @@ void CreateLink( const Path& Source, const Path& Link, bool IsHardlink = false )
   * 	If the copy operation could not be completed.
   */
 
-void Copy( const Path& Source, const Path& Destination, bool IsRecursive = true, CopyOption TargetCopyOption = SkipIfExists );
+void copy( const Path& source, const Path& destination, bool isRecursive = true, CopyOption targetCopyOption = SKIP_IF_EXISTS );
 
 /**
   * @brief This function runs the specified console command.
   *
-  * @param Command
+  * @param command
   * 	This is the console command to run; if null, this function will instead test for the presence of a console command processor.
   *
-  * @param SuccessValue
+  * @param successValue
   * 	This is the return value of the console command processor which indicates success.
   *
   * @return
@@ -245,7 +261,7 @@ void Copy( const Path& Source, const Path& Destination, bool IsRecursive = true,
   * 	boolean value of 'true' if one is present, and 'false' otherwise.
   */
 
-bool RunCommand( const char* Command = nullptr, int SuccessValue = Null );
+bool runCommand( const char* command = nullptr, int successValue = UNSET );
 
 } // 'FileSystem' Namespace
 

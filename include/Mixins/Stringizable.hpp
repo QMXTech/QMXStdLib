@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Stringizable.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 21FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to allow for string representation of an object.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 21FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a mixin class to allow for string representation of an object.
   *
-  * @section Description
+  * @section StringizableH0000 Description
   *
   * This header file defines the interface for a mixin class to allow for string representation of an object.
   *
-  * @section License
+  * @section StringizableH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -89,10 +89,11 @@ public:
 
 		enum NumericBase
 		{
-			None,
-			Octal,
-			Decimal,
-			Hexidecimal
+			NONE,
+			BINARY,
+			OCTAL,
+			DECIMAL,
+			HEXIDECIMAL
 		};
 
 		/**
@@ -106,52 +107,52 @@ public:
 			// Public Fields
 
 				/**
-				  * @brief This is the flag to determine if prefixes should be used for octal or hexidecimal values.
+				  * @brief This is the flag to determine if prefixes should be used for binary, octal, or hexidecimal values.
 				  */
 
-				bool UsePrefix;
+				bool usePrefix;
 
 				/**
 				  * @brief This is the flag to determine case of any letters appearing in the conversion.
 				  */
 
-				bool UseUpperCase;
+				bool useUpperCase;
 
 				/**
 				  * @brief This is the flag to determine if boolean values will yield 'yes/no' instead of 'true/false'.
 				  */
 
-				bool UseYesNo;
+				bool useYesNo;
 
 				/**
 				  * @brief This is the flag to determine if character values are treated as integers.
 				  */
 
-				bool CharsAsInts;
+				bool charsAsInts;
 
 				/**
 				  * @brief This is the fill character to use for padding if needed.
 				  */
 
-				char Filler;
+				char filler;
 
 				/**
 				  * @brief This is the minimum width to use when converting the numerical value.
 				  */
 
-				int32_t Width;
+				int32_t width;
 
 				/**
 				  * @brief This is the floating point precision to use when converting the numerical value.
 				  */
 
-				int32_t Precision;
+				int32_t precision;
 
 				/**
 				  * @brief This is the numerical base to use for the conversion.
 				  */
 
-				NumericBase Base;
+				NumericBase base;
 		};
 
 	// Public Constructors
@@ -185,73 +186,62 @@ public:
 		  * 	A string representing this object.
 		  */
 
-		std::string ToString() const
+		std::string toString() const
 		{
 			// Return a string representation of this object to calling routine.
 
-				return ToStringImp();
+				return toStringImp();
 		}
 
 		/**
 		  * @brief This method sets the specified string format struct to the default settings for the specified numeric base.
 		  *
-		  * 	If the numeric base is set to 'None', then it will default to decimal.
+		  * 	If the numeric base is set to 'NONE', then it will default to decimal.
 		  *
-		  * @param Target
+		  * @param target
 		  * 	This is the string format struct to set to the default settings.
 		  *
-		  * @param Base
+		  * @param base
 		  * 	This is the numeric base that determines the default settings; if it is given an out-of-range value, it will be set to decimal.
 		  */
 
-		static void SetStringFormat( StringFormat& Target, NumericBase Base = Decimal )
+		static void setStringFormat( StringFormat& target, NumericBase base = DECIMAL )
 		{
 			// Set the specified string format struct to the default settings for the specified numeric base.
 
-				switch( Base )
+				switch( base )
 				{
-					case Octal:
+					case BINARY:
 					{
-						Target.UsePrefix = true;
-						Target.UseUpperCase = false;
-						Target.UseYesNo = false;
-						Target.CharsAsInts = false;
-						Target.Filler = '0';
-						Target.Width = 0;
-						Target.Precision = 0;
+						target = { true, false, false, true, '0', 0, 0 };
 
 						break;
 					}
 
-					case None:
-					case Decimal:
+					case OCTAL:
 					{
-						Target.UsePrefix = false;
-						Target.UseUpperCase = false;
-						Target.UseYesNo = false;
-						Target.CharsAsInts = false;
-						Target.Filler = '0';
-						Target.Width = 0;
-						Target.Precision = 5;
+						target = { true, false, false, false, '0', 0, 0 };
 
 						break;
 					}
 
-					case Hexidecimal:
+					case NONE:
+					case DECIMAL:
 					{
-						Target.UsePrefix = true;
-						Target.UseUpperCase = true;
-						Target.UseYesNo = false;
-						Target.CharsAsInts = false;
-						Target.Filler = '0';
-						Target.Width = 16;
-						Target.Precision = 0;
+						target = { false, false, false, false, '0', 0, 5 };
+
+						break;
+					}
+
+					case HEXIDECIMAL:
+					{
+						target = { true, true, false, false, '0', 16, 0 };
 
 						break;
 					}
 				}
 
-				Target.Base = Base;
+				target.base = base;
 		}
 
 private:
@@ -259,13 +249,13 @@ private:
 	// Private Methods
 
 		/**
-		  * @brief This is the overridable implementation for the 'ToString' method.
+		  * @brief This is the overridable implementation for the 'toString' method.
 		  *
 		  * @return
 		  * 	A string representing this object.
 		  */
 
-		virtual std::string ToStringImp() const = PURE_VIRTUAL;
+		virtual std::string toStringImp() const = PURE_VIRTUAL;
 };
 
 } // 'QMXStdLib' Namespace

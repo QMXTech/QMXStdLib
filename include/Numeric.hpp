@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Numeric.hpp
-// Robert M. Baker | Created : 07JAN12 | Last Modified : 28JAN16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 07JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of numeric manipulation functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -20,19 +20,19 @@
 /**
   * @file
   * @author  Robert M. Baker
-  * @date    Created : 07JAN12
-  * @date    Last Modified : 28JAN16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Created : 27AUG19
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a set of numeric manipulation functions.
   *
-  * @section Description
+  * @section NumericH0000 Description
   *
   * This header file defines the interface for a set of numeric manipulation functions.
   *
-  * @section License
+  * @section NumericH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -67,6 +67,10 @@ namespace QMXStdLib
 // Start of the 'Numeric' Namespace
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+  * @brief This is the namespace for all numeric functions.
+  */
+
 namespace Numeric
 {
 
@@ -77,51 +81,76 @@ namespace Numeric
 /**
   * @brief This function determines if the specified value falls within the specified closed interval.
   *
-  * If 'Min' is greater-than 'Max', this function will always return 'false'.
+  * If 'min' is greater-than 'max', this function will always return 'false'.
   *
-  * @param Value
+  * @param value
   * 	This is the value to use when performing the range check.
   *
-  * @param Min
+  * @param min
   * 	This is the minimum value to use when performing the range check.
   *
-  * @param Max
+  * @param max
   * 	This is the maximum value to use when performing the range check.
   *
   * @return
-  * 	A boolean value of 'true' if 'Value' falls within the closed interval from 'Min' to 'Max', and 'false' otherwise.
+  * 	A boolean value of 'true' if 'Value' falls within the closed interval from 'min' to 'max', and 'false' otherwise.
   */
 
-template< typename NType > bool InRange( NType Value, NType Min, NType Max )
+template< typename NType > bool inRange( NType value, NType min, NType max )
 {
 	// Report whether or not the specified value falls within the specified closed range to calling routine.
 
-		return( ( Value >= Min ) && ( Value <= Max ) );
+		return( ( value >= min ) && ( value <= max ) );
 }
 
 /**
   * @brief This function clamps the specified value within the specified closed interval.
   *
-  * If 'Min' is greater-than 'Max', 'Value' will be clamped to 'Min' when 'Value < Min' and always 'Max' otherwise.
+  * If 'min' is greater-than 'max', 'Value' will be clamped to 'min' when 'value < min' and always 'max' otherwise.
   *
-  * @param Value
+  * @param value
   * 	This is the value to be clamped.
   *
-  * @param Min
+  * @param min
   * 	This is the minimum value to use when clamping.
   *
-  * @param Max
+  * @param max
   * 	This is the maximum value to use when clamping.
   */
 
-template< typename NType > void Clamp( NType& Value, NType Min, NType Max )
+template< typename NType > void clamp( NType& value, NType min, NType max )
 {
-	// Clamp the specified value between the specified closed range, if necessary;
+	// Clamp the specified value between the specified closed range, if necessary.
 
-		if( Value < Min )
-			Value = Min;
-		else if( Value > Max )
-			Value = Max;
+		if( value < min )
+			value = min;
+		else if( value > max )
+			value = max;
+}
+
+/**
+  * @brief This function wraps the specified value within the specified closed interval.
+  *
+  * If 'min' is greater-than 'max', 'value' will be wrapped to 'max' when 'value < min' and always 'min' otherwise.
+  *
+  * @param value
+  * 	This is the value to be wrapped.
+  *
+  * @param min
+  * 	This is the minimum value to use when wrapping.
+  *
+  * @param max
+  * 	This is the maximum value to use when wrapping.
+  */
+
+template< typename NType > void wrap( NType& value, NType min, NType max )
+{
+	// Wrap the specified value between the specified closed range, if necessary.
+
+		if( value < min )
+			value = max;
+		else if( value > max )
+			value = min;
 }
 
 /**
@@ -129,57 +158,57 @@ template< typename NType > void Clamp( NType& Value, NType Min, NType Max )
   *
   * If 'NType' is not a valid floating point type, then this function will always return 'true'.
   *
-  * @param Value
+  * @param value
   * 	This is the numeric value to check.
   *
   * @return
   * 	A boolean value of 'true' if the specified value is a whole number, and 'false' otherwise.
   */
 
-template< typename NType > bool IsWholeNumber( NType Value )
+template< typename NType > bool isWholeNumber( NType value )
 {
 	// Report whether or not the specified value is a whole number to calling routine.
 
-		return( ( Value - static_cast< int64_t >( Value ) ) == 0 );
+		return( ( value - static_cast< int64_t >( value ) ) == 0 );
 }
 
 /**
   * @brief This function gets the next power of 2 greater-than or equal-to to the specified value.
   *
-  * @param Value
+  * @param value
   * 	This is the numeric value that will be used in determining the next power of 2.
   *
   * @return
   * 	A numeric value of the next power of 2 greater-than or equal-to the specified value.
   */
 
-template< typename NType > NType GetNextPowerOfTwo( NType Value )
+template< typename NType > NType getNextPowerOfTwo( NType value )
 {
 	// Create local variables.
 
-		NType Result = 1;
+		NType result = 1;
 
 	// Get next power of 2 greater-than or equal-to specified value.
 
-		while( Result < Value )
-			Result <<= 1;
+		while( result < value )
+			result <<= 1;
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
 /**
   * @brief This function constructs a string representation of the specified value.
   *
-  * @param Value
+  * @param value
   * 	This is the value to use when constructing the string.
   *
-  * @param Base
+  * @param base
   * 	This is the numeric base to use when constructing a string format object; if set to none, it will be ignored in favor of 'Format'.
   *
-  * @param TargetFormat
-  * 	This is a pointer to a string format object, which must be valid if 'Base' is set to none.  If base is none, it will be set to decimal.
+  * @param targetFormat
+  * 	This is a pointer to a string format object, which must be valid if 'base' is set to none.  If base is none, it will be set to decimal.
   *
   * @return
   * 	A string representing the specified value.
@@ -188,65 +217,72 @@ template< typename NType > NType GetNextPowerOfTwo( NType Value )
   * 	If the base was set to none, but the string format pointer was null.
   */
 
-template< typename NType > std::string ToString( NType Value,
-                                                 Stringizable::NumericBase Base = Stringizable::Decimal,
-                                                 const Stringizable::StringFormat* TargetFormat = nullptr )
+template< typename NType > std::string toString(
+	NType value,
+	Stringizable::NumericBase base = Stringizable::DECIMAL,
+	const Stringizable::StringFormat* targetFormat = nullptr
+)
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "Numeric::ToString", 0000 );
+		SCOPED_STACK_TRACE( "Numeric::toString", 0000 );
 
 	// Create local variables.
 
-		std::ostringstream Result;
-		Stringizable::StringFormat Format;
+		std::ostringstream result;
+		Stringizable::StringFormat format;
 
 	// Construct a string representation of the specified value.
 
-		if( Base != Stringizable::None )
-			Stringizable::SetStringFormat( Format, Base );
+		if( base != Stringizable::NONE )
+			Stringizable::setStringFormat( format, base );
 		else
 		{
-			QMX_ASSERT( TargetFormat, "QMXStdLib", "Numeric::ToString", "00000010", Value << ", " << Base );
-			Format = *TargetFormat;
+			QMX_ASSERT( targetFormat, "QMXStdLib", "Numeric::toString", "00000010", value << ", " << base );
+			format = *targetFormat;
 
-			if( Format.Base == Stringizable::None )
-				Format.Base = Stringizable::Decimal;
+			if( format.base == Stringizable::NONE )
+				format.base = Stringizable::DECIMAL;
 		}
 
 		if( typeid( NType ) == typeid( bool ) )
 		{
-			if( Format.UseYesNo )
-				Result << ( Value ? "yes" : "no" );
+			if( format.useYesNo )
+				result << ( value ? "yes" : "no" );
 			else
-				Result << std::boolalpha << Value;
+				result << std::boolalpha << value;
 		}
 		else
 		{
-			if( Format.UsePrefix && ( Format.Base != Stringizable::Decimal ) )
-				Result << ( ( Format.Base == Stringizable::Octal ) ? "0" : "0x" );
+			if( format.usePrefix && ( format.base != Stringizable::DECIMAL ) )
+				result << ( ( format.base == Stringizable::BINARY ) ? "0b" : ( ( format.base == Stringizable::OCTAL ) ? "0" : "0x" ) );
 
-			Result << ( Format.UseUpperCase ? std::uppercase : std::nouppercase );
+			result << ( format.useUpperCase ? std::uppercase : std::nouppercase );
 
-			if( Format.Filler )
-				Result << std::setfill( Format.Filler ) << std::setw( Format.Width );
+			if( format.filler )
+				result << std::setfill( format.filler ) << std::setw( format.width );
 			else
-				Result << std::setw( 0 );
+				result << std::setw( 0 );
 
-			if( Format.Base == Stringizable::Decimal )
-				Result << std::dec << std::setprecision( Format.Precision ) << std::fixed;
-			else
-				Result << ( ( Format.Base == Stringizable::Octal ) ? std::oct : std::hex );
+			if( format.base == Stringizable::DECIMAL )
+				result << std::dec << std::setprecision( format.precision ) << std::fixed;
+			else if( format.base != Stringizable::BINARY )
+				result << ( ( format.base == Stringizable::OCTAL ) ? std::oct : std::hex );
 
-			if( Format.CharsAsInts && ( ( typeid( NType ) == typeid( int8_t ) ) || ( typeid( NType ) == typeid( uint8_t ) ) ) )
-				Result << static_cast< int32_t >( Value );
+			if( format.base == Stringizable::BINARY )
+				result << std::bitset< ( sizeof( NType ) * 8 ) >( value ).to_string();
 			else
-				Result << Value;
+			{
+				if( format.charsAsInts && ( ( typeid( NType ) == typeid( int8_t ) ) || ( typeid( NType ) == typeid( uint8_t ) ) ) )
+					result << static_cast< int32_t >( value );
+				else
+					result << value;
+			}
 		}
 
 	// Return result to calling routine.
 
-		return Result.str();
+		return result.str();
 }
 
 } // 'Numeric' Namespace

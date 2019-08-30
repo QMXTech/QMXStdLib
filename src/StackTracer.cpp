@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracer.cpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a stack tracer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for a stack tracer class.
   *
-  * @section Description
+  * @section StackTracerS0000 Description
   *
   * This source file defines the implementation for a stack tracer class.
   *
-  * @section License
+  * @section StackTracerS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -64,10 +64,10 @@ namespace QMXStdLib
 // Static Field Initializers for the 'StackTracer' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SharedMutex StackTracer::LocalMutex;
-bool StackTracer::IsEnabled = false;
-StringTLS StackTracer::ThreadID;
-StackTracer::StackTraceMap StackTracer::StackTraces;
+SharedMutexPair StackTracer::localMutex;
+bool StackTracer::isEnabled = false;
+StringTLS StackTracer::threadID;
+StackTracer::StackTraceMap StackTracer::stackTraces;
 
 } // 'QMXStdLib' Namespace
 

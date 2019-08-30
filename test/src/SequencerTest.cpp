@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SequencerTest.cpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Sequencer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,17 +34,29 @@ TEST( SequencerTest, OperatorPostIncrementIntegralNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 0, 1, 2, 3, 4, 4, 4, 4, 4, 4 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Linear' mode with no looping.
+		int64_t expectedResults[] = {
+			0,
+			1,
+			2,
+			3,
+			4,
+			4,
+			4,
+			4,
+			4,
+			4
+		};
 
-		Instance->Set( { false, Sequencer< int64_t >::Linear, 0, 4, 1, 0 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< int64_t >::LINEAR, 0, 4, 1, 0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -52,17 +64,29 @@ TEST( SequencerTest, OperatorPostIncrementIntegralNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 0, 1, 2, 3, 4, 3, 2, 1, 0, 0 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Oscillate' mode with no looping.
+		int64_t expectedResults[] = {
+			0,
+			1,
+			2,
+			3,
+			4,
+			3,
+			2,
+			1,
+			0,
+			0
+		};
 
-		Instance->Set( { false, Sequencer< int64_t >::Oscillate, 0, 4, 1, 0 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< int64_t >::OSCILLATE, 0, 4, 1, 0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -70,17 +94,29 @@ TEST( SequencerTest, OperatorPostIncrementIntegralLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 0, 1, 2, 3, 4, 0, 1, 2, 3, 4 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Linear' mode with looping.
+		int64_t expectedResults[] = {
+			0,
+			1,
+			2,
+			3,
+			4,
+			0,
+			1,
+			2,
+			3,
+			4
+		};
 
-		Instance->Set( { true, Sequencer< int64_t >::Linear, 0, 4, 1, 0 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< int64_t >::LINEAR, 0, 4, 1, 0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -88,17 +124,29 @@ TEST( SequencerTest, OperatorPostIncrementIntegralLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 0, 1, 2, 3, 4, 3, 2, 1, 0, 1 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
+	
+		int64_t expectedResults[] = {
+			0,
+			1,
+			2,
+			3,
+			4,
+			3,
+			2,
+			1,
+			0,
+			1
+		};
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Oscillate' mode with looping.
+	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with looping.
 
-		Instance->Set( { true, Sequencer< int64_t >::Oscillate, 0, 4, 1, 0 } );
+		instance->set( { true, Sequencer< int64_t >::OSCILLATE, 0, 4, 1, 0 } );
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -106,17 +154,29 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 0.0, 0.5, 1.0, 1.5, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Linear' mode with no looping.
+		real_t expectedResults[] = {
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0,
+			2.0,
+			2.0,
+			2.0,
+			2.0,
+			2.0
+		};
 
-		Instance->Set( { false, Sequencer< real_t >::Linear, 0.0, 2.0, 0.5, 0.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< real_t >::LINEAR, 0.0, 2.0, 0.5, 0.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -124,17 +184,29 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 0.0, 0.5, 1.0, 1.5, 2.0, 1.5, 1.0, 0.5, 0.0, 0.0 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Oscillate' mode with no looping.
+		real_t expectedResults[] = {
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0,
+			0.0
+		};
 
-		Instance->Set( { false, Sequencer< real_t >::Oscillate, 0.0, 2.0, 0.5, 0.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< real_t >::OSCILLATE, 0.0, 2.0, 0.5, 0.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -142,17 +214,29 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 0.0, 0.5, 1.0, 1.5, 2.0, 0.0, 0.5, 1.0, 1.5, 2.0 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Linear' mode with looping.
+		real_t expectedResults[] = {
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0,
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0
+		};
 
-		Instance->Set( { true, Sequencer< real_t >::Linear, 0.0, 2.0, 0.5, 0.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< real_t >::LINEAR, 0.0, 2.0, 0.5, 0.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -160,17 +244,29 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 0.0, 0.5, 1.0, 1.5, 2.0, 1.5, 1.0, 0.5, 0.0, 0.5 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Oscillate' mode with looping.
+		real_t expectedResults[] = {
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0,
+			0.5
+		};
 
-		Instance->Set( { true, Sequencer< real_t >::Oscillate, 0.0, 2.0, 0.5, 0.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< real_t >::OSCILLATE, 0.0, 2.0, 0.5, 0.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)++;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)++;
 		}
 }
 
@@ -178,17 +274,29 @@ TEST( SequencerTest, OperatorPostDecrementIntegralNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 4, 3, 2, 1, 0, 0, 0, 0, 0, 0 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Linear' mode with no looping.
+		int64_t expectedResults[] = {
+			4,
+			3,
+			2,
+			1,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0
+		};
 
-		Instance->Set( { false, Sequencer< int64_t >::Linear, 0, 4, 1, 4 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< int64_t >::LINEAR, 0, 4, 1, 4 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -196,17 +304,29 @@ TEST( SequencerTest, OperatorPostDecrementIntegralNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 4, 3, 2, 1, 0, 1, 2, 3, 4, 4 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Oscillate' mode with no looping.
+		int64_t expectedResults[] = {
+			4,
+			3,
+			2,
+			1,
+			0,
+			1,
+			2,
+			3,
+			4,
+			4
+		};
 
-		Instance->Set( { false, Sequencer< int64_t >::Oscillate, 0, 4, 1, 4 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< int64_t >::OSCILLATE, 0, 4, 1, 4 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -214,17 +334,29 @@ TEST( SequencerTest, OperatorPostDecrementIntegralLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 4, 3, 2, 1, 0, 4, 3, 2, 1, 0 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Linear' mode with looping.
+		int64_t expectedResults[] = {
+			4,
+			3,
+			2,
+			1,
+			0,
+			4,
+			3,
+			2,
+			1,
+			0
+		};
 
-		Instance->Set( { true, Sequencer< int64_t >::Linear, 0, 4, 1, 4 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< int64_t >::LINEAR, 0, 4, 1, 4 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -232,17 +364,29 @@ TEST( SequencerTest, OperatorPostDecrementIntegralLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::PointerType Instance = Sequencer< int64_t >::Create();
-		int64_t ExpectedResults[] = { 4, 3, 2, 1, 0, 1, 2, 3, 4, 3 };
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using integral values in 'Oscillate' mode with looping.
+		int64_t expectedResults[] = {
+			4,
+			3,
+			2,
+			1,
+			0,
+			1,
+			2,
+			3,
+			4,
+			3
+		};
 
-		Instance->Set( { true, Sequencer< int64_t >::Oscillate, 0, 4, 1, 4 } );
+	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< int64_t >::OSCILLATE, 0, 4, 1, 4 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -250,17 +394,29 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 2.0, 1.5, 1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Linear' mode with no looping.
+		real_t expectedResults[] = {
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0,
+			0.0,
+			0.0,
+			0.0,
+			0.0,
+			0.0
+		};
 
-		Instance->Set( { false, Sequencer< real_t >::Linear, 0.0, 2.0, 0.5, 2.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< real_t >::LINEAR, 0.0, 2.0, 0.5, 2.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -268,17 +424,29 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 2.0, 1.5, 1.0, 0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.0 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Oscillate' mode with no looping.
+		real_t expectedResults[] = {
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0,
+			2.0
+		};
 
-		Instance->Set( { false, Sequencer< real_t >::Oscillate, 0.0, 2.0, 0.5, 2.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with no looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { false, Sequencer< real_t >::OSCILLATE, 0.0, 2.0, 0.5, 2.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -286,17 +454,29 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 2.0, 1.5, 1.0, 0.5, 0.0, 2.0, 1.5, 1.0, 0.5, 0.0 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Linear' mode with looping.
+		real_t expectedResults[] = {
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0,
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0
+		};
 
-		Instance->Set( { true, Sequencer< real_t >::Linear, 0.0, 2.0, 0.5, 2.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< real_t >::LINEAR, 0.0, 2.0, 0.5, 2.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 
@@ -304,17 +484,29 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::PointerType Instance = Sequencer< real_t >::Create();
-		real_t ExpectedResults[] = { 2.0, 1.5, 1.0, 0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 1.5 };
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
-	// Perform unit test for 'operator++( int )' method using floating point values in 'Oscillate' mode with looping.
+		real_t expectedResults[] = {
+			2.0,
+			1.5,
+			1.0,
+			0.5,
+			0.0,
+			0.5,
+			1.0,
+			1.5,
+			2.0,
+			1.5
+		};
 
-		Instance->Set( { true, Sequencer< real_t >::Oscillate, 0.0, 2.0, 0.5, 2.0 } );
+	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with looping.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( ExpectedResults ); Index++ )
+		instance->set( { true, Sequencer< real_t >::OSCILLATE, 0.0, 2.0, 0.5, 2.0 } );
+
+		for( size_t index = 0; index < ARRAY_SIZE( expectedResults ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Instance->GetValue() );
-			(*Instance)--;
+			ASSERT_EQ( expectedResults[ index ], instance->getValue() );
+			(*instance)--;
 		}
 }
 

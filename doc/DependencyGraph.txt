@@ -30,16 +30,6 @@ X = Not Yet Implemented
 - Mixins/Lockable
 - RAII/ScopedStackTrace
 
-[*] PluginManager
-=================
-- Object
-- FileSystem
-- DynamicLibrary
-- Utility
-- Mixins/Singleton
-- Mixins/Plugin
-- RAII/ScopedStackTrace
-
 [*] ProgramOptions
 ==================
 - Object
@@ -86,23 +76,19 @@ X = Not Yet Implemented
 
 [-] Mixins/Lockable
 ===================
-- None
-
-[-] Mixins/NonCopyable (DEPRECATED)
-===================================
-- None
-
-[-] Mixins/Plugin
-=================
-- Utility
+- NONE
 
 [-] Mixins/Singleton
 ====================
-- None
+- NONE
 
 [-] Mixins/Stringizable
 =======================
-- None
+- NONE
+
+[-] RAII/ScopedLock
+===================
+- NONE
 
 [-] RAII/ScopedStackTrace
 =========================
@@ -123,7 +109,6 @@ Order of Unit Test Implementation
 - ThreadManager
 - Timer
 - Utility
-- PluginManager
 - ProgramOptions
 - Sequencer
 - UniqueRandom

@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManager.hpp
-// Robert M. Baker | Created : 24FEB16 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 24FEB16 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 24FEB16
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
   *
-  * @section Description
+  * @section ThreadManagerH0000 Description
   *
   * This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
   *
-  * @section License
+  * @section ThreadManagerH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -55,13 +55,14 @@
 #include "Base.hpp"
 #include "Object.hpp"
 #include "Mixins/Singleton.hpp"
+#include "RAII/ScopedLock.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define THREAD_MANAGER                QMXStdLib::ThreadManager::GetSingleton()
-#define THREAD_MANAGER_P              QMXStdLib::ThreadManager::GetSingletonPointer()
+#define THREAD_MANAGER   QMXStdLib::ThreadManager::getSingleton()
+#define THREAD_MANAGER_P QMXStdLib::ThreadManager::getSingletonPointer()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -90,7 +91,7 @@ class ThreadManager : public Object< ThreadManager >, public Singleton< ThreadMa
 {
 	// Friend Classes
 
-		friend class Object;
+		friend class Object< ThreadManager >;
 
 public:
 
@@ -110,13 +111,13 @@ public:
 				  * @brief This is the group's map of thread pointers.
 				  */
 
-				ThreadPtrMap Threads;
+				ThreadPtrMap threads;
 
 				/**
 				  * @brief This is the group's barrier used for execution synchronization.
 				  */
 
-				BarrierPtr GroupBarrier;
+				BarrierPtr groupBarrier;
 		};
 
 	// Destructor
@@ -125,32 +126,32 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		virtual ~ThreadManager();
+		~ThreadManager();
 
 	// Public Methods
 
 		/**
 		  * @brief This method creates a new thread group, if it does not already exist.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
 		  * @exception QMXException
 		  * 	If the specified thread group already exists.
 		  */
 
-		void CreateGroup( const std::string& GroupID );
+		void createGroup( const std::string& groupID );
 
 		/**
 		  * @brief This method destroys a thread group, with optional thread destruction/interruption, if it exists.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param DoDestroyThreads
+		  * @param doDestroyThreads
 		  * 	This is a boolean value which determines if a non-empty group should have its threads destroyed.
 		  *
-		  * @param DoInterrupt
+		  * @param doInterrupt
 		  * 	This is a boolean value which determines if destroyed threads are interrupted or detached.
 		  *
 		  * @exception QMXException
@@ -158,36 +159,45 @@ public:
 		  * 	If the specified thread group was not empty and 'DoDestroyThreads' was set to 'false'.
 		  */
 
-		void DestroyGroup( const std::string& GroupID, const bool DoDestroyThreads = false, const bool DoInterrupt = true );
+		void destroyGroup( const std::string& groupID, const bool doDestroyThreads = false, const bool doInterrupt = true );
+
+		/**
+		  * @brief This method retrieves all group IDs, if any exist.
+		  *
+		  * @param target
+		  * 	This is a string vector which will be populated with the retrieved group IDs.
+		  */
+
+		void getGroupIDs( StringVector& target ) const;
 
 		/**
 		  * @brief This method sets the barrier size for the specified group, if it exists.
 		  *
-		  * This method should be called on a group to set its barrier size before any calls to 'Wait' are made; otherwise, the program could end up in a locked
+		  * This method should be called on a group to set its barrier size before any calls to 'wait' are made; otherwise, the program could end up in a locked
 		  * state.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param TargetSize
+		  * @param newSize
 		  * 	This is the new barrier size to use.
 		  *
 		  * @exception QMXException
 		  * 	If the specified thread group does not exist.
 		  */
 
-		void SetBarrierSize( const std::string& GroupID, const size_t TargetSize );
+		void setBarrierSize( const std::string& groupID, const size_t newSize );
 
 		/**
 		  * @brief This method destroys a thread in the specified group, with optional interruption, if both group and thread exist.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param ThreadID
+		  * @param threadID
 		  * 	This is a string containing the thread's ID.
 		  *
-		  * @param DoInterrupt
+		  * @param doInterrupt
 		  * 	This is a boolean value which determines if the thread is interrupted or detached.
 		  *
 		  * @exception QMXException
@@ -195,15 +205,30 @@ public:
 		  * 	If the specified thread does not exist within the specified group.
 		  */
 
-		void DestroyThread( const std::string& GroupID, const std::string& ThreadID, const bool DoInterrupt = true );
+		void destroyThread( const std::string& groupID, const std::string& threadID, const bool doInterrupt = true );
+
+		/**
+		  * @brief This method retrieves all thread IDs for the specified group, if it exists.
+		  *
+		  * @param groupID
+		  * 	This is a string containing the thread group's ID.
+		  *
+		  * @param target
+		  * 	This is a string vector which will be populated with the retrieved thread IDs.
+		  *
+		  * @exception QMXException
+		  * 	If the specified thread group does not exist.
+		  */
+
+		void getThreadIDs( const std::string& groupID, StringVector& target ) const;
 
 		/**
 		  * @brief This method calls 'wait' on the specified group's thread barrier, if it exists.
 		  *
-		  * This will cause the calling thread to be blocked until the number of threads equal to the value used in 'SetBarrierSize' have called this method.  If
+		  * This will cause the calling thread to be blocked until the number of threads equal to the value used in 'setBarrierSize' have called this method.  If
 		  * the barrier size is zero, this method will simply return immediately.  This is also a predefined interruption point.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
 		  * @exception ThreadInterrupted
@@ -213,7 +238,7 @@ public:
 		  * 	If the specified thread group does no exist.
 		  */
 
-		void Wait( const std::string& GroupID );
+		void wait( const std::string& groupID );
 
 		/**
 		  * @brief This method joins the specified thread in the specified group, if both group and thread exist.
@@ -222,10 +247,10 @@ public:
 		  * task before proceeding.  This is also a predefined interruption point.
 		  * enabled.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param ThreadID
+		  * @param threadID
 		  * 	This is a string containing the thread's ID.
 		  *
 		  * @exception ThreadInterrupted
@@ -236,7 +261,7 @@ public:
 		  * 	If the specified thread does not exist within the specified group.
 		  */
 
-		void Join( const std::string& GroupID, const std::string& ThreadID );
+		void join( const std::string& groupID, const std::string& threadID );
 
 		/**
 		  * @brief This method joins all the threads in the specified group, if it exists.
@@ -244,31 +269,31 @@ public:
 		  * This will cause the thread calling this method to block until all threads in the specified group exit, which is useful to ensure all spawned threads
 		  * in a group have completed their task before proceeding.  This is also a predefined interruption point.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @exception ThreadInterrupted
+		  * @exception threadInterrupted
 		  * 	If the current thread has been issued an interrupt request, and interruption is enabled for the current thread.
 		  *
 		  * @exception QMXException
 		  * 	If the specified thread group does not exist.
 		  */
 
-		void JoinAll( const std::string& GroupID );
+		void joinAll( const std::string& groupID );
 
 		/**
 		  * @brief This method sends an interrupt request to the specified thread in the specified group, if both group and thread exist.
 		  *
 		  * This request will cause the current thread to be interrupted, if interruption is enabled, upon entering any of the predefined interruption points.
-		  * The 'InterruptionRequested' method can be used to process the request manually, regardless of wether or not interruption is enabled.  In addition to
-		  * the 'InterruptionPoint' method, the following are also predefined points of interruption: 'Wait', 'Join', 'JoinAll', 'TryJoin' and 'TryJoinAll'.
-		  * Interruption can be disabled by instantiated the class 'DisableInterruption', which will disable interruption for the current thread upon construction
-		  * and restore the previous state upon destruction.
+		  * The 'interruptionRequested' method can be used to process the request manually, regardless of wether or not interruption is enabled.  In addition to
+		  * the 'interruptionPoint' method, the following are also predefined points of interruption: 'wait', 'join', 'joinAll', 'tryJoin' and 'tryJoinAll'.
+		  * Interruption can be disabled via the class 'DisableInterruption', which will disable interruption for the current thread upon construction and restore
+		  * the previous state upon destruction.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param ThreadID
+		  * @param threadID
 		  * 	This is a string containing the thread's ID.
 		  *
 		  * @exception QMXException
@@ -276,16 +301,16 @@ public:
 		  *	If the specified thread does not exist in the specified group.
 		  */
 
-		void Interrupt( const std::string& GroupID, const std::string& ThreadID );
+		void interrupt( const std::string& groupID, const std::string& threadID );
 
 		/**
 		  * @brief This method sends an interrupt request to all threads in the specified group, if it exists.
 		  *
 		  * This request will cause all threads in the specified group to be interrupted, if interruption is enabled, upon entering any of the predefined
-		  * interruption points.  The 'InterruptionRequested' method can be used to process the request manually, regardless of wether or not interruption is
-		  * enabled.  In addition to the 'InterruptionPoint' method, the following are also predefined points of interruption: 'Wait', 'Join', 'JoinAll',
-		  * 'TryJoin', and 'TryJoinAll'.  Interruption can be disabled by instantiated the class 'DisableInterruption', which will disable interruption for the
-		  * current thread upon construction and restore the previous state upon destruction.
+		  * interruption points.  The 'interruptionRequested' method can be used to process the request manually, regardless of wether or not interruption is
+		  * enabled.  In addition to the 'interruptionPoint' method, the following are also predefined points of interruption: 'wait', 'join', 'joinAll',
+		  * 'tryJoin', and 'tryJoinAll'.  Interruption can be disabled via the class 'DisableInterruption', which will disable interruption for the current thread
+		  * upon construction and restore the previous state upon destruction.
 		  *
 		  * @param GroupID
 		  * 	This is a string containing the thread group's ID.
@@ -294,7 +319,7 @@ public:
 		  * 	If the specified thread group does not exist.
 		  */
 
-		void InterruptAll( const std::string& GroupID );
+		void interruptAll( const std::string& GroupID );
 
 		/**
 		  * @brief This method determines if an interrupt request has been issued for the current thread.
@@ -303,7 +328,7 @@ public:
 		  * 	A boolean value of 'true' if an interrupt request has been issued for the current thread, and 'false' otherwise.
 		  */
 
-		bool InterruptionRequested();
+		bool interruptionRequested() const;
 
 		/**
 		  * @brief This method is a predefined interruption point.
@@ -315,7 +340,7 @@ public:
 		  * 	If the current thread has been issued an interrupt request, and interruption is enabled for the current thread.
 		  */
 
-		void InterruptionPoint();
+		void interruptionPoint() const;
 
 		/**
 		  * @brief This method retrieves the number of logical cores available on the current system.
@@ -326,7 +351,7 @@ public:
 		  * 	The number of logical cores available on the current system, or '0' if that information is not available.
 		  */
 
-		uint32_t GetLogicalCoreCount();
+		uint32_t getLogicalCoreCount() const;
 
 		/**
 		  * @brief This method retrieves the number of physical cores available on the current system.
@@ -335,21 +360,21 @@ public:
 		  * 	The number of physical cores available on the current system, or '0' if that information is not available.
 		  */
 
-		uint32_t GetPhysicalCoreCount();
+		uint32_t getPhysicalCoreCount() const;
 
 		/**
 		  * @brief This method creates a thread in the specified group, if both group and thread are valid.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param ThreadID
+		  * @param threadID
 		  * 	This is a string containing the thread's ID.
 		  *
-		  * @param TargetFunction
+		  * @param targetFunction
 		  * 	This is a pointer to the function which will be called by the new thread.
 		  *
-		  * @param TargetArguments
+		  * @param targetArguments
 		  * 	This is a list of arguments to be sent to 'TargetFunction'.
 		  *
 		  * @exception QMXException
@@ -357,10 +382,12 @@ public:
 		  * 	If the specified thread already exists.
 		  */
 
-		template< typename Type, typename... ATypes > void CreateThread( const std::string& GroupID,
-		                                                                 const std::string& ThreadID,
-		                                                                 Type TargetFunction,
-		                                                                 ATypes... TargetArguments  )
+		template< typename Type, typename... ATypes > void createThread(
+			const std::string& groupID,
+			const std::string& threadID,
+			Type targetFunction,
+			ATypes... targetArguments
+		)
 		{
 			// Obtain locks.
 
@@ -368,23 +395,27 @@ public:
 
 			// Create scoped stack traces.
 
-				SCOPED_STACK_TRACE( "ThreadManager::CreateThread", 0000 );
+				SCOPED_STACK_TRACE( "ThreadManager::createThread", 0000 );
 
 			// Create local variables.
 
-				auto GroupMapIterator = Groups.find( GroupID );
-				ThreadPtrMap::iterator ThreadPtrMapIterator;
+				auto groupMapIterator = groups.find( groupID );
+				ThreadPtrMap::iterator threadPtrMapIterator;
 
 			// Create specified thread in specified group, if both group and thread are valid.
 
-				QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::CreateThread", "00000033", GroupID << ", " << ThreadID );
-				ThreadPtrMapIterator = GroupMapIterator->second.Threads.find( ThreadID );
-				QMX_ASSERT( ( ThreadPtrMapIterator == GroupMapIterator->second.Threads.end() ),
-				            "QMXStdLib",
-				            "ThreadManager::CreateThread",
-				            "00000034",
-				            GroupID << ", " << ThreadID );
-				GroupMapIterator->second.Threads.insert( ThreadPtrMap::value_type( ThreadID, std::make_shared< Thread >( TargetFunction, TargetArguments... ) ) );
+				QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::createThread", "00000025", groupID << ", " << threadID );
+				threadPtrMapIterator = groupMapIterator->second.threads.find( threadID );
+
+				QMX_ASSERT(
+					( threadPtrMapIterator == groupMapIterator->second.threads.end() ),
+					"QMXStdLib",
+					"ThreadManager::createThread",
+					"00000026",
+					groupID << ", " << threadID
+				);
+
+				groupMapIterator->second.threads.insert( ThreadPtrMap::value_type( threadID, std::make_shared< Thread >( targetFunction, targetArguments... ) ) );
 		}
 
 		/**
@@ -393,13 +424,13 @@ public:
 		  * This will cause the thread calling this method to block until either the specified thread exits or the timeout duration is reached, which is useful to
 		  * wait for a spawned thread only a reasonable amount of time before proceeding.  This is also a predefined interruption point.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param ThreadID
+		  * @param threadID
 		  * 	This is a string containing the thread's ID.
 		  *
-		  * @param Duration
+		  * @param duration
 		  * 	This is the timeout duration to use; it can be an instantiation of one of the following classes: 'Nanoseconds', 'Microseconds', 'Milliseconds',
 		  * 	'Seconds', 'Minutes', or 'Hours'.
 		  *
@@ -414,9 +445,11 @@ public:
 		  * 	If the specified thread does not exist within the specified group.
 		  */
 
-		template< typename RType, typename PType > bool TryJoin( const std::string& GroupID,
-		                                                         const std::string& ThreadID,
-		                                                         const boost::chrono::duration< RType, PType >& Duration )
+		template< typename RType, typename PType > bool tryJoin(
+			const std::string& groupID,
+			const std::string& threadID,
+			const boost::chrono::duration< RType, PType >& duration
+		)
 		{
 			// Obtain locks.
 
@@ -424,30 +457,31 @@ public:
 
 			// Create scoped stack traces.
 
-				SCOPED_STACK_TRACE( "ThreadManager::TryJoin", 0000 );
+				SCOPED_STACK_TRACE( "ThreadManager::tryJoin", 0000 );
 
 			// Create local variables.
 
-				bool Result = Null;
-				auto GroupMapIterator = Groups.find( GroupID );
-				ThreadPtrMap::iterator ThreadPtrMapIterator;
+				bool result = UNSET;
+				auto groupMapIterator = groups.find( groupID );
+				ThreadPtrMap::iterator threadPtrMapIterator;
 
 			// Join specified thread in specified group with specified timeout duration, if both group and thread exist.
 
-				QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::TryJoin", "0000002D", GroupID << ", " << ThreadID );
-				ThreadPtrMapIterator = GroupMapIterator->second.Threads.find( ThreadID );
-				QMX_ASSERT( ( ThreadPtrMapIterator != GroupMapIterator->second.Threads.end() ),
-								"QMXStdLib",
-								"ThreadManager::TryJoin",
-								"0000002E",
-								GroupID << ", " << ThreadID );
+				QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::tryJoin", "0000001F", groupID << ", " << threadID );
+				threadPtrMapIterator = groupMapIterator->second.threads.find( threadID );
+				QMX_ASSERT( ( threadPtrMapIterator != groupMapIterator->second.threads.end() ),
+					"QMXStdLib",
+					"ThreadManager::tryJoin",
+					"00000020",
+					groupID << ", " << threadID
+				);
 
-				if( ThreadPtrMapIterator->second->joinable() )
-					Result = ThreadPtrMapIterator->second->try_join_for( Duration );
+				if( threadPtrMapIterator->second->joinable() )
+					result = threadPtrMapIterator->second->try_join_for( duration );
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 		/**
@@ -457,10 +491,10 @@ public:
 		  * is applied per thread), which is useful to wait for all spawned threads in a group only a reasonable amount of time before proceeding.  This is also a
 		  * predefined interruption point.
 		  *
-		  * @param GroupID
+		  * @param groupID
 		  * 	This is a string containing the thread group's ID.
 		  *
-		  * @param Duration
+		  * @param duration
 		  * 	This is the timeout duration to use; it can be an instantiation of one of the following classes: 'Nanoseconds', 'Microseconds', 'Milliseconds',
 		  * 	'Seconds', 'Minutes', or 'Hours'.
 		  *
@@ -474,7 +508,7 @@ public:
 		  * 	If the specified thread group does not exist.
 		  */
 
-		template< typename RType, typename PType > bool TryJoinAll( const std::string& GroupID, const boost::chrono::duration< RType, PType >& Duration )
+		template< typename RType, typename PType > bool tryJoinAll( const std::string& groupID, const boost::chrono::duration< RType, PType >& duration )
 		{
 			// Obtain locks.
 
@@ -482,26 +516,26 @@ public:
 
 			// Create scoped stack traces.
 
-				SCOPED_STACK_TRACE( "ThreadManager::TryJoinAll", 0000 );
+				SCOPED_STACK_TRACE( "ThreadManager::tryJoinAll", 0000 );
 
 			// Create local variables.
 
-				bool Result = Null;
-				auto GroupMapIterator = Groups.find( GroupID );
+				bool result = UNSET;
+				auto groupMapIterator = groups.find( groupID );
 
 			// Join all spawned threads for specified group with specified timeout duration, if it exists.
 
-				QMX_ASSERT( ( GroupMapIterator != Groups.end() ), "QMXStdLib", "ThreadManager::TryJoinAll", "0000002F", GroupID );
+				QMX_ASSERT( ( groupMapIterator != groups.end() ), "QMXStdLib", "ThreadManager::tryJoinAll", "00000021", groupID );
 
-				for( auto& Index : GroupMapIterator->second.Threads )
+				for( auto& index : groupMapIterator->second.threads )
 				{
-					if( Index.second->joinable() )
-						Result = Index.second->try_join_for( Duration );
+					if( index.second->joinable() )
+						result = index.second->try_join_for( duration );
 				}
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 private:
@@ -516,7 +550,7 @@ private:
 		  * @brief This is the map of thread groups.
 		  */
 
-		GroupMap Groups;
+		GroupMap groups;
 
 	// Private Constructors
 
@@ -532,7 +566,7 @@ private:
 		  * @brief This is the overridden implementation for the 'Deallocate' method.
 		  */
 
-		void DeallocateImp();
+		void deallocateImp();
 };
 
 } // 'QMXStdLib' Namespace
