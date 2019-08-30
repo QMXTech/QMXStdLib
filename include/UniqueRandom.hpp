@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UniqueRandom.hpp
-// Robert M. Baker | Created : 03FEB12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
-// This is a header file for 'QMXStdLib'; it defines the interface for a unique random number generation class.
+// Robert M. Baker | Created : 03FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
+// This is a header file for 'QMXStdLib'; it defines the interface for a set of unique random number generation functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 03FEB12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a unique random number generation class.
   *
-  * @section Description
+  * @section UniqueRandomH0000 Description
   *
   * This header file defines the interface for a unique random number generation class.
   *
-  * @section License
+  * @section UniqueRandomH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -52,10 +52,13 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <type_traits>
+
 #include "Base.hpp"
 #include "Object.hpp"
 #include "Numeric.hpp"
 #include "Utility.hpp"
+#include "RAII/ScopedLock.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -65,393 +68,113 @@ namespace QMXStdLib
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'UniqueRandom' Class
+// Start of the 'UniqueRandom' Namespace
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace UniqueRandom
+{
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function Prototypes
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-  * @class UniqueRandom UniqueRandom.hpp "include/UniqueRandom.hpp"
+  * @brief This function defines the structure for a generator which will produce a set of unique random integral numbers.
   *
-  * @brief This class defines unique random number generation algorithms.
+  * If 'min' is less-than 'max', 'min' will be set to 'max - 1';  'quantity' will be clamped on the closed interval [0, ( max - min + 1 )].
   *
-  * These algorithms are useful when it is necessary to have a set of unique random numbers.
+  * @param target
+  * 	This is a reference to a numeric vector which will receive the generated values; it will be cleared if not empty.
   *
-  * Platform Independent     : Yes<br>
-  * Architecture Independent : Yes<br>
-  * Thread-Safe              : Conditionally ('GenerateImp' must be defined in a thread-safe manner.)
+  * @param quantity
+  * 	This is the quantity of unique random numbers to generate.
+  *
+  * @param min
+  * 	This is the minimum value to use while generating random numbers.
+  *
+  * @param max
+  * 	This is the maximum value to use while generating random numbers.
   */
 
-template< typename NType > class UniqueRandom
+template< typename NType > void generateInt( std::vector< NType >& target, size_t quantity, NType min, NType max )
 {
-public:
+	// Create local variables.
 
-	// Public Type Definitions
+		NType value = UNSET;
 
-		typedef std::vector< NType > NumberVector;
+	// Check arguments.
 
-	// Destructor
+		if( min >= max )
+			min = max - 1;
 
-		/**
-		  * @brief This is the destructor.
-		  */
+		Numeric::clamp< size_t >( quantity, 0, ( max - min + 1 ) );
 
-		virtual ~UniqueRandom()
+	// Clear number vector if necessary.
+
+		if( !target.empty() )
+			target.clear();
+
+	// Generate random numbers based on specified data.
+
+		while( target.size() < quantity )
 		{
-			// Do nothing.
+			value = QMXStdLib::Utility::randInt< NType >( min, max );
+
+			if( std::find( target.begin(), target.end(), value ) == target.end() )
+				target.push_back( value );
 		}
-
-	// Public Methods
-
-		/**
-		  * @brief This method generates the set of unique random numbers based on the specified values.
-		  *
-		  * If 'Min' is less-than 'Max', 'Min' will be set to 'Max - 1';  'Quantity' will be clamped on the closed interval [0, ( Max - Min + 1 )] if 'NType' is
-		  * an integral type.
-		  *
-		  * @param Quantity
-		  * 	This is the quantity of unique random numbers to generate.
-		  *
-		  * @param Min
-		  * 	This is the minimum value to use while generating random numbers.
-		  *
-		  * @param Max
-		  * 	This is the maximum value to use while generating random numbers.
-		  */
-
-		void Generate( size_t Quantity, NType Min, NType Max )
-		{
-			// Generate random numbers based on specified data.
-
-				GenerateImp( Quantity, Min, Max );
-		}
-
-protected:
-
-	// Protected Fields
-
-		/**
-		  * @brief This is the vector of unique random numbers.
-		  */
-
-		NumberVector Numbers;
-
-	// Protected Constructors
-
-		/**
-		  * @brief This is the default constructor, which is made protected to prevent direct instantiation.
-		  */
-
-		UniqueRandom()
-		{
-			// Do nothing.
-		}
-
-private:
-
-	// Private Methods
-
-		/**
-		  * @brief This is the overridable implementation for the 'Generate' method.
-		  *
-		  * @param Quantity
-		  * 	This is the quantity of unique random numbers to generate.
-		  *
-		  * @param Min
-		  * 	This is the minimum value to use while generating random numbers.
-		  *
-		  * @param Max
-		  * 	This is the maximum value to use while generating random numbers.
-		  */
-
-		virtual void GenerateImp( size_t Quantity, NType Min, NType Max ) = PURE_VIRTUAL;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'UniqueRandomI' Class
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
 
 /**
-  * @class UniqueRandomI UniqueRandom.hpp "include/UniqueRandom.hpp"
+  * @brief This function defines the structure for a generator which will produce a set of unique random floating point numbers.
   *
-  * @brief This class specializes the 'UniqueRandom' class for integral numbers.
+  * If 'min' is less-than 'max', 'min' will be set to 'max - 1'.
   *
-  * Platform Independent     : Yes<br>
-  * Architecture Independent : Yes<br>
-  * Thread-Safe              : Yes
+  * @param target
+  * 	This is a reference to a numeric vector which will receive the generated values; it will be cleared if not empty.
+  *
+  * @param quantity
+  * 	This is the quantity of unique random numbers to generate.
+  *
+  * @param min
+  * 	This is the minimum value to use while generating random numbers.
+  *
+  * @param max
+  * 	This is the maximum value to use while generating random numbers.
   */
 
-template< typename NType > class UniqueRandomI : public Object< UniqueRandomI< NType > >, public UniqueRandom< NType >
+template< typename NType > void generateFloat( std::vector< NType >& target, size_t quantity, NType min, NType max )
 {
-	// Friend Classes
+	// Create local variables.
 
-		friend class Object< UniqueRandomI< NType > >;
+		NType value = UNSET;
 
-public:
+	// Check arguments.
 
-	// Destructor
+		if( min >= max )
+			min = max - 1;
 
-		/**
-		  * @brief This is the destructor
-		  */
+	// Clear number vector if necessary.
 
-		virtual ~UniqueRandomI()
+		if( !target.empty() )
+			target.clear();
+
+	// Generate random numbers based on specified data.
+
+		while( target.size() < quantity )
 		{
-			// Perform necessary cleanup.
+			value = QMXStdLib::Utility::randFloat< NType >( min, max );
 
-				if( this->Initialized )
-					this->Deallocate();
+			if( std::find( target.begin(), target.end(), value ) == target.end() )
+				target.push_back( value );
 		}
+}
 
-	// Public Methods
-
-		/**
-		  * @brief This method gets a non-mutable reference to the number vector.
-		  *
-		  * @return
-		  * 	A non-mutable reference to the number vector.
-		  */
-
-		const typename UniqueRandom< NType >::NumberVector& GetNumbers() const
-		{
-			// Obtain locks.
-
-				SCOPED_READ_LOCK;
-
-			// Return a non-mutable number vector reference to the calling routine.
-
-				return this->Numbers;
-		}
-
-private:
-
-	// Private Constructors
-
-		/**
-		  * @brief This is the default constructor, which is made private to prevent direct instantiation.
-		  */
-
-		UniqueRandomI()
-		{
-			// Do nothing.
-		}
-
-	// Private Methods
-
-		/**
-		  * @brief This is the overridden implementation for the 'operator=' method.
-		  *
-		  * @param Instance
-		  * 	This is the 'Object' pointer with which to set 'this'.
-		  */
-
-		void OperatorAssignImp( const Object< UniqueRandomI< NType > >* Instance )
-		{
-			// Create local variables.
-
-				const UniqueRandomI< NType >* DInstance = dynamic_cast< const UniqueRandomI< NType >* >( Instance );
-
-			// Assign specified object to 'this'.
-
-				this->Numbers = DInstance->Numbers;
-		}
-
-		/**
-		  * @brief This is the overridden implementation for the 'Clone' method.
-		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
-		  */
-
-		CLONE_IMP_T( UniqueRandomI< NType > )
-
-		/**
-		  * @brief This is the overridden implementation for the 'Generate' method.
-		  *
-		  * @param Quantity
-		  * 	This is the quantity of unique random numbers to generate.
-		  *
-		  * @param Min
-		  * 	This is the minimum value to use while generating random numbers.
-		  *
-		  * @param Max
-		  * 	This is the maximum value to use while generating random numbers.
-		  */
-
-		void GenerateImp( size_t Quantity, NType Min, NType Max )
-		{
-			// Obtain locks.
-
-				SCOPED_WRITE_LOCK;
-
-			// Create local variables.
-
-				NType Value = Null;
-
-			// Check arguments.
-
-				if( Min >= Max )
-					Min = Max - 1;
-
-				Numeric::Clamp< size_t >( Quantity, 0, ( Max - Min + 1 ) );
-
-			// Clear number vector if necessary.
-
-				if( !this->Numbers.empty() )
-					this->Numbers.clear();
-
-			// Generate random numbers based on specified data.
-
-				while( this->Numbers.size() < Quantity )
-				{
-					Value = QMXStdLib::Utility::RandomI< NType >( Min, Max );
-
-					if( std::find( this->Numbers.begin(), this->Numbers.end(), Value ) == this->Numbers.end() )
-						this->Numbers.push_back( Value );
-				}
-		}
-};
+} // 'UniqueRandom' Namespace
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'UniqueRandomF' Class
+// End of the 'UniqueRandom' Namespace
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
-  * @class UniqueRandomF UniqueRandom.hpp "include/UniqueRandom.hpp"
-  *
-  * @brief This class specializes the 'UniqueRandom' class for floating point numbers.
-  *
-  * Platform Independent     : Yes<br>
-  * Architecture Independent : Yes<br>
-  * Thread-Safe              : Yes
-  */
-
-template< typename NType > class UniqueRandomF : public Object< UniqueRandomF< NType > >, public UniqueRandom< NType >
-{
-	// Friend Classes
-
-		friend class Object< UniqueRandomF< NType > >;
-
-public:
-
-	// Destructor
-
-		/**
-		  * @brief This is the destructor
-		  */
-
-		virtual ~UniqueRandomF()
-		{
-			// Perform necessary cleanup.
-
-				if( this->Initialized )
-					this->Deallocate();
-		}
-
-	// Public Methods
-
-		/**
-		  * @brief This method gets a non-mutable reference to the number vector.
-		  *
-		  * @return
-		  * 	A non-mutable reference to the number vector.
-		  */
-
-		const typename UniqueRandom< NType >::NumberVector& GetNumbers() const
-		{
-			// Obtain locks.
-
-				SCOPED_READ_LOCK;
-
-			// Return a non-mutable number vector reference to the calling routine.
-
-				return this->Numbers;
-		}
-
-private:
-
-	// Private Constructors
-
-		/**
-		  * @brief This is the default constructor, which is made private to prevent direct instantiation.
-		  */
-
-		UniqueRandomF()
-		{
-			// Do nothing.
-		}
-
-	// Private Methods
-
-		/**
-		  * @brief This is the overridden implementation for the 'operator=' method.
-		  *
-		  * @param Instance
-		  * 	This is the 'Object' pointer with which to set 'this'.
-		  */
-
-		void OperatorAssignImp( const Object< UniqueRandomF< NType > >* Instance )
-		{
-			// Create local variables.
-
-				const UniqueRandomF< NType >* DInstance = dynamic_cast< const UniqueRandomF< NType >* >( Instance );
-
-			// Assign specified object to 'this'.
-
-				this->Numbers = DInstance->Numbers;
-		}
-
-		/**
-		  * @brief This is the overridden implementation for the 'Clone' method.
-		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
-		  */
-
-		CLONE_IMP_T( UniqueRandomF< NType > )
-
-		/**
-		  * @brief This is the overridden implementation for the 'Generate' method.
-		  *
-		  * @param Quantity
-		  * 	This is the quantity of unique random numbers to generate.
-		  *
-		  * @param Min
-		  * 	This is the minimum value to use while generating random numbers.
-		  *
-		  * @param Max
-		  * 	This is the maximum value to use while generating random numbers.
-		  */
-
-		void GenerateImp( size_t Quantity, NType Min, NType Max )
-		{
-			// Obtain locks.
-
-				SCOPED_WRITE_LOCK;
-
-			// Create local variables.
-
-				NType Value = Null;
-
-			// Check arguments.
-
-				if( Min >= Max )
-					Min = Max - 1;
-
-			// Clear number vector if necessary.
-
-				if( !this->Numbers.empty() )
-					this->Numbers.clear();
-
-			// Generate random numbers based on specified data.
-
-				while( this->Numbers.size() < Quantity )
-				{
-					Value = QMXStdLib::Utility::RandomF< NType >( Min, Max );
-
-					if( std::find( this->Numbers.begin(), this->Numbers.end(), Value ) == this->Numbers.end() )
-						this->Numbers.push_back( Value );
-				}
-		}
-};
 
 } // 'QMXStdLib' Namespace
 

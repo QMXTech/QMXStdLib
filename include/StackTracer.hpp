@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracer.hpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a stack tracer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a stack tracer class.
   *
-  * @section Description
+  * @section StackTracerH0000 Description
   *
   * This header file defines the interface for a stack tracer class.
   *
-  * @section License
+  * @section StackTracerH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -54,12 +54,13 @@
 
 #include "Base.hpp"
 #include "QMXException.hpp"
+#include "RAII/ScopedLock.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define STACK_TRACE QMXStdLib::StackTracer::GetStackTrace()
+#define STACK_TRACE QMXStdLib::StackTracer::getStackTrace()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -91,79 +92,79 @@ public:
 	// Public Methods
 
 		/**
-		  * @brief This method gets the current value of 'IsEnabled'.
+		  * @brief This method gets the current value of 'isEnabled'.
 		  *
 		  * @return
 		  * 	A boolean value of 'true' if the stack tracer is enabled, and 'false' otherwise.
 		  */
 
-		static bool GetEnabled()
+		static bool getEnabled()
 		{
 			// Obtain locks.
 
-				SharedLock ScopedReadLock( LocalMutex );
+				ScopedLock readLock( ScopedLock::READ, localMutex );
 
 			// Report value of 'IsEnabled' to calling routine.
 
-				return IsEnabled;
+				return isEnabled;
 		}
 
 		/**
-		  * @brief This method sets the value of 'IsEnabled'.
+		  * @brief This method sets the value of 'isEnabled'.
 		  *
-		  * When 'IsEnabled' is 'false', none of the methods (other than 'GetEnabled' and 'SetEnabled') will have any effect.
+		  * When 'isEnabled' is 'false', none of the methods (other than 'getEnabled' and 'setEnabled') will have any effect.
 		  *
-		  * @param TargetValue
-		  * 	This is the value with which to set 'IsEnabled'.
+		  * @param target
+		  * 	This is the value with which to set 'isEnabled'.
 		  */
 
-		static void SetEnabled( bool TargetValue )
+		static void setEnabled( bool target )
 		{
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Set value of 'IsEnabled' to specified value.
 
-				IsEnabled = TargetValue;
+				isEnabled = target;
 		}
 
 		/**
 		  * @brief This method gets the current thread's ID.
 		  *
-		  * If a call was never made to 'SetThreadID' for the current thread, this will return an empty string.
+		  * If a call was never made to 'setThreadID' for the current thread, this will return an empty string.
 		  *
 		  * @return
 		  * 	A string containing the current thread's ID.
 		  */
 
-		static std::string GetThreadID()
+		static std::string getThreadID()
 		{
 			// Report current thread's ID to calling routine.
 
-				return( ThreadID.get() ? *ThreadID : "" );
+				return( threadID.get() ? *threadID : "" );
 		}
 
 		/**
 		  * @brief This method sets the current thread's ID to the specified string.
 		  *
-		  * @param Target
+		  * @param target
 		  * 	This is the string with which to set the current thread's ID.
 		  */
 
-		static void SetThreadID( const std::string& Target )
+		static void setThreadID( const std::string& target )
 		{
 			// Set the current thread's ID to the specified string.
 
-				ThreadID.reset( ( new std::string( Target ) ) );
+				threadID.reset( ( new std::string( target ) ) );
 		}
 
 		/**
 		  * @brief This method adds the current thread to the stack trace map.
 		  *
-		  * The current thread's ID should first be set with a call to 'SetThreadID'.
+		  * The current thread's ID should first be set with a call to 'setThreadID'.
 		  *
-		  * @param BaseStackTrace
+		  * @param baseStackTrace
 		  * 	This is a string containing the base stack trace.
 		  *
 		  * @exception QMXException
@@ -172,37 +173,40 @@ public:
 		  * 	If the current thread was already added to the tracer.
 		  */
 
-		static void AddThread( const std::string& BaseStackTrace )
+		static void addThread( const std::string& base )
 		{
 			// Perform pre-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Perform post-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Add current thread to stack trace map, if its name has been properly set and has not already been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::AddThread", "00000022", BaseStackTrace );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::AddThread", "00000023", BaseStackTrace );
-				QMX_ASSERT_X( StackTraces.insert( StackTraceMap::value_type( *ThreadID, StringVector( 1, BaseStackTrace ) ) ).second,
-				              "QMXStdLib",
-				              "StackTracer::AddThread",
-				              "00000024",
-				              *ThreadID << ", " << BaseStackTrace );
+				QMX_ASSERT_X( threadID.get(), "QMXStdLib", "StackTracer::addThread", "00000013", base );
+				QMX_ASSERT_X( threadID->length(), "QMXStdLib", "StackTracer::addThread", "00000014", base );
+
+				QMX_ASSERT_X(
+					stackTraces.insert( StackTraceMap::value_type( *threadID, StringVector( 1, base ) ) ).second,
+					"QMXStdLib",
+					"StackTracer::addThread",
+					"00000015",
+					*threadID << ", " << base
+				);
 		}
 
 		/**
 		  * @brief This method removes the current thread from the stack trace map.
 		  *
-		  * The current thread's ID should first be set with a call to 'SetThreadID'.
+		  * The current thread's ID should first be set with a call to 'setThreadID'.
 		  *
 		  * @exception QMXException
 		  * 	If the current thread's ID was not set.<br>
@@ -210,27 +214,27 @@ public:
 		  * 	If the current thread was not added to the tracer.
 		  */
 
-		static void RemoveThread()
+		static void removeThread()
 		{
 			// Perform pre-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Perform post-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Remove the current thread from stack trace map, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::RemoveThread", "00000022", "" );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::RemoveThread", "00000023", "" );
-				QMX_ASSERT_X( StackTraces.erase( *ThreadID ), "QMXStdLib", "StackTracer::RemoveThread", "00000025", *ThreadID );
+				QMX_ASSERT_X( threadID.get(), "QMXStdLib", "StackTracer::removeThread", "00000013", "" );
+				QMX_ASSERT_X( threadID->length(), "QMXStdLib", "StackTracer::removeThread", "00000014", "" );
+				QMX_ASSERT_X( stackTraces.erase( *threadID ), "QMXStdLib", "StackTracer::removeThread", "00000016", *threadID );
 		}
 
 		/**
@@ -238,7 +242,7 @@ public:
 		  *
 		  * All pushed entries will be used to construct a stack trace when the 'GetStackTrace' method is called.
 		  *
-		  * @param Entry
+		  * @param target
 		  * 	This is a string containing the entry to push.
 		  *
 		  * @exception QMXException
@@ -247,33 +251,33 @@ public:
 		  * 	If the current thread was not added to the tracer.
 		  */
 
-		static void Push( const std::string& Entry )
+		static void push( const std::string& target )
 		{
 			// Perform pre-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Perform post-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Create local variables.
 
-				StackTraceMap::iterator StackTraceMapIterator;
+				StackTraceMap::iterator stackTraceMapIterator;
 
 			// Push the specified entry onto the current thread's stack trace, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::Push", "00000022", Entry );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::Push", "00000023", Entry );
-				StackTraceMapIterator = StackTraces.find( *ThreadID );
-				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::Push", "00000025", *ThreadID << ", " << Entry );
-				StackTraceMapIterator->second.push_back( Entry );
+				QMX_ASSERT_X( threadID.get(), "QMXStdLib", "StackTracer::push", "00000013", target );
+				QMX_ASSERT_X( threadID->length(), "QMXStdLib", "StackTracer::push", "00000014", target );
+				stackTraceMapIterator = stackTraces.find( *threadID );
+				QMX_ASSERT_X( ( stackTraceMapIterator != stackTraces.end() ), "QMXStdLib", "StackTracer::push", "00000016", *threadID << ", " << target );
+				stackTraceMapIterator->second.push_back( target );
 		}
 
 		/**
@@ -288,35 +292,35 @@ public:
 		  * 	If the current thread was not added to the tracer.
 		  */
 
-		static void Pop()
+		static void pop()
 		{
 			// Perform pre-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Perform post-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return;
 
 			// Create local variables.
 
-				StackTraceMap::iterator StackTraceMapIterator;
+				StackTraceMap::iterator stackTraceMapIterator;
 
 			// Pop the last pushed entry off the current thread's stack trace, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::Pop", "00000022", "" );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::Pop", "00000023", "" );
-				StackTraceMapIterator = StackTraces.find( *ThreadID );
-				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::Pop", "00000025", *ThreadID );
+				QMX_ASSERT_X( threadID.get(), "QMXStdLib", "StackTracer::pop", "00000013", "" );
+				QMX_ASSERT_X( threadID->length(), "QMXStdLib", "StackTracer::pop", "00000014", "" );
+				stackTraceMapIterator = stackTraces.find( *threadID );
+				QMX_ASSERT_X( ( stackTraceMapIterator != stackTraces.end() ), "QMXStdLib", "StackTracer::pop", "00000016", *threadID );
 
-				if( StackTraceMapIterator->second.size() > 1 )
-					StackTraceMapIterator->second.pop_back();
+				if( stackTraceMapIterator->second.size() > 1 )
+					stackTraceMapIterator->second.pop_back();
 		}
 
 		/**
@@ -331,64 +335,64 @@ public:
 		  * 	If the current thread was not added to the tracer.
 		  */
 
-		static std::string GetStackTrace()
+		static std::string getStackTrace()
 		{
 			// Perform pre-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return "";
 
 			// Obtain locks.
 
-				SharedLock ScopedReadLock( LocalMutex );
+				ScopedLock readLock( ScopedLock::READ, localMutex );
 
 			// Perform post-lock abort check.
 
-				if( !IsEnabled )
+				if( !isEnabled )
 					return "";
 
 			// Create local variables.
 
-				std::string Result;
-				StackTraceMap::iterator StackTraceMapIterator;
-				size_t Index = Null;
+				std::string result;
+				StackTraceMap::iterator stackTraceMapIterator;
+				size_t index = UNSET;
 
 			// Construct the stack trace for the current thread, if its name has been properly set and has been added.
 
-				QMX_ASSERT_X( ThreadID.get(), "QMXStdLib", "StackTracer::GetStackTrace", "00000022", "" );
-				QMX_ASSERT_X( ThreadID->length(), "QMXStdLib", "StackTracer::GetStackTrace", "00000023", "" );
-				StackTraceMapIterator = StackTraces.find( *ThreadID );
-				QMX_ASSERT_X( ( StackTraceMapIterator != StackTraces.end() ), "QMXStdLib", "StackTracer::GetStackTrace", "00000025", *ThreadID );
+				QMX_ASSERT_X( threadID.get(), "QMXStdLib", "StackTracer::getStackTrace", "00000013", "" );
+				QMX_ASSERT_X( threadID->length(), "QMXStdLib", "StackTracer::getStackTrace", "00000014", "" );
+				stackTraceMapIterator = stackTraces.find( *threadID );
+				QMX_ASSERT_X( ( stackTraceMapIterator != stackTraces.end() ), "QMXStdLib", "StackTracer::getStackTrace", "00000016", *threadID );
 
-				if( StackTraceMapIterator->second.size() == 1 )
-					Result = StackTraceMapIterator->second[ 0 ];
+				if( stackTraceMapIterator->second.size() == 1 )
+					result = stackTraceMapIterator->second[ 0 ];
 				else
 				{
-					for( ; Index < ( StackTraceMapIterator->second.size() - 1 ); Index++ )
-						Result += StackTraceMapIterator->second[ Index ] + STACKTRACER_ENTRY_SEPERATOR;
+					for( ; index < ( stackTraceMapIterator->second.size() - 1 ); index++ )
+						result += stackTraceMapIterator->second[ index ] + STACKTRACER_ENTRY_SEPARATOR;
 
-					Result += StackTraceMapIterator->second[ Index ];
+					result += stackTraceMapIterator->second[ index ];
 				}
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 		/**
 		  * @brief This method resets the stack tracer to its default state.
 		  */
 
-		static void Reset()
+		static void reset()
 		{
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Reset stack tracer to default state.
 
-				IsEnabled = false;
-				StackTraces.clear();
+				isEnabled = false;
+				stackTraces.clear();
 		}
 
 private:
@@ -403,25 +407,25 @@ private:
 		  * @brief This is the mutex for use when thread-safety is needed.
 		  */
 
-		static SharedMutex LocalMutex;
+		static SharedMutexPair localMutex;
 
 		/**
 		  * @brief This is the flag which determines if the stack tracer is enabled.
 		  */
 
-		static bool IsEnabled;
+		static bool isEnabled;
 
 		/**
 		  * @brief This is a thread-specific pointer to a string containing the current thread's ID.
 		  */
 
-		static StringTLS ThreadID;
+		static StringTLS threadID;
 
 		/**
 		  * @brief This is the stack trace map.
 		  */
 
-		static StackTraceMap StackTraces;
+		static StackTraceMap stackTraces;
 
 	// Private Constructors
 

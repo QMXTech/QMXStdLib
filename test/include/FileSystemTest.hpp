@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystemTest.hpp
-// Robert M. Baker | Created : 12MAR12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 12MAR12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::FileSystem' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -35,6 +35,7 @@
 
 #include <cstdlib>
 #include <sstream>
+#include <string>
 #include <gtest/gtest.h>
 
 #include "../../include/QMXException.hpp"
@@ -48,11 +49,48 @@
 
 #if ( QMX_PLATFORM == QMX_PLATFORM_LINUX )
 #	define TEST_OTHER "/dev/null"
-#elif( QMX_PLATFORM == QMX_PLATFORM_OSX )
+#elif( QMX_PLATFORM == QMX_PLATFORM_MACOS )
 #	define TEST_OTHER "/dev/null"
 #elif( QMX_PLATFORM == QMX_PLATFORM_WINDOWS )
 #	define TEST_OTHER "TestFileSymlink"
 #endif // Platform Headers
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The 'ScopedPathChange' Class
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class ScopedPathChange
+{
+public:
+
+	// Public Constructors
+
+		ScopedPathChange( const QMXStdLib::Path& target )
+		{
+			// Initialize fields.
+
+				initialPath = boost::filesystem::current_path();
+
+			// Perform necessary initialization.
+
+				boost::filesystem::current_path( target );
+		}
+
+	// Destructor
+
+		~ScopedPathChange()
+		{
+			// Perform necessary cleanup.
+
+				boost::filesystem::current_path( initialPath );
+		}
+
+private:
+
+	// Private Fields
+
+		QMXStdLib::Path initialPath;
+};
 
 #endif // __QMX_QMXSTDLIBTEST_FILESYSTEMTEST_HPP_
 

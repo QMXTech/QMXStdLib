@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptions.cpp
-// Robert M. Baker | Created : 23OCT13 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 23OCT13 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a program options class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 23OCT13
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for a program options class.
   *
-  * @section Description
+  * @section ProgramOptionsS0000 Description
   *
   * This source file defines the implementation for a program options class.
   *
-  * @section License
+  * @section ProgramOptionsS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -64,7 +64,7 @@ namespace QMXStdLib
 // Static Field Initializers for the 'ProgramOptions' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<> ProgramOptions* Singleton< ProgramOptions >::SingletonInstance = nullptr;
+template<> ProgramOptions* Singleton< ProgramOptions >::singletonInstance = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Public Methods for the 'ProgramOptions' Class
@@ -72,13 +72,20 @@ template<> ProgramOptions* Singleton< ProgramOptions >::SingletonInstance = null
 
 ProgramOptions::~ProgramOptions()
 {
-	// Perform necessary cleanup.
+	try
+	{
+		// Perform necessary cleanup.
 
-		if( Initialized )
-			Deallocate();
+			if( initialized )
+				deallocate();
+	}
+	catch( const exception& except )
+	{
+		// Do nothing.
+	}
 }
 
-void ProgramOptions::ParseCommandLine( int ArgumentCount, char* ArgumentValues[] )
+void ProgramOptions::parseCommandLine( int argumentCount, char* argumentValues[] )
 {
 	// Obtain locks.
 
@@ -86,57 +93,57 @@ void ProgramOptions::ParseCommandLine( int ArgumentCount, char* ArgumentValues[]
 
 	// Create local variables.
 
-		string Target;
-		string Value;
-		string Key;
-		string Group;
-		size_t Position = Null;
+		string target;
+		string value;
+		string key;
+		string group;
+		size_t position = UNSET;
 
 	// Parse specified command line arguments.
 
-		for( int Index = 0; Index < ArgumentCount; Index++ )
+		for( int index = 0; index < argumentCount; index++ )
 		{
-			Target = ArgumentValues[ Index ];
+			target = argumentValues[ index ];
 
-			if( Target.rfind( PROGRAMOPTIONS_TOGGLE_OPTION_PREFIX ) == 0 )
+			if( target.rfind( PROGRAMOPTIONS_TOGGLE_OPTION_PREFIX ) == 0 )
 			{
-				Target = Target.substr( 1 );
-				STRIP_ALL_WHITESPACE( Target );
+				target = target.substr( 1 );
+				STRIP_ALL_WHITESPACE( target );
 
-				if( Target.length() )
+				if( target.length() )
 				{
-					for( size_t Position = 0; Position < Target.length(); Position++ )
-						ToggleOptions.insert( Target.substr( Position, 1 ) );
+					for( size_t position = 0; position < target.length(); position++ )
+						toggleOptions.insert( target.substr( position, 1 ) );
 				}
 			}
-			else if( Target.substr( 0, 2 ) == PROGRAMOPTIONS_COMMAND_OPTION_PREFIX )
+			else if( target.substr( 0, 2 ) == PROGRAMOPTIONS_COMMAND_OPTION_PREFIX )
 			{
-				Target = Target.substr( 2 );
-				Position = Target.find( PROGRAMOPTIONS_ASSIGNMENT_OPERATOR );
+				target = target.substr( 2 );
+				position = target.find( PROGRAMOPTIONS_ASSIGNMENT_OPERATOR );
 
-				if( Position == string::npos )
+				if( position == string::npos )
 				{
-					STRIP_ALL_WHITESPACE( Target );
+					STRIP_ALL_WHITESPACE( target );
 
-					if( Target.length() )
-						CommandOptions.insert( Target );
+					if( target.length() )
+						commandOptions.insert( target );
 				}
-				else if( ( Position > 0 ) && ( Position < ( Target.length() - 1 ) ) )
+				else if( ( position > 0 ) && ( position < ( target.length() - 1 ) ) )
 				{
-					Value = Target.substr( ( Position + 1 ) );
-					Key = Target.substr( 0, Position );
-					Group = ExtractGroup( Key );
+					value = target.substr( ( position + 1 ) );
+					key = target.substr( 0, position );
+					group = extractGroup( key );
 
-					if( Key.length() )
-						ConfigOptions[ Group ][ Key ] = Value;
+					if( key.length() )
+						configOptions[ group ][ key ] = value;
 				}
 			}
 			else
-				PositionalOptions.push_back( Target );
+				positionalOptions.push_back( target );
 		}
 }
 
-void ProgramOptions::ParseConfigFile( const Path& ConfigPath )
+void ProgramOptions::parseConfigFile( const Path& configPath )
 {
 	// Obtain locks.
 
@@ -144,47 +151,47 @@ void ProgramOptions::ParseConfigFile( const Path& ConfigPath )
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ProgramOptions::ParseConfigFile", 0000 );
+		SCOPED_STACK_TRACE( "ProgramOptions::parseConfigFile", 0000 );
 
 	// Create local variables.
 
-		ifstream ConfigFile( ConfigPath.string().c_str() );
-		char Buffer[ MAX_BUFFER_SIZE ];
-		string Line;
-		string Value;
-		string Key;
-		string Group = PROGRAMOPTIONS_GROUP_DEFAULT;
-		size_t Position = Null;
+		ifstream configFile( configPath.string().c_str() );
+		char buffer[ MAX_BUFFER_SIZE ];
+		string line;
+		string value;
+		string key;
+		string group = PROGRAMOPTIONS_GROUP_DEFAULT;
+		size_t position = UNSET;
 
 	// Parse specified config file, if it exists.
 
-		QMX_ASSERT( ConfigFile, "QMXStdLib", "ProgramOptions::ParseConfigFile", "00000020", ConfigPath );
-		ConfigFile.getline( Buffer, MAX_BUFFER_SIZE );
+		QMX_ASSERT( configFile, "QMXStdLib", "ProgramOptions::parseConfigFile", "00000011", configPath );
+		configFile.getline( buffer, MAX_BUFFER_SIZE );
 
-		while( ConfigFile.good() )
+		while( configFile.good() )
 		{
-			Line = Buffer;
-			STRIP_ALL_WHITESPACE( Line );
+			line = buffer;
+			STRIP_ALL_WHITESPACE( line );
 
-			if( ( Line[ 0 ] != PROGRAMOPTIONS_COMMENT_INITIATOR ) && ( Line.length() >= 3 ) )
+			if( ( line[ 0 ] != PROGRAMOPTIONS_COMMENT_INITIATOR ) && ( line.length() >= 3 ) )
 			{
-				Position = Line.find( PROGRAMOPTIONS_ASSIGNMENT_OPERATOR );
-				
-				if( ( Line[ 0 ] == PROGRAMOPTIONS_GROUP_DELIMITER_LEFT ) && ( Line[ Line.length() - 1 ] == PROGRAMOPTIONS_GROUP_DELIMITER_RIGHT ) )
-					Group = Line.substr( 1, ( Line.length() - 2 ) );
-				else if( ( Position != string::npos ) && ( Position > 0 ) && ( Position < ( Line.length() - 1 ) ) )
+				position = line.find( PROGRAMOPTIONS_ASSIGNMENT_OPERATOR );
+
+				if( ( line[ 0 ] == PROGRAMOPTIONS_GROUP_DELIMITER_LEFT ) && ( line[ line.length() - 1 ] == PROGRAMOPTIONS_GROUP_DELIMITER_RIGHT ) )
+					group = line.substr( 1, ( line.length() - 2 ) );
+				else if( ( position != string::npos ) && ( position > 0 ) && ( position < ( line.length() - 1 ) ) )
 				{
-					Key = Line.substr( 0, Position );
-					Value = Line.substr( ( Position + 1 ) );
-					ConfigOptions[ Group ][ Key ] = Value;
+					key = line.substr( 0, position );
+					value = line.substr( ( position + 1 ) );
+					configOptions[ group ][ key ] = value;
 				}
 			}
 
-			ConfigFile.getline( Buffer, MAX_BUFFER_SIZE );
+			configFile.getline( buffer, MAX_BUFFER_SIZE );
 		}
 }
 
-void ProgramOptions::SaveConfigFile( const Path& ConfigPath ) const
+void ProgramOptions::saveConfigFile( const Path& configPath ) const
 {
 	// Obtain locks.
 
@@ -192,36 +199,36 @@ void ProgramOptions::SaveConfigFile( const Path& ConfigPath ) const
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "ProgramOptions::SaveConfigFile", 0000 );
+		SCOPED_STACK_TRACE( "ProgramOptions::saveConfigFile", 0000 );
 
 	// Create local variables.
 
-		ofstream ConfigFile( ConfigPath.string().c_str() );
-		map< string, map< string, string > > SortedOptions;
+		ofstream configFile( configPath.string().c_str() );
+		map< string, map< string, string > > sortedOptions;
 
 	// Save current config options to specified file.
 
-		QMX_ASSERT( ConfigFile, "QMXStdLib", "ProgramOptions::SaveConfigFile", "00000021", ConfigPath );
-		ConfigFile << PROGRAMOPTIONS_COMMENT_INITIATOR << ' ' << ConfigPath.filename().string() << "\n\n";
+		QMX_ASSERT( configFile, "QMXStdLib", "ProgramOptions::saveConfigFile", "00000012", configPath );
+		configFile << PROGRAMOPTIONS_COMMENT_INITIATOR << ' ' << configPath.filename().string() << "\n\n";
 
-		for( const auto& IndexA : ConfigOptions )
+		for( const auto& indexA : configOptions )
 		{
-			for( const auto& IndexB : IndexA.second )
-				SortedOptions[ IndexA.first ][ IndexB.first ] = IndexB.second;
+			for( const auto& indexB : indexA.second )
+				sortedOptions[ indexA.first ][ indexB.first ] = indexB.second;
 		}
 
-		for( const auto& IndexA : SortedOptions )
+		for( const auto& indexA : sortedOptions )
 		{
-			ConfigFile << PROGRAMOPTIONS_GROUP_DELIMITER_LEFT << IndexA.first << PROGRAMOPTIONS_GROUP_DELIMITER_RIGHT << '\n';
+			configFile << PROGRAMOPTIONS_GROUP_DELIMITER_LEFT << indexA.first << PROGRAMOPTIONS_GROUP_DELIMITER_RIGHT << '\n';
 
-			for( const auto& IndexB : IndexA.second )
-				ConfigFile << IndexB.first << ' ' << PROGRAMOPTIONS_ASSIGNMENT_OPERATOR << ' ' << IndexB.second << '\n';
+			for( const auto& indexB : indexA.second )
+				configFile << indexB.first << ' ' << PROGRAMOPTIONS_ASSIGNMENT_OPERATOR << ' ' << indexB.second << '\n';
 
-			ConfigFile << '\n';
+			configFile << '\n';
 		}
 }
 
-bool ProgramOptions::IsToggleOptionPresent( const string& TargetOption ) const
+bool ProgramOptions::isToggleOptionPresent( const string& targetOption ) const
 {
 	// Obtain locks.
 
@@ -229,10 +236,10 @@ bool ProgramOptions::IsToggleOptionPresent( const string& TargetOption ) const
 
 	// Report whether or not specified toggle option is present to calling routine.
 
-		return( ToggleOptions.count( TargetOption ) != 0 );
+		return( toggleOptions.count( targetOption ) != 0 );
 }
 
-bool ProgramOptions::IsCommandOptionPresent( const string& TargetOption ) const
+bool ProgramOptions::isCommandOptionPresent( const string& targetOption ) const
 {
 	// Obtain locks.
 
@@ -240,10 +247,10 @@ bool ProgramOptions::IsCommandOptionPresent( const string& TargetOption ) const
 
 	// Report whether or not specified command option is present to calling routine.
 
-		return( CommandOptions.count( TargetOption ) != 0 );
+		return( commandOptions.count( targetOption ) != 0 );
 }
 
-string ProgramOptions::GetConfigOption( const string& TargetOption ) const
+string ProgramOptions::getConfigOption( const string& targetOption ) const
 {
 	// Obtain locks.
 
@@ -251,33 +258,44 @@ string ProgramOptions::GetConfigOption( const string& TargetOption ) const
 
 	// Create local variables.
 
-		string Result;
-		string Key = TargetOption;
-		string Group = ExtractGroup( Key );
-		ConfigMap::const_iterator ConfigMapIterator;
-		StringMap::const_iterator StringMapIterator;
+		string result;
+		string key = targetOption;
+		string group = extractGroup( key );
+		ConfigMap::const_iterator configMapIterator;
+		StringMap::const_iterator stringMapIterator;
 
 	// Get specified config option value, with optional group, if it exists.
 
-		if( Key.length() )
+		if( key.length() )
 		{
-			ConfigMapIterator = ConfigOptions.find( Group );
+			configMapIterator = configOptions.find( group );
 
-			if( ConfigMapIterator != ConfigOptions.end() )
+			if( configMapIterator != configOptions.end() )
 			{
-				StringMapIterator = ConfigMapIterator->second.find( Key );
+				stringMapIterator = configMapIterator->second.find( key );
 
-				if( StringMapIterator != ConfigMapIterator->second.end() )
-					Result = StringMapIterator->second;
+				if( stringMapIterator != configMapIterator->second.end() )
+					result = stringMapIterator->second;
 			}
 		}
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
-void ProgramOptions::SetConfigOption( const string& TargetOption, const string& TargetValue, const bool DoCreate )
+const ProgramOptions::ConfigMap& ProgramOptions::getConfigOptions() const
+{
+	// Obtain locks.
+
+		SCOPED_READ_LOCK;
+
+	// Return non-mutable reference to underlying config map to calling routine.
+
+		return configOptions;
+}
+
+void ProgramOptions::setConfigOption( const string& targetOption, const string& newValue, const bool doCreate )
 {
 	// Obtain locks.
 
@@ -285,33 +303,44 @@ void ProgramOptions::SetConfigOption( const string& TargetOption, const string& 
 
 	// Create local variables.
 
-		string Key = TargetOption;
-		string Group = ExtractGroup( Key );
-		ConfigMap::iterator ConfigMapIterator;
-		StringMap::iterator StringMapIterator;
+		string key = targetOption;
+		string group = extractGroup( key );
+		ConfigMap::iterator configMapIterator;
+		StringMap::iterator stringMapIterator;
 
 	// Set specified config option value, with optional group, if it exists.
 
-		if( Key.length() )
+		if( key.length() )
 		{
-			if( DoCreate )
-				ConfigOptions[ Group ][ Key ] = TargetValue;
+			if( doCreate )
+				configOptions[ group ][ key ] = newValue;
 			else
 			{
-				ConfigMapIterator = ConfigOptions.find( Group );
+				configMapIterator = configOptions.find( group );
 
-				if( ConfigMapIterator != ConfigOptions.end() )
+				if( configMapIterator != configOptions.end() )
 				{
-					StringMapIterator = ConfigMapIterator->second.find( Key );
+					stringMapIterator = configMapIterator->second.find( key );
 
-					if( StringMapIterator != ConfigMapIterator->second.end() )
-						StringMapIterator->second = TargetValue;
+					if( stringMapIterator != configMapIterator->second.end() )
+						stringMapIterator->second = newValue;
 				}
 			}
 		}
 }
 
-void ProgramOptions::RemoveConfigOption( const string& TargetOption )
+void ProgramOptions::setConfigOptions( const ConfigMap& targetOptions )
+{
+	// Obtain locks.
+
+		SCOPED_WRITE_LOCK;
+
+	// Set underlying config map to specified config map.
+
+		configOptions = targetOptions;
+}
+
+void ProgramOptions::removeConfigOption( const string& targetOption )
 {
 	// Obtain locks.
 
@@ -319,33 +348,33 @@ void ProgramOptions::RemoveConfigOption( const string& TargetOption )
 
 	// Create local variables.
 
-		string Key = TargetOption;
-		string Group = ExtractGroup( Key );
-		ConfigMap::iterator ConfigMapIterator;
-		StringMap::iterator StringMapIterator;
+		string key = targetOption;
+		string group = extractGroup( key );
+		ConfigMap::iterator configMapIterator;
+		StringMap::iterator stringMapIterator;
 
 	// Remove specified config option, with optional group, if it exists.
 
-		if( Key.length() )
+		if( key.length() )
 		{
-			ConfigMapIterator = ConfigOptions.find( Group );
+			configMapIterator = configOptions.find( group );
 
-			if( ConfigMapIterator != ConfigOptions.end() )
+			if( configMapIterator != configOptions.end() )
 			{
-				StringMapIterator = ConfigMapIterator->second.find( Key );
+				stringMapIterator = configMapIterator->second.find( key );
 
-				if( StringMapIterator != ConfigMapIterator->second.end() )
+				if( stringMapIterator != configMapIterator->second.end() )
 				{
-					ConfigMapIterator->second.erase( StringMapIterator );
+					configMapIterator->second.erase( stringMapIterator );
 
-					if( ConfigMapIterator->second.empty() )
-						ConfigOptions.erase( ConfigMapIterator );
+					if( configMapIterator->second.empty() )
+						configOptions.erase( configMapIterator );
 				}
 			}
 		}
 }
 
-string ProgramOptions::GetPositionalOption( size_t TargetIndex ) const
+string ProgramOptions::getPositionalOption( size_t targetIndex ) const
 {
 	// Obtain locks.
 
@@ -353,7 +382,7 @@ string ProgramOptions::GetPositionalOption( size_t TargetIndex ) const
 
 	// Report either specified positional option value or an empty string to calling routine.
 
-		return( ( TargetIndex < PositionalOptions.size() ) ? PositionalOptions[ TargetIndex ] : "" );
+		return( ( targetIndex < positionalOptions.size() ) ? positionalOptions[ targetIndex ] : "" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -365,48 +394,48 @@ ProgramOptions::ProgramOptions()
 	// Do nothing.
 }
 
-void ProgramOptions::DeallocateImp()
+void ProgramOptions::deallocateImp()
 {
 	// Perform necessary cleanup.
 
-		if( !ToggleOptions.empty() )
-			ToggleOptions.clear();
+		if( !toggleOptions.empty() )
+			toggleOptions.clear();
 
-		if( !CommandOptions.empty() )
-			CommandOptions.clear();
+		if( !commandOptions.empty() )
+			commandOptions.clear();
 
-		if( !ConfigOptions.empty() )
-			ConfigOptions.clear();
+		if( !configOptions.empty() )
+			configOptions.clear();
 
-		if( !PositionalOptions.empty() )
-			PositionalOptions.clear();
+		if( !positionalOptions.empty() )
+			positionalOptions.clear();
 }
 
-string ProgramOptions::ExtractGroup( string& Target ) const
+string ProgramOptions::extractGroup( string& target ) const
 {
 	// Create local variables.
 
-		string Result = PROGRAMOPTIONS_GROUP_DEFAULT;
-		size_t Position = Null;
+		string result = PROGRAMOPTIONS_GROUP_DEFAULT;
+		size_t position = UNSET;
 
 	// Extract embedded group ID from specified string, if there is one.
 
-		STRIP_ALL_WHITESPACE( Target );
+		STRIP_ALL_WHITESPACE( target );
 
-		if( Target.length() )
+		if( target.length() )
 		{
-			Position = Target.find( PROGRAMOPTIONS_GROUP_KEY_SEPERATOR );
+			position = target.find( PROGRAMOPTIONS_GROUP_KEY_SEPARATOR );
 
-			if( ( Position != string::npos ) && ( Position > 0 ) && ( Position < ( Target.length() - 1 ) ) )
+			if( ( position != string::npos ) && ( position > 0 ) && ( position < ( target.length() - 1 ) ) )
 			{
-				Result = Target.substr( 0, Position );
-				Target = Target.substr( ( Position + 1 ) );
+				result = target.substr( 0, position );
+				target = target.substr( ( position + 1 ) );
 			}
 		}
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
 } // 'QMXStdLib' Namespace

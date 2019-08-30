@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Timer.cpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a timer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for a timer class.
   *
-  * @section Description
+  * @section TimerS0000 Description
   *
   * This source file defines the implementation for a timer class.
   *
-  * @section License
+  * @section TimerS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -51,6 +51,8 @@
 
 #include "../include/Timer.hpp"
 
+using namespace std;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,13 +66,20 @@ namespace QMXStdLib
 
 Timer::~Timer()
 {
-	// Perform necessary cleanup.
+	try
+	{
+		// Perform necessary cleanup.
 
-		if( Initialized )
-			Deallocate();
+			if( initialized )
+				deallocate();
+	}
+	catch( const exception& except )
+	{
+		// Do nothing.
+	}
 }
 
-bool Timer::IsRunning() const
+bool Timer::isRunning() const
 {
 	// Obtain locks.
 
@@ -78,10 +87,10 @@ bool Timer::IsRunning() const
 
 	// Report wether or not the timer is running to the calling routine.
 
-		return !LocalTimer.is_stopped();
+		return !localTimer.is_stopped();
 }
 
-void Timer::Toggle()
+void Timer::toggle()
 {
 	// Obtain locks.
 
@@ -89,13 +98,13 @@ void Timer::Toggle()
 
 	// Toggle the timer.
 
-		if( LocalTimer.is_stopped() )
-			LocalTimer.resume();
+		if( localTimer.is_stopped() )
+			localTimer.resume();
 		else
-			LocalTimer.stop();
+			localTimer.stop();
 }
 
-void Timer::Reset()
+void Timer::reset()
 {
 	// Obtain locks.
 
@@ -103,11 +112,11 @@ void Timer::Reset()
 
 	// Reset the timer.
 
-		LocalTimer.start();
-		LocalTimer.stop();
+		localTimer.start();
+		localTimer.stop();
 }
 
-real_t Timer::GetTime( Timer::TimeUnits Units ) const
+real_t Timer::getTime( Timer::TimeUnits units ) const
 {
 	// Obtain locks.
 
@@ -115,7 +124,7 @@ real_t Timer::GetTime( Timer::TimeUnits Units ) const
 
 	// Return elapsed time, in specified units, to calling routine.
 
-		return( LocalTimer.elapsed().wall / static_cast< real_t >( Units ) );
+		return( localTimer.elapsed().wall / static_cast< real_t >( units ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,19 +135,15 @@ Timer::Timer()
 {
 	// Initialize fields.
 
-		LocalTimer.start();
-		LocalTimer.stop();
+		localTimer.start();
+		localTimer.stop();
 }
 
-void Timer::OperatorAssignImp( const Object* Instance )
+void Timer::cloneImp( Timer::InstancePtr& target ) const
 {
-	// Create local variables.
+	// Assign data of 'this' to specified object.
 
-		const Timer* DInstance = dynamic_cast< const Timer* >( Instance );
-
-	// Assign specified object to 'this'.
-
-		LocalTimer = DInstance->LocalTimer;
+		target->localTimer = localTimer;
 }
 
 } // 'QMXStdLib' Namespace

@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 24FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 24FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a set of string utility functions.
   *
-  * @section Description
+  * @section StringH0000 Description
   *
   * This header file defines the interface for a set of string utility functions.
   *
-  * @section License
+  * @section StringH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -52,6 +52,9 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <codecvt>
+#include <boost/locale.hpp>
+
 #include "Base.hpp"
 #include "Mixins/Stringizable.hpp"
 #include "RAII/ScopedStackTrace.hpp"
@@ -67,153 +70,157 @@ namespace QMXStdLib
 // Start of the 'String' Namespace
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+  * @brief This is the namespace for all string utility functions.
+  */
+
 namespace String
 {
 
 /**
   * @brief This function converts the specified UTF-16 string to a UTF-8 string.
   *
-  * @param Target
+  * @param source
   * 	This is the UTF-16 string to convert.
   *
   * @return
   * 	A UTF-8 equivalent of the specified UTF-16 string.
   */
 
-std::string ToUTF8( const std::u16string& Target );
+std::string toUTF8( const std::u16string& source );
 
 /**
   * @brief This function converts the specified UTF-32 string to a UTF-8 string.
   *
-  * @param Target
+  * @param source
   * 	This is the UTF-32 string to convert.
   *
   * @return
   * 	A UTF-8 equivalent of the specified UTF-32 string.
   */
 
-std::string ToUTF8( const std::u32string& Target );
+std::string toUTF8( const std::u32string& source );
 
 /**
   * @brief This function converts the specified UTF-8 string to a UTF-16 string.
   *
-  * @param Target
+  * @param source
   * 	This is the UTF-8 string to convert.
   *
   * @return
   * 	A UTF-16 equivalent of the specified UTF-8 string.
   */
 
-std::u16string ToUTF16( const std::string& Target );
+std::u16string toUTF16( const std::string& source );
 
 /**
   * @brief This function converts the specified UTF-8 string to a UTF-32 string.
   *
-  * @param Target
+  * @param source
   * 	This is the UTF-8 string to convert.
   *
   * @return
   * 	A UTF-32 equivalent of the specified UTF-8 string.
   */
 
-std::u32string ToUTF32( const std::string& Target );
+std::u32string toUTF32( const std::string& source );
 
 /**
   * @brief This function determines if the specified string is all whitepace or not.
   *
-  * @param Target
+  * @param source
   * 	This is the string to check.
   *
   * @return
   * 	A boolean value of 'true' if the specified string is all whitespace, and 'false' otherwise.
   */
 
-bool IsAllWhitespace( const std::string& Target );
+bool isAllWhitespace( const std::string& source );
 
 /**
   * @brief This function strips all occurrences of the specified substring from the specified string.
   *
-  * @param Target
+  * @param target
   * 	This is the string from which to strip all occurrences of the specified substring.
   *
-  * @param Substring
+  * @param substring
   * 	This is the substring to strip from the specified string.
   *
-  * @param ModifyTarget
+  * @param modifyTarget
   * 	This is a flag that determines if the target string is modified.
   *
   * @return
   * 	The target string with all occurrences of the specified substring stripped.
   */
 
-std::string Strip( std::string& Target, const std::string& Substring, bool ModifyTarget = false );
+std::string strip( std::string& target, const std::string& substring, bool modifyTarget = false );
 
 /**
   * @brief This function converts the specified string too all uppercase.
   *
   * Before using this function, the global locale must be set to a locale generated with 'QMXStdLib::Utility::GenerateLocale'.
   *
-  * @param Target
+  * @param target
   * 	This is the string to convert to uppercase.
   *
-  * @param ModifyTarget
+  * @param modifyTarget
   * 	This is a flag that determines if the target string is modified.
   *
   * @return
   * 	The uppercased version of the target string.
   */
 
-std::string ToUpper( std::string& Target, bool ModifyTarget = false );
+std::string toUpper( std::string& target, bool modifyTarget = false );
 
 /**
   * @brief This function converts the specified string too all lowercase.
   *
   * Before using this function, the global locale must be set to a locale generated with 'QMXStdLib::Utility::GenerateLocale'.
   *
-  * @param Target
+  * @param target
   * 	This is the string to convert to lowercase.
   *
-  * @param ModifyTarget
+  * @param modifyTarget
   * 	This is a flag that determines if the target string is modified.
   *
   * @return
   * 	The lowercased version of the target string.
   */
 
-std::string ToLower( std::string& Target, bool ModifyTarget = false );
+std::string toLower( std::string& target, bool modifyTarget = false );
 
 /**
   * @brief This function replaces all occurrences of the 'Find' substring with the 'Replace' substring in the specified string.
   *
-  * @param Target
+  * @param target
   * 	This is the string to use for the find/replace operation.
   *
-  * @param Find
+  * @param find
   * 	This is the substring for which all occurrences will be replaced.
   *
-  * @param Replace
+  * @param replace
   * 	This is the substring with which to replace all occurrences of the 'Find' substring.
   *
-  * @param ModifyTarget
+  * @param modifyTarget
   * 	This is a flag that determines if the target string is modified.
   *
   * @return
   * 	The target string with all occurrences of the specified 'Find' substring replaced with the 'Replace' substring.
   */
 
-std::string FindReplace( std::string& Target, const std::string& Find, const std::string& Replace, bool ModifyTarget = false );
+std::string findReplace( std::string& target, const std::string& find, const std::string& replace, bool modifyTarget = false );
 
 /**
   * @brief This function splits the specified string into tokens.
   *
-  * @param Tokens
+  * @param target
   * 	This is the string deque into which the tokens are placed.
   *
-  * @param Target
+  * @param source
   * 	This is the string to split into tokens.
   */
 
-void Tokenize( StringDeque& Tokens, const std::string& Target );
+void tokenize( StringDeque& target, const std::string& source );
 
 /**
   * @brief This function defines the structure for a string to numeric value converter.
@@ -221,33 +228,36 @@ void Tokenize( StringDeque& Tokens, const std::string& Target );
   * If converting to a boolean value, the string must be exactly (case-sensitive) one of the following: "true", "yes", "false", "no"; otherwise, the value
   * will always be 'false'.  Using an 'NType' of 'int8' or 'uint8' can have undesired results, so it is recommended to substitute 'int32' in those cases.
   *
-  * @param Target
+  * @param source
   * 	This is the string to convert into a numeric value.
   *
-  * @param Base
+  * @param base
   * 	This is the numeric base to use during the conversion; if it is out-of-range, it will be set to decimal.
   *
   * @return
   * 	A numeric representation of the specified string.
   */
 
-template< typename NType > NType ToValue( const std::string& Target, Stringizable::NumericBase Base = Stringizable::Decimal )
+template< typename NType > NType toValue( const std::string& source, Stringizable::NumericBase base = Stringizable::DECIMAL )
 {
 	// Create local variables.
 
-		NType Result = Null;
-		std::istringstream Value( Target );
+		NType result = UNSET;
+		std::string targetSource = ( source.substr( 0, 2 ) == "0b" ) ? source.substr( 2 ) : source;
+		std::istringstream value( source );
 
 	// Convert the specified string to a numerical value.
 
 		if( typeid( NType ) == typeid( bool ) )
-			Result = ( ( Target == "true" ) || ( Target == "yes" ) ) ? true : false;
+			result = ( ( source == "true" ) || ( source == "yes" ) ) ? true : false;
+		else if( base == Stringizable::BINARY )
+			result = static_cast< NType >( std::bitset< ( sizeof( NType ) * 8 ) >( targetSource ).to_ullong() );
 		else
-			Value >> ( ( Base == Stringizable::Octal ) ? std::oct : ( ( Base == Stringizable::Hexidecimal ) ? std::hex : std::dec ) ) >> Result;
+			value >> ( ( base == Stringizable::OCTAL ) ? std::oct : ( ( base == Stringizable::HEXIDECIMAL ) ? std::hex : std::dec ) ) >> result;
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
 } // 'String' Namespace

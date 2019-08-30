@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Timer.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a timer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29JAN19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a timer class.
   *
-  * @section Description
+  * @section TimerH0000 Description
   *
   * This header file defines the interface for a timer class.
   *
-  * @section License
+  * @section TimerH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -54,6 +54,7 @@
 
 #include "Base.hpp"
 #include "Object.hpp"
+#include "RAII/ScopedLock.hpp"
 #include "RAII/ScopedStackTrace.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +84,7 @@ class Timer : public Object< Timer >
 {
 	// Friend Classes
 
-		friend class Object;
+		friend class Object< Timer >;
 
 public:
 
@@ -95,10 +96,10 @@ public:
 
 		enum TimeUnits : unsigned long long int
 		{
-			Milliseconds = 1000000ull,
-			Seconds = 1000000000ull,
-			Minutes = 60000000000ull,
-			Hours = 3600000000000ull
+			MILLISECONDS = 1000000ull,
+			SECONDS = 1000000000ull,
+			MINUTES = 60000000000ull,
+			HOURS = 3600000000000ull
 		};
 
 	// Destructor
@@ -107,7 +108,7 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		virtual ~Timer();
+		~Timer();
 
 	// Public Methods
 
@@ -118,19 +119,19 @@ public:
 		  * 	A boolean value of 'true' if the timer is running, and 'false' otherwise.
 		  */
 
-		bool IsRunning() const;
+		bool isRunning() const;
 
 		/**
 		  * @brief This method toggles the timer.
 		  */
 
-		void Toggle();
+		void toggle();
 
 		/**
 		  * @brief this method resets the timer.
 		  */
 
-		void Reset();
+		void reset();
 
 		/**
 		  * @brief This method gets the elapsed time in the specified units.
@@ -142,7 +143,7 @@ public:
 		  * 	The elapsed time in the specified units.
 		  */
 
-		real_t GetTime( TimeUnits Units = Seconds ) const;
+		real_t getTime( TimeUnits units = SECONDS ) const;
 
 private:
 
@@ -152,7 +153,7 @@ private:
 		  * @brief This is the timer object.
 		  */
 
-		boost::timer::cpu_timer LocalTimer;
+		boost::timer::cpu_timer localTimer;
 
 	// Private Constructors
 
@@ -165,22 +166,13 @@ private:
 	// Private Methods
 
 		/**
-		  * @brief This is the overridden implementation for the 'operator=' method.
-		  *
-		  * @param Instance
-		  * 	This is the 'Object' pointer with which to set 'this'.
-		  */
-
-		void OperatorAssignImp( const Object* Instance );
-
-		/**
 		  * @brief This is the overridden implementation for the 'Clone' method.
 		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
+		  * @param Target
+		  * 	This is the object pointer to use when setting.
 		  */
 
-		CLONE_IMP( Timer )
+		void cloneImp( InstancePtr& target ) const;
 };
 
 } // 'QMXStdLib' Namespace

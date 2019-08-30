@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Object.hpp
-// Robert M. Baker | Created : 05JAN12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 05JAN12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a generic base class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 05JAN12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 29AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a generic base class.
   *
-  * @section Description
+  * @section ObjectH0000 Description
   *
   * This header file defines the interface for a generic base class.
   *
-  * @section License
+  * @section ObjectH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -54,14 +54,8 @@
 
 #include "Base.hpp"
 #include "Mixins/Lockable.hpp"
+#include "RAII/ScopedLock.hpp"
 #include "RAII/ScopedStackTrace.hpp"
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static Macros
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define CLONE_IMP(x)   x::PointerType CloneImp() const { x::PointerType Result( new x() );  *Result = *this;  return Result; }
-#define CLONE_IMP_T(x) typename x::PointerType CloneImp() const { typename x::PointerType Result( new x() );  *Result = *this;  return Result; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -127,11 +121,11 @@ public:
 		  * 	A boolean value of 'true' if this object is initialized, and 'false' otherwise.
 		  */
 
-		bool IsObjectInitialized() const
+		bool isObjectInitialized() const
 		{
 			// Report wether or not this object is initialized to calling routine.
-			
-				return Initialized;
+
+				return initialized;
 		}
 
 		/**
@@ -141,7 +135,7 @@ public:
 		  * 	If the object instance was already initialized.
 		  */
 
-		void Allocate()
+		void allocate()
 		{
 			// Obtain locks.
 
@@ -149,13 +143,13 @@ public:
 
 			// Create scoped stack traces.
 
-				SCOPED_STACK_TRACE( "Object::Allocate", 0000 );
+				SCOPED_STACK_TRACE( "Object::allocate", 0000 );
 
 			// Perform necessary initialization.
 
-				QMX_ASSERT( !Initialized, "QMXStdLib", "Object::Allocate", "00000000", "" );
-				AllocateImp();
-				Initialized = true;
+				QMX_ASSERT( !initialized, "QMXStdLib", "Object::Allocate", "00000000", "" );
+				allocateImp();
+				initialized = true;
 		}
 
 		/**
@@ -165,7 +159,7 @@ public:
 		  * 	If the object instance was not initialized.
 		  */
 
-		void Deallocate()
+		void deallocate()
 		{
 			// Obtain locks.
 
@@ -173,23 +167,23 @@ public:
 
 			// Create scoped stack traces.
 
-				SCOPED_STACK_TRACE( "Object::Deallocate", 0000 );
+				SCOPED_STACK_TRACE( "Object::deallocate", 0000 );
 
 			// Perform necessary cleanup.
 
-				QMX_ASSERT( Initialized, "QMXStdLib", "Object::Deallocate", "00000001", "" );
-				DeallocateImp();
-				Initialized = false;
+				QMX_ASSERT( initialized, "QMXStdLib", "Object::deallocate", "00000001", "" );
+				deallocateImp();
+				initialized = false;
 		}
 
 		/**
 		  * @brief This is the public properties accessor for this class.
 		  *
-		  * @param Target
+		  * @param target
 		  * 	This is a 'PPType' structure which will be set using the public properties of 'this'.
 		  */
 
-		void Get( PPType& Target ) const
+		void get( PPType& target ) const
 		{
 			// Obtain locks.
 
@@ -197,17 +191,17 @@ public:
 
 			// Set specified 'PPType' structure using the public properties of 'this'.
 
-				Target = Properties;
+				target = properties;
 		}
 
 		/**
 		  * @brief This is the public properties mutator for this class.
 		  *
-		  * @param Target
+		  * @param source
 		  * 	This is a 'PPType' structure which will be used to set the public properties of 'this'.
 		  */
 
-		void Set( const PPType& Target )
+		void set( const PPType& source )
 		{
 			// Obtain locks.
 
@@ -215,51 +209,68 @@ public:
 
 			// Set public properties of 'this' using the specified 'PPType' structure.
 
-				Properties = Target;
-		}
-
-		/**
-		  * @brief This method creates a copy of this object.
-		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
-		  */
-
-		PointerType Clone() const
-		{
-			// Obtain locks.
-
-				SCOPED_READ_LOCK;
-
-			// Return copy of this object to calling routine.
-
-				return CloneImp();
+				properties = source;
 		}
 
 		/**
 		  * @brief This method creates an instance of this class.
 		  *
-		  * @param DoAllocate
-		  * 	This is a boolean value which determines if 'Allocate' is called on the created instance.
+		  * @param doAllocate
+		  * 	This is a boolean value which determines if 'allocate' is called on the created instance.
 		  *
 		  * @return
 		  * 	A pointer to the newly created instance.
+		  *
+		  * @exception QMXException
+		  * 	If the an error occurs during allocation.
 		  */
 
-		static PointerType Create( const bool DoAllocate = true )
+		static InstancePtr create( const bool doAllocate = true )
 		{
+			// Create scoped stack traces.
+
+				SCOPED_STACK_TRACE( "Object::create", 0000 );
+
 			// Create local variables.
 
-				PointerType Result( new DType() );
+				InstancePtr result( ( new DType() ) );
 
-			// Initialize new instance, if 'DoAllocate' is 'true'.
+			// Initialize new instance, if 'doAllocate' is 'true'.
 
-				if( DoAllocate )
-					Result->Allocate();
+				if( doAllocate )
+					result->allocate();
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
+		}
+
+		/**
+		  * @brief This method assigns the data of 'this' to the specified object.
+		  *
+		  * If the specified object pointer is the same as 'this', this method will have no effect.
+		  *
+		  * @param target
+		  * 	This is the object pointer to use when setting.
+		  */
+
+		void clone( InstancePtr& target ) const
+		{
+			// Perform abort check.
+
+				if( target.get() == this )
+					return;
+
+			// Obtain locks.
+
+				SCOPED_READ_LOCK;
+				SCOPED_WRITE_LOCK_X( target, 0000 );
+
+			// Assign data of 'this' to specified object.
+
+				target->initialized = initialized;
+				target->properties = properties;
+				cloneImp( target );
 		}
 
 protected:
@@ -270,13 +281,13 @@ protected:
 		  * @brief This is the flag used to determine initialization state.
 		  */
 
-		bool Initialized;
+		bool initialized;
 
 		/**
 		  * @brief These are the public properties of this class.
 		  */
 
-		PPType Properties;
+		PPType properties;
 
 	// Protected Methods
 
@@ -288,37 +299,7 @@ protected:
 		{
 			// Initialize fields.
 
-				Initialized = false;
-		}
-
-	// Protected Overloaded Operators
-
-		/**
-		  * @brief This is the default assignment-operator, which is made protected to prevent direct copying.
-		  *
-		  * @param Instance
-		  * 	This is the 'Object' instance with which to set 'this'.
-		  *
-		  * @return
-		  * 	A reference to this object.
-		  */
-
-		Object& operator=( const Object& Instance )
-		{
-			// Obtain locks.
-
-				SCOPED_WRITE_LOCK;
-				SCOPED_READ_LOCK_X( Instance, 0000 );
-
-			// Assign specified object to 'this'.
-
-				Initialized = Instance.Initialized;
-				Properties = Instance.Properties;
-				OperatorAssignImp( &Instance );
-
-			// Return a reference to this object to calling routine.
-
-				return *this;
+				initialized = false;
 		}
 
 private:
@@ -326,47 +307,33 @@ private:
 	// Private Methods
 
 		/**
-		  * @brief This is the overridable implementation for the 'Allocate' method.
+		  * @brief This is the overridable implementation for the 'allocate' method.
 		  */
 
-		virtual void AllocateImp()
+		virtual void allocateImp()
 		{
 			// Do nothing.
 		}
 
 		/**
-		  * @brief This is the overridable implementation for the 'Deallocate' method.
+		  * @brief This is the overridable implementation for the 'deallocate' method.
 		  */
 
-		virtual void DeallocateImp()
+		virtual void deallocateImp()
 		{
 			// Do nothing.
 		}
 
 		/**
-		  * @brief This is the overridable implementation for the 'operator=' method.
+		  * @brief This is the overridable implementation for the 'clone' method.
 		  *
-		  * @param Instance
-		  * 	This is the 'Object' pointer with which to set 'this'.
+		  * @param target
+		  * 	This is the object pointer to use when setting.
 		  */
 
-		virtual void OperatorAssignImp( const Object* Instance )
+		virtual void cloneImp( InstancePtr& target ) const
 		{
 			// Do nothing.
-		}
-
-		/**
-		  * @brief This is the overridable implementation for the 'Clone' method.
-		  *
-		  * @return
-		  * 	A pointer to a copy of this object.
-		  */
-
-		virtual PointerType CloneImp() const
-		{
-			// Return a null pointer to calling routine.
-
-				return PointerType( nullptr );
 		}
 };
 

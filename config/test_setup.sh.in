@@ -1,11 +1,11 @@
 #! /bin/bash
 ################################################################################################################################################################
 # test_setup.sh
-# Robert M. Baker | Created : 15FEB16 | Last Modified : 27FEB16 by Robert M. Baker
-# Version : 1.1.2
+# Robert M. Baker | Created : 15FEB16 | Last Modified : 26AUG19 by Robert M. Baker
+# Version : 2.0.0
 # This is a bash script for setup of the test directory for 'QMXStdLibTest'.
 ################################################################################################################################################################
-# Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+# Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 #
 # This file is part of 'QMXStdLib'.
 #
@@ -19,8 +19,28 @@
 ################################################################################################################################################################
 
 ################################################################################################################################################################
+# Variables
+################################################################################################################################################################
+
+platform=${1}
+
+################################################################################################################################################################
 # Constants
 ################################################################################################################################################################
+
+NAME="test_setup.sh"
+VERSION="1.0.0"
+YEARS="2011-2019"
+COMPANY="QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership"
+AUTHOR="Robert M. Baker"
+
+COLOR_ERROR=${FG_I_RED}
+COLOR_INFO=${FG_I_GREEN}
+COLOR_TEXT=${FG_I_WHITE}
+
+OPTIONS_SHORT="hv"
+OPTIONS_LONG="help,version"
+MIN_ARGS=1
 
 ASSIGNMENT="@PROGRAMOPTIONS_ASSIGNMENT_OPERATOR@"
 COMMENT="@PROGRAMOPTIONS_COMMENT_INITIATOR@"
@@ -29,42 +49,67 @@ DELIMITER_RIGHT="@PROGRAMOPTIONS_GROUP_DELIMITER_RIGHT@"
 DEFAULT_GROUP="@PROGRAMOPTIONS_GROUP_DEFAULT@"
 
 ################################################################################################################################################################
-# Variables
-################################################################################################################################################################
-
-Platform=${1}
-Mode=${2}
-
-################################################################################################################################################################
 # Functions
 ################################################################################################################################################################
 
-DoAbort()
+doAbort()
 {
-	# Display appropriate abort message.
+	# Display specified abort message.
 
 		if [[ ${2} > 0 ]]; then
-			echo -e "setup.sh: ${FG_RED}${1}${RESET}"
+			echo -e "${COLOR_ERROR}Error: ${1}${RESET}"
 		else
-			echo -e "setup.sh: ${1}"
+			echo -e "${COLOR_INFO}Info: ${1}${RESET}"
 		fi
 
-		echo -e "Usage: setup.sh PLATFORM"
-		echo -e "Example: install.sh lin"
 		echo -e
-		echo -e "   -h, --help        Display this help text and exit."
-		echo -e
-		echo -e "   'PLATFORM' must be one of: 'lin' (GNU Linux) or 'mac' (Apple Mac OS X)"
 
-	# Exit script with specified abort code.
+	# Exit script with specified code.
 
 		exit ${2}
 }
 
-DoSetupLin()
+doHelp()
+{
+	# Display help.
+
+		echo -e "${COLOR_INFO}Usage: ${NAME} [OPTION]... <PLATFORM>"
+		echo -e "Sets up the test directory for 'QMXStdLibTest'."
+		echo -e
+		echo -e "  -h, --help           : Display this help and exit."
+		echo -e "  -v, --version        : Output version information and exit."
+		echo -e
+		echo -e "'PLATFORM' must be one of: 'lin' (GNU Linux) or 'mac' (Apple macOS)"
+		echo -e "${RESET}"
+
+	# Exit script.
+
+		exit 0
+}
+
+doVersion()
+{
+	# Display version information.
+
+		echo -e "${COLOR_INFO}${NAME} V${VERSION}"
+		echo -e "Copyright (C) ${YEARS} ${COMPANY}"
+		echo -e "License LGPLv3+: GNU LGPL version 3 or later <https://www.gnu.org/licenses/lgpl.html>."
+		echo -e "This is free software: you are free to change and redistribute it."
+		echo -e "There is NO WARRANTY, to the extent permitted by law."
+		echo -e
+		echo -e "Written by ${AUTHOR}"
+		echo -e ${RESET}
+
+	# Exit script.
+
+		exit 0
+}
+
+doSetupLin()
 {
 	# Perform setup on a GNU Linux platform.
 
+		if [[ ! -e TestDirectory ]]; then mkdir TestDirectory; fi
 		cd TestDirectory
 		mkdir EmptyTestDirectory
 		mkdir -p NonEmptyTestDirectory/NonEmptyTestSubdirectory
@@ -91,35 +136,52 @@ DoSetupLin()
 		printf "\n" >> Test.cfg
 }
 
-DoSetupMac()
+doSetupMac()
 {
-	# Perform setup on an Apple Mac OS X platform.
+	# Perform setup on an Apple macOS platform.
 
-		echo -e "Stub: Perform Apple Mac OS X setup."
+		echo -e "Stub: Perform Apple macOS setup."
 }
 
 ################################################################################################################################################################
-# Arguments Check
+# Process Options and Arguments
 ################################################################################################################################################################
 
-if [[ ${#} == 0 ]]; then
-	DoAbort "No arguments specified!" 1
-elif [[ ( ${1} == "-h" ) || ( ${1} == "--help" ) ]]; then
-	DoAbort "Display help text and exit." 0
-elif [[ ( ${Platform} != "lin" ) && ( ${Platform} != "mac" ) ]]; then
-	DoAbort "Unsupported platform ( '${Platform}' ) specified!" 2
+options=$(getopt -o ${OPTIONS_SHORT} -l ${OPTIONS_LONG} -q -- "$@")
+eval set -- "${options}"
+
+while true; do
+	case "${1}" in
+		"-h"|"--help")
+			doHelp
+		;;
+		"-v"|"--version")
+			doVersion
+		;;
+		"--")
+			shift 1
+			break
+		;;
+		*)
+			doAbort "Unhandled exception!" 1
+		;;
+	esac
+done
+
+if [[ ${#} -lt ${MIN_ARGS} ]]; then
+	doAbort "Too few arguments specified!" 2
+elif [[ ( ${platform} != "lin" ) && ( ${platform} != "mac" ) ]]; then
+	doAbort "Unsupported platform ('${Platform}') specified!" 3
 fi
 
 ################################################################################################################################################################
 # Script Body
 ################################################################################################################################################################
 
-# Setup based on the specified platform.
-
-if [[ ${Platform} == "lin" ]]; then
-	DoSetupLin
-elif [[ ${Platform} == "mac" ]]; then
-	DoSetupMac
+if [[ ${platform} == "lin" ]]; then
+	doSetupLin
+elif [[ ${platform} == "mac" ]]; then
+	doSetupMac
 fi
 
 ################################################################################################################################################################

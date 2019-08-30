@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIO.hpp
-// Robert M. Baker | Created : 12DEC11 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 12DEC11 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a console I/O class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 12DEC11
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a console I/O class.
   *
-  * @section Description
+  * @section ConsoleIOH0000 Description
   *
   * This header file defines the interface for a console I/O class.
   *
-  * @section License
+  * @section ConsoleIOH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -52,17 +52,20 @@
 // Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <cctype>
+
 #include "Base.hpp"
 #include "Numeric.hpp"
-#include "Mixins/NonCopyable.hpp"
+#include "RAII/ScopedLock.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define COUT QMXStdLib::ConsoleIO::SynchronizedStream( QMXStdLib::ConsoleIO::OutputStream )
-#define CERR QMXStdLib::ConsoleIO::SynchronizedStream( QMXStdLib::ConsoleIO::ErrorStream )
-#define CLOG QMXStdLib::ConsoleIO::SynchronizedStream( QMXStdLib::ConsoleIO::LogStream )
+#define COUT           QMXStdLib::ConsoleIO::SynchronizedStream( QMXStdLib::ConsoleIO::OUTPUT_STREAM )
+#define CERR           QMXStdLib::ConsoleIO::SynchronizedStream( QMXStdLib::ConsoleIO::ERROR_STREAM )
+#define CLOG           QMXStdLib::ConsoleIO::SynchronizedStream( QMXStdLib::ConsoleIO::LOG_STREAM )
+#define WAIT_FOR_ENTER SINGLE_STATEMENT( COUT << "Press 'Enter' to continue...";  std::cin.peek();  FLUSH_ISTREAM( std::cin ); )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -84,7 +87,7 @@ namespace QMXStdLib
   *
   * Platform Independent     : Yes<br>
   * Architecture Independent : Yes<br>
-  * Thread-Safe              : Partially (The 'GetInput' method is not thread-safe.)
+  * Thread-Safe              : Partially (The 'getInput' method is not thread-safe.)
   */
 
 class ConsoleIO
@@ -103,10 +106,10 @@ public:
 
 		enum StreamType
 		{
-			OutputStream,
-			ErrorStream,
-			LogStream,
-			StreamCount
+			OUTPUT_STREAM,
+			ERROR_STREAM,
+			LOG_STREAM,
+			STREAM_COUNT
 		};
 
 		/**
@@ -115,11 +118,11 @@ public:
 
 		enum InputType
 		{
-			Minimum,
-			Maximum,
-			Range,
-			TwoChoice,
-			MultipleChoice
+			MINIMUM,
+			MAXIMUM,
+			RANGE,
+			TWO_CHOICE,
+			MULTIPLE_CHOICE
 		};
 
 		/**
@@ -135,33 +138,28 @@ public:
 				/**
 				  * @brief This is the copy constructor, which is deleted to prevent copying.
 				  *
-				  * @param Instance
+				  * @param instance
 				  * 	N/A
 				  */
 
-				SynchronizedStream( const SynchronizedStream& Instance ) = delete;
+				SynchronizedStream( const SynchronizedStream& instance ) = delete;
 
 				/**
 				  * @brief This is the constructor which accepts a stream type.
 				  *
-				  * @param TargetType
+				  * @param sourceType
 				  * 	This is the stream type to use for all operations.
 				  */
 
-				SynchronizedStream( StreamType TargetType )
+				SynchronizedStream( StreamType sourceType )
 				{
-					// Create local variables.
-
-						UniqueLock WriteLockTarget( ConsoleIO::StreamMutexes[ TargetType ], boost::defer_lock );
-
 					// Initialize fields.
 
-						WriteLock.swap( WriteLockTarget );
-						Type = TargetType;
+						type = sourceType;
 
 					// Acquire lock.
 
-						WriteLock.lock();
+						ConsoleIO::streamMutexes[ type ].lock();
 				}
 
 			// Destructor
@@ -170,11 +168,11 @@ public:
 				  * @brief This is the destructor.
 				  */
 
-				virtual ~SynchronizedStream()
+				~SynchronizedStream()
 				{
 					// Release lock.
 
-						WriteLock.unlock();
+						ConsoleIO::streamMutexes[ type ].unlock();
 				}
 
 			// Public Overloaded Operators
@@ -182,58 +180,41 @@ public:
 				/**
 				  * @brief This is the default assignment-operator, which is deleted to prevent copying.
 				  *
-				  * @param Instance
+				  * @param instance
 				  * 	N/A
 				  *
 				  * @return
 				  * 	N/A
 				  */
 
-				SynchronizedStream& operator=( const SynchronizedStream& Instance ) = delete;
+				SynchronizedStream& operator=( const SynchronizedStream& instance ) = delete;
 
 				/**
 				  * @brief This is the overloaded bitwise left shift operator, which redirects inputs to the specified console stream.
 				  *
 				  * If the specified stream is disabled, the operation will be ignored.
 				  *
-				  * @param RHS
+				  * @param rhs
 				  * 	This is the right-hand-side operand.
 				  *
 				  * @return
 				  * 	A mutable reference to this object.
 				  */
 
-				template< typename DType > SynchronizedStream& operator<<( DType RHS )
+				template< typename DType > SynchronizedStream& operator<<( DType rhs )
 				{
-					// Perform precondition checks.
+					// Perform abort check.
 
-						if( ConsoleIO::IsStreamDisabled[ Type ] )
+						if( ConsoleIO::isStreamDisabled[ type ] )
 							return *this;
 
 					// Redirect input to specified console stream.
 
-						switch( Type )
+						switch( type )
 						{
-							case ConsoleIO::OutputStream:
-							{
-								std::cout << RHS;
-
-								break;
-							}
-
-							case ConsoleIO::ErrorStream:
-							{
-								std::cerr << RHS;
-
-								break;
-							}
-
-							case ConsoleIO::LogStream:
-							{
-								std::clog << RHS;
-
-								break;
-							}
+							case ConsoleIO::OUTPUT_STREAM: { std::cout << rhs;  break; }
+							case ConsoleIO::ERROR_STREAM: { std::cerr << rhs;  break; }
+							case ConsoleIO::LOG_STREAM: { std::clog << rhs;  break; }
 
 							default:
 							{
@@ -254,13 +235,7 @@ public:
 					  * @brief This is the stream type to use.
 					  */
 
-					StreamType Type;
-
-					/**
-					  * @brief This is the lock object to use when acquiring/releasing a lock.
-					  */
-
-					UniqueLock WriteLock;
+					StreamType type;
 		};
 
 	// Public Methods
@@ -268,43 +243,43 @@ public:
 		/**
 		  * @brief This method gets the current stream disabled flag for the specified type.
 		  *
-		  * @param Type
+		  * @param type
 		  * 	This is the stream type to use when getting the current stream disabled flag.
 		  *
 		  * @return
 		  * 	A boolean value of 'true' if the specified stream type is disabled, and 'false' otherwise.
 		  */
 
-		static bool GetStreamDisabled( StreamType Type )
+		static bool getStreamDisabled( StreamType type )
 		{
 			// Obtain locks.
 
-				SharedLock ScopedReadLock( LocalMutex );
+				ScopedLock readLock( ScopedLock::READ, localMutex );
 
 			// Return stream disabled flag for specified type to calling routine.
 
-				return IsStreamDisabled[ Type ];
+				return isStreamDisabled[ type ];
 		}
 
 		/**
 		  * @brief This method sets the stream disabled flag for the specified type to the specified value.
 		  *
-		  * @param Type
+		  * @param type
 		  * 	This is the stream type to use when setting the stream disabled flag.
 		  *
-		  * @param Value
+		  * @param value
 		  * 	This is the target value for the specified stream disabled flag.
 		  */
 
-		static void SetStreamDisabled( StreamType Type, bool Value )
+		static void setStreamDisabled( StreamType type, bool value )
 		{
 			// Obtain locks.
 
-				UniqueLock ScopedWriteLock( LocalMutex );
+				ScopedLock writeLock( ScopedLock::WRITE, localMutex );
 
 			// Set stream disabled flag of specified type to specified value.
 
-				IsStreamDisabled[ Type ] = Value;
+				isStreamDisabled[ type ] = value;
 		}
 
 		/**
@@ -313,100 +288,102 @@ public:
 		  * Only numeric primitive types (including 'char') are supported for the input types; using any other type, such as 'std::string', will have undefined
 		  * results.
 		  *
-		  * @param Min
+		  * @param min
 		  * 	This is either the minimum value or one of two choices depending on the input type; if it is greater-than or equal-to 'max' and the input type is
-		  * 	'Range', it will be set to 'max - 1'.
+		  * 	'RANGE', it will be set to 'max - 1'.
 		  *
-		  * @param Max
+		  * @param max
 		  * 	This is either the maximum value or one of two choices depending on the input type; if it is less-than or equal-to 'min' and the input type is
-		  * 	'Range', 'min' will be set to 'max - 1'.
+		  * 	'RANGE', 'min' will be set to 'max - 1'.
 		  *
-		  * @param Type
+		  * @param type
 		  * 	This value determines how the user input will be processed.
 		  *
-		  * @param Choices
-		  * 	This is a string containing all valid choices if the input type is set to 'MultipleChoice'; if it is empty, it will be set to the default choices;
+		  * @param choices
+		  * 	This is a string containing all valid choices if the input type is set to 'MULTIPLE_CHOICE'; if it is empty, it will be set to the default choices;
 		  * 	the proper format for this string is single characters separated by a comma-space combo and optionally having the word 'or' before the last choice
 		  * 	(e.g. "A, B, C, D, or E").
 		  *
-		  * @param Prompt
-		  * 	This is a string containing the input prompt to display to the user; if 'min' is greater-than or equal-to 'max' and the input type is 'Range', or it
+		  * @param prompt
+		  * 	This is a string containing the input prompt to display to the user; if 'min' is greater-than or equal-to 'max' and the input type is 'RANGE', or it
 		  *   is empty, it will be set to a default prompt.
 		  *
-		  * @param Error
+		  * @param error
 		  * 	This is a string containing the error message to display on invalid input from the user; if 'min' is greater-than or equal-to 'max' and the input
-		  * 	type is 'Range', or it is empty, it will be set to a default message.
+		  * 	type is 'RANGE', or it is empty, it will be set to a default message.
 		  *
 		  * @return
 		  * 	The value input by the user.
 		  */
 
-		template< typename DType > static DType GetInput( DType Min,
-		                                                  DType Max,
-		                                                  InputType Type = CONSOLEIO_DEFAULT_INPUT_TYPE,
-		                                                  const std::string& Choices = "",
-		                                                  const std::string& Prompt = "",
-		                                                  const std::string& Error = "" )
+		template< typename DType > static DType getInput(
+			DType min,
+			DType max,
+			InputType type = CONSOLEIO_DEFAULT_INPUT_TYPE,
+			const std::string& choices = "",
+			const std::string& prompt = "",
+			const std::string& error = ""
+		)
 		{
 			// Create local variables.
 
-				DType Result;
-				bool Done = false;
-				std::ostringstream ChoicesBuffer( Choices );
-				std::ostringstream PromptBuffer( Prompt );
-				std::ostringstream ErrorBuffer( Error );
+				DType result;
+				bool isDone = false;
+				std::ostringstream choicesBuffer( choices );
+				std::ostringstream promptBuffer( prompt );
+				std::ostringstream errorBuffer( error );
 
 			// Check arguments.
 
-				if( ( Type == Range ) && ( Min >= Max ) )
+				if( ( type == RANGE ) && ( min >= max ) )
 				{
-					Min = Max - 1;
-					PromptBuffer.str( "" );
-					ErrorBuffer.str( "" );
+					min = max - 1;
+					promptBuffer.str( "" );
+					errorBuffer.str( "" );
 				}
 
 			// Set choices string if not specified.
 
-				if( ChoicesBuffer.str().empty() )
-					ChoicesBuffer.str( CONSOLEIO_DEFAULT_CHOICES );
+				if( choicesBuffer.str().empty() )
+					choicesBuffer.str( CONSOLEIO_DEFAULT_CHOICES );
 
 			// Set prompt string if not specified.
 
-				if( PromptBuffer.str().empty() )
+				if( promptBuffer.str().empty() )
 				{
-					switch( Type )
+					switch( type )
 					{
-						case Minimum:
+						case MINIMUM:
 						{
-							PromptBuffer << "\nPlease enter a value that is " << Min << " or greater: ";
+							promptBuffer << "\nPlease enter a value that is " << min << " or greater: ";
 
 							break;
 						}
 
-						case Maximum:
+						case MAXIMUM:
 						{
-							PromptBuffer << "\nPlease enter a value that is " << Max << " or less: ";
+							promptBuffer << "\nPlease enter a value that is " << max << " or less: ";
 
 							break;
 						}
 
-						case Range:
+						case RANGE:
 						{
-							PromptBuffer << "\nPlease enter a value between " << Min << " and " << Max << ": ";
+							promptBuffer << "\nPlease enter a value between " << min << " and " << max << ": ";
 
 							break;
 						}
 
-						case TwoChoice:
+						case TWO_CHOICE:
 						{
-							PromptBuffer << "\nPlease enter either " << Min << " or " << Max << ": ";
+							promptBuffer << "\nPlease enter either " << min << " or " << max << ": ";
 
 							break;
 						}
 
-						case MultipleChoice:
+						case MULTIPLE_CHOICE:
 						{
-							PromptBuffer << "\nPlease enter either " << ChoicesBuffer.str() << ": ";
+							promptBuffer << "\nPlease enter either " << choicesBuffer.str() << ": ";
 
 							break;
 						}
@@ -415,41 +392,41 @@ public:
 
 			// Set error string if not specified.
 
-				if( ErrorBuffer.str().empty() )
+				if( errorBuffer.str().empty() )
 				{
-					switch( Type )
+					switch( type )
 					{
-						case Minimum:
+						case MINIMUM:
 						{
-							ErrorBuffer << "\nYou must enter a value that is " << Min << " or greater.\n\n";
+							errorBuffer << "\nYou must enter a value that is " << min << " or greater.\n\n";
 
 							break;
 						}
 
-						case Maximum:
+						case MAXIMUM:
 						{
-							ErrorBuffer << "\nYou must enter a value that is " << Max << " or less.\n\n";
+							errorBuffer << "\nYou must enter a value that is " << max << " or less.\n\n";
 
 							break;
 						}
 
-						case Range:
+						case RANGE:
 						{
-							ErrorBuffer << "\nYou must enter a value between " << Min << " and " << Max << ".\n\n";
+							errorBuffer << "\nYou must enter a value between " << min << " and " << max << ".\n\n";
 
 							break;
 						}
 
-						case TwoChoice:
+						case TWO_CHOICE:
 						{
-							ErrorBuffer << "\nYou must enter either " << Min << " or " << Max << ".\n\n";
+							errorBuffer << "\nYou must enter either " << min << " or " << max << ".\n\n";
 
 							break;
 						}
 
-						case MultipleChoice:
+						case MULTIPLE_CHOICE:
 						{
-							ErrorBuffer << "\nYou must enter either " << ChoicesBuffer.str() << ".\n\n";
+							errorBuffer << "\nYou must enter either " << choicesBuffer.str() << ".\n\n";
 
 							break;
 						}
@@ -460,59 +437,59 @@ public:
 
 				do
 				{
-					COUT << PromptBuffer.str();
-					std::cin >> Result;
+					COUT << promptBuffer.str();
+					std::cin >> result;
 
-					switch( Type )
+					switch( type )
 					{
-						case Minimum:
+						case MINIMUM:
 						{
-							if( !std::cin.fail() && ( Result >= Min ) )
-								Done = true;
+							if( !std::cin.fail() && ( result >= min ) )
+								isDone = true;
 
 							break;
 						}
 
-						case Maximum:
+						case MAXIMUM:
 						{
-							if( !std::cin.fail() && ( Result <= Max ) )
-								Done = true;
+							if( !std::cin.fail() && ( result <= max ) )
+								isDone = true;
 
 							break;
 						}
 
-						case Range:
+						case RANGE:
 						{
-							if( !std::cin.fail() && Numeric::InRange< DType >( Result, Min, Max ) )
-								Done = true;
+							if( !std::cin.fail() && Numeric::inRange< DType >( result, min, max ) )
+								isDone = true;
 
 							break;
 						}
 
-						case TwoChoice:
+						case TWO_CHOICE:
 						{
-							Result = toupper( Result );
+							result = toupper( result );
 
-							if( !std::cin.fail() && ( ( Result == Min ) || ( Result == Max ) ) )
-								Done = true;
+							if( !std::cin.fail() && ( ( result == min ) || ( result == max ) ) )
+								isDone = true;
 
 							break;
 						}
 
-						case MultipleChoice:
+						case MULTIPLE_CHOICE:
 						{
-							Result = toupper( Result );
+							result = toupper( result );
 
-							if( !std::cin.fail() && ( ChoicesBuffer.str().find( Result ) != std::string::npos ) )
-								Done = true;
+							if( !std::cin.fail() && ( choicesBuffer.str().find( result ) != std::string::npos ) )
+								isDone = true;
 
 							break;
 						}
 					}
 
-					if( !Done )
+					if( !isDone )
 					{
-						COUT << ErrorBuffer.str();
+						COUT << errorBuffer.str();
 
 						if( !std::cin )
 						{
@@ -520,7 +497,7 @@ public:
 							FLUSH_ISTREAM( std::cin );
 						}
 					}
-				} while( !Done );
+				} while( !isDone );
 
 			// Flush input buffer to ensure no extraneous data causes issues.
 
@@ -528,7 +505,7 @@ public:
 
 			// Return result to calling routine.
 
-				return Result;
+				return result;
 		}
 
 private:
@@ -539,19 +516,19 @@ private:
 		  * @brief This is the flag array used to determine if a certain stream type is disabled.
 		  */
 
-		static bool IsStreamDisabled[ StreamCount ];
+		static bool isStreamDisabled[ STREAM_COUNT ];
 
 		/**
 		  * @brief This is the mutex used for synchronization of field manipulation.
 		  */
 
-		static SharedMutex LocalMutex;
+		static SharedMutexPair localMutex;
 
 		/**
 		  * @brief This is the mutex array used for synchronization of a certain stream type.
 		  */
 
-		static SharedMutex StreamMutexes[ StreamCount ];
+		static SharedMutex streamMutexes[ STREAM_COUNT ];
 
 	// Private Constructors
 

@@ -2,49 +2,47 @@
 
 ## Synopsis
 
-> QuantuMatriX Software Standard Library - V1.1.2
-> Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+> QuantuMatriX Software Standard Library - V2.0.0
+> Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 >
-> This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMX Software website at 'https://software.qmxtech.com/'.
+> This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMXStdLib website at 'https://git.qmx-software.com/open-source/qmxstdlib/'.
 >
 > 'QMXStdLib' is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 ## Dependencies
 
-> ### Linux and Mac OS X
+> ### GNU Linux and Apple macOS
 >
 >> #### Compiler
->> * Clang >= 3.7.1 or GCC >= 5.3.0
+>> * Clang >= 3.0 or GCC >= 4.6
 >>
 >> #### Documentation
->> * Doxygen >= 1.8.11
+>> * Doxygen >= 1.6
 >>
 >> #### Libraries
->> * Boost >= 1.60.0
->> * GTest >= 1.7.0 (optional)
+>> * Boost >= 1.50
+>> * GTest >= 1.6 (optional)
 >>
 >> #### Tools
->> * CMake >= 3.4.3
+>> * CMake >= 3.0
 >
-> ### Windows
+> ### Microsoft Windows
 >
 >> #### Compiler
->> * TDM-GCC >= 5.1.0
+>> * MSYS2 + Clang >= 3.0 or MSYS2 + MinGW >= 4.6
 >>
 >> #### Documentation
->> * Doxygen >= 1.8.11
+>> * Doxygen >= 1.6
 >>
 >> #### Libraries
->> * Boost >= 1.60.0
->> * GTest >= 1.7.0 (optional)
+>> * Boost >= 1.50
+>> * GTest >= 1.6 (optional)
 >>
 >> #### Tools
->> * CMake >= 3.4.3
+>> * CMake >= 3.0
 
 ## Building
 
-> The source release for QMXStdLib may be downloaded from the website link listed under 'Contacts and Support'.
->
 > To build using CMake, use the following steps:
 >
 > * Navigate to the project's root directory, and create a new directory called 'build'.
@@ -74,7 +72,7 @@
 
 ## CMake Package
 
-> This project provides a CMake package which can be used the the 'find_package' command.  Once found, the following variables are set:
+> This project provides a CMake package which can be used with the 'find_package' command.  Once found, the following variables are set:
 >
 >> * QMXStdLib_VERSION (the current library version)
 >> * QMXStdLib_LIB_DEBUG (the debug build of the library)
@@ -84,10 +82,10 @@
 
 ## Contacts and Support
 
-> * Site: 'https://software.qmxtech.com/qmxstdlib/'
-> * Forums: 'https://forums.qmxtech.com/qmxstdlib/'
-> * Bug Tracker: 'https://bugs.qmxtech.com/qmxstdlib/'
-> * Email: 'support@qmxtech.com'
+> * Site: 'https://git.qmx-software.com/open-source/qmxstdlib/'
+> * Forums: 'https://forums.qmx-software.com/qmxstdlib/' (Currently Unavailable)
+> * Bug Tracker: 'https://git.qmx-software.com/open-source/qmxstdlib/issues'
+> * Email: 'support@qmx-software.com'
 
 ## Event Messages
 
@@ -110,39 +108,25 @@
 > | 0000000E    | The copy operation could not be performed due to an invalid source target!                |
 > | 0000000F    | The copy operation could not be completed!                                                |
 > | 00000010    | The base was set to none, but the string format pointer was null!                         |
-> | 00000011    | The specified module could not be registered because it already exists!                   |
-> | 00000012    | The specified module could not be unregistered because it did not exist!                  |
-> | 00000013    | No plugins could be loaded because the specified path was not a directory!                |
-> | 00000014    | No plugins were found at the specified path!                                              |
-> | 00000015    | The specified plugin was already loaded!                                                  |
-> | 00000016    | The specified plugin did not have a 'PluginGetModule' function!                           |
-> | 00000017    | The specified plugin did not have a 'PluginStart' function!                               |
-> | 00000018    | The specified plugin did not have a 'PluginStop' function!                                |
-> | 00000019    | The specified plugin could not be loaded because its module was not registered!           |
-> | 0000001A    | The specified plugin could not be unloaded because its module did not exist!              |
-> | 0000001B    | The specified plugin could not be unloaded because it was not loaded!                     |
-> | 0000001C    | A plugin list could not be constructed because the specified module did not exist!        |
-> | 0000001D    | The specified plugin's meta data could not be retrieved because its module did not exist! |
-> | 0000001E    | The specified plugin's meta data could not be retrieved because it did not exist!         |
-> | 0000001F    | Attempted to initialize plugin manager, but it was already initialized!                   |
-> | 00000020    | The specified config file could not be opened for reading!                                |
-> | 00000021    | The specified config file could not be opened for writing!                                |
-> | 00000022    | The current thread's ID was not set!                                                      |
-> | 00000023    | The current thread's ID was an empty string!                                              |
-> | 00000024    | The current thread was already added to the tracer!                                       |
-> | 00000025    | The current thread was not added to the tracer!                                           |
-> | 00000026    | The specified group could not be created because it already exists!                       |
-> | 00000027    | The specified group could not be destroyed because it did not exist!                      |
-> | 00000028    | The specified group could not be destroyed because it was not empty!                      |
-> | 00000029    | The thread barrier size could not be set because the specified group did not exist!       |
-> | 0000002A    | The specified thread could not be destroyed because its group did not exist!              |
-> | 0000002B    | The specified thread could not be destroyed because it did not exist!                     |
-> | 0000002C    | The thread barrier could not be called because the specified group did not exist!         |
-> | 0000002D    | The specified thread could not be joined because its group did not exist!                 |
-> | 0000002E    | The specified thread could not be joined because it did not exist!                        |
-> | 0000002F    | The threads could not be joined because the specified group did not exist!                |
-> | 00000030    | The specified thread could not be interrupted because its group did not exist!            |
-> | 00000031    | The specified thread could not be interrupted because it did not exist!                   |
-> | 00000032    | The threads could not be interrupted because the specified group did not exist!           |
-> | 00000033    | The specified thread could not be created because its group did not exist!                |
-> | 00000034    | The specified thread could not be created because it already exists!                      |
+> | 00000011    | The specified config file could not be opened for reading!                                |
+> | 00000012    | The specified config file could not be opened for writing!                                |
+> | 00000013    | The current thread's ID was not set!                                                      |
+> | 00000014    | The current thread's ID was an empty string!                                              |
+> | 00000015    | The current thread was already added to the tracer!                                       |
+> | 00000016    | The current thread was not added to the tracer!                                           |
+> | 00000017    | The specified group could not be created because it already exists!                       |
+> | 00000018    | The specified group could not be destroyed because it did not exist!                      |
+> | 00000019    | The specified group could not be destroyed because it was not empty!                      |
+> | 0000001A    | The thread barrier size could not be set because the specified group did not exist!       |
+> | 0000001B    | The specified thread could not be destroyed because its group did not exist!              |
+> | 0000001C    | The specified thread could not be destroyed because it did not exist!                     |
+> | 0000001D    | The thread barrier could not be called because the specified group did not exist!         |
+> | 0000001E    | The thread barrier could not be called because the specified group did not exist!         |
+> | 0000001F    | The specified thread could not be joined because its group did not exist!                 |
+> | 00000020    | The specified thread could not be joined because it did not exist!                        |
+> | 00000021    | The threads could not be joined because the specified group did not exist!                |
+> | 00000022    | The specified thread could not be interrupted because its group did not exist!            |
+> | 00000023    | The specified thread could not be interrupted because it did not exist!                   |
+> | 00000024    | The threads could not be interrupted because the specified group did not exist!           |
+> | 00000025    | The specified thread could not be created because its group did not exist!                |
+> | 00000026    | The specified thread could not be created because it already exists!                      |

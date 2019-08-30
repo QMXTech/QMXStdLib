@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibraryTest.cpp
-// Robert M. Baker | Created : 01JUL12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 01JUL12 | Last Modified : 29OCT19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::DynamicLibrary' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,66 +34,55 @@ TEST( DynamicLibraryTest, LoadWorks )
 {
 	// Create local variables.
 
-		DynamicLibrary::PointerType Instance = DynamicLibrary::Create();
-		string DynLibPathsBad[] = { "NonEmptyTestFile.txt",
-		                            "NonExistent" };
-		string DynLibPathsGood[] = { "TestPlugin1",
-		                             "TestPlugin2",
-		                             "TestPlugin3" };
+		DynamicLibrary::InstancePtr instance = DynamicLibrary::create();
 
-	// Perform unit test for 'Load' method.
+		string dynLibPathsBad[] = {
+			"NonEmptyTestFile.txt",
+			"NonExistent"
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( DynLibPathsBad ); Index++ )
+		string dynLibPathGood = "TestLibrary";
+
+	// Perform unit test for 'load' method.
+
+		for( size_t index = 0; index < ARRAY_SIZE( dynLibPathsBad ); index++ )
 		{
-			ASSERT_THROW( Instance->Load( ( BASE_PATH + DynLibPathsBad[ Index ] ) ), QMXException );
+			ASSERT_THROW( instance->load( ( BASE_PATH + dynLibPathsBad[ index ] ) ), QMXException );
 		}
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( DynLibPathsGood ); Index++ )
-		{
-			Instance->Load( ( PLUGINS_PATH + DynLibPathsGood[ Index ] + DYNLIB_EXTENSION ) );
-		}
+		instance->load( ( PLUGINS_PATH + dynLibPathGood + DYNLIB_EXTENSION ) );
 }
 
 TEST( DynamicLibraryTest, UnloadWorks )
 {
 	// Create local variables.
 
-		DynamicLibrary::PointerType Instance = DynamicLibrary::Create();
-		string DynLibPaths[] = { "TestPlugin1",
-		                         "TestPlugin2",
-		                         "TestPlugin3" };
+		DynamicLibrary::InstancePtr instance = DynamicLibrary::create();
+		string dynLibPath = "TestLibrary";
 
-	// Perform unit test for 'Unload' method.
+	// Perform unit test for 'unload' method.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( DynLibPaths ); Index++ )
-		{
-			ASSERT_THROW( Instance->Unload(), QMXException );
-			Instance->Load( ( PLUGINS_PATH + DynLibPaths[ Index ] + DYNLIB_EXTENSION ) );
-			Instance->Unload();
-		}
+		ASSERT_THROW( instance->unload(), QMXException );
+		instance->load( ( PLUGINS_PATH + dynLibPath + DYNLIB_EXTENSION ) );
+		instance->unload();
 }
 
 TEST( DynamicLibraryTest, GetSymbolWorks )
 {
 	// Create local variables.
 
-		DynamicLibrary::PointerType Instance = DynamicLibrary::Create();
-		string DynLibPaths[] = { "TestPlugin1",
-		                         "TestPlugin2",
-		                         "TestPlugin3" };
+		DynamicLibrary::InstancePtr instance = DynamicLibrary::create();
+		string dynLibPath = "TestLibrary";
 
-	// Perform unit test for 'GetSymbol' method.
+	// Perform unit test for 'getSymbol' method.
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( DynLibPaths ); Index++ )
-		{
-			ASSERT_THROW( Instance->GetSymbol( "PluginGetModule" ), QMXException );
-			Instance->Load( ( PLUGINS_PATH + DynLibPaths[ Index ] + DYNLIB_EXTENSION ) );
-			ASSERT_THROW( Instance->GetSymbol( "NonExistent" ), QMXException );
-			ASSERT_TRUE( ( Instance->GetSymbol( "PluginGetModule" ) != nullptr ) );
-			ASSERT_TRUE( ( Instance->GetSymbol( "PluginStart" ) != nullptr ) );
-			ASSERT_TRUE( ( Instance->GetSymbol( "PluginStop" ) != nullptr ) );
-			Instance->Unload();
-		}
+		ASSERT_THROW( instance->getSymbol( "libraryFunction1" ), QMXException );
+		instance->load( ( PLUGINS_PATH + dynLibPath + DYNLIB_EXTENSION ) );
+		ASSERT_THROW( instance->getSymbol( "nonExistent" ), QMXException );
+		ASSERT_TRUE( ( instance->getSymbol( "libraryFunction1" ) != nullptr ) );
+		ASSERT_TRUE( ( instance->getSymbol( "libraryFunction2" ) != nullptr ) );
+		ASSERT_TRUE( ( instance->getSymbol( "libraryFunction3" ) != nullptr ) );
+		instance->unload();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

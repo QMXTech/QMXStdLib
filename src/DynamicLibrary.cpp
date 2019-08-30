@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibrary.cpp
-// Robert M. Baker | Created : 15APR12 | Last Modified : 28FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 15APR12 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a dynamically-loaded library class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 15APR12
-  * @date    Last Modified : 28FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This source file defines the implementation for a dynamically-loaded library class.
   *
-  * @section Description
+  * @section DynamicLibraryS0000 Description
   *
   * This source file defines the implementation for a dynamically-loaded library class.
   *
-  * @section License
+  * @section DynamicLibraryS0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -66,13 +66,20 @@ namespace QMXStdLib
 
 DynamicLibrary::~DynamicLibrary()
 {
-	// Perform necessary cleanup.
+	try
+	{
+		// Perform necessary cleanup.
 
-		if( Initialized )
-			Deallocate();
+			if( initialized )
+				deallocate();
+	}
+	catch( const exception& except )
+	{
+		// Do nothing.
+	}
 }
 
-void DynamicLibrary::Load( const Path& Target )
+void DynamicLibrary::load( const Path& source )
 {
 	// Obtain locks.
 
@@ -80,29 +87,29 @@ void DynamicLibrary::Load( const Path& Target )
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "DynamicLibrary::Load", 0000 );
+		SCOPED_STACK_TRACE( "DynamicLibrary::load", 0000 );
 
 	// Create local variables.
 
-		Path LocalTarget = Target;
+		Path localSource = source;
 
 	// If a dynamic library is currently loaded, unload it.
 
-		if( Handle )
-			UnloadImp();
+		if( handle )
+			unloadImp();
 
 	// Load dynamic library using the specified path.
 
-		if( !LocalTarget.has_extension() )
-			LocalTarget.replace_extension( DYNLIB_EXTENSION );
+		if( !localSource.has_extension() )
+			localSource.replace_extension( DYNLIB_EXTENSION );
 
-		QMX_ASSERT( ( LocalTarget.extension() == DYNLIB_EXTENSION ), "QMXStdLib", "DynamicLibrary::Load", "00000002", LocalTarget );
-		Handle = reinterpret_cast< DYNLIB_HANDLE >( DYNLIB_LOAD( LocalTarget.string().c_str() ) );
-		QMX_ASSERT( Handle, "QMXStdLib", "DynamicLibrary::Load", "00000003", LocalTarget );
-		DynLibTarget = LocalTarget;
+		QMX_ASSERT( ( localSource.extension() == DYNLIB_EXTENSION ), "QMXStdLib", "DynamicLibrary::load", "00000002", localSource );
+		handle = reinterpret_cast< DYNLIB_HANDLE >( DYNLIB_LOAD( localSource.string().c_str() ) );
+		QMX_ASSERT( handle, "QMXStdLib", "DynamicLibrary::load", "00000003", localSource );
+		dynLibPath = localSource;
 }
 
-void DynamicLibrary::Unload()
+void DynamicLibrary::unload()
 {
 	// Obtain locks.
 
@@ -110,14 +117,14 @@ void DynamicLibrary::Unload()
 
    // Create scoped stack traces.
 
-   	SCOPED_STACK_TRACE( "DynamicLibrary::Unload", 0000 );
+   	SCOPED_STACK_TRACE( "DynamicLibrary::unload", 0000 );
 
 	// Unload dynamic library.
 
-		UnloadImp();
+		unloadImp();
 }
 
-const Path& DynamicLibrary::GetPath() const
+const Path& DynamicLibrary::getPath() const
 {
 	// Obtain locks.
 
@@ -125,10 +132,10 @@ const Path& DynamicLibrary::GetPath() const
 
 	// Return dynamic library path to calling routine.
 
-		return DynLibTarget;
+		return dynLibPath;
 }
 
-void* DynamicLibrary::GetSymbol( const std::string& Target ) const
+void* DynamicLibrary::getSymbol( const std::string& symbol ) const
 {
 	// Obtain locks.
 
@@ -136,24 +143,27 @@ void* DynamicLibrary::GetSymbol( const std::string& Target ) const
 
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "DynamicLibrary::GetSymbol", 0000 );
+		SCOPED_STACK_TRACE( "DynamicLibrary::getSymbol", 0000 );
 
 	// Create local variables.
 
-		void* Result = nullptr;
+		void* result = nullptr;
 
 	// Retrieve specified symbol from the dynamic library.
 
-		QMX_ASSERT( Handle, "QMXStdLib", "DynamicLibrary::GetSymbol", "00000004", Target );
-		QMX_ASSERT( ( Result = reinterpret_cast< void* >( DYNLIB_GETSYMBOL( Handle, Target.c_str() ) ) ),
-		            "QMXStdLib",
-		            "DynamicLibrary::GetSymbol",
-		            "00000005",
-		            DynLibTarget << ", " << Target );
+		QMX_ASSERT( handle, "QMXStdLib", "DynamicLibrary::getSymbol", "00000004", symbol );
+
+		QMX_ASSERT(
+			( result = reinterpret_cast< void* >( DYNLIB_GETSYMBOL( handle, symbol.c_str() ) ) ),
+			"QMXStdLib",
+			"DynamicLibrary::getSymbol",
+			"00000005",
+			dynLibPath << ", " << symbol
+		);
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,41 +174,33 @@ DynamicLibrary::DynamicLibrary()
 {
 	// Intialize fields.
 
-		Handle = nullptr;
+		handle = nullptr;
 }
 
-void DynamicLibrary::DeallocateImp()
-{
-	// Perform necessary cleanup.
-
-		if( Handle )
-			UnloadImp();
-}
-
-void DynamicLibrary::OperatorAssignImp( const Object* Instance )
-{
-	// Create local variables.
-
-		const DynamicLibrary* DInstance = dynamic_cast< const DynamicLibrary* >( Instance );
-
-	// Assign specified object to 'this'.
-
-		Handle = DInstance->Handle;
-		DynLibTarget = DInstance->DynLibTarget;
-}
-
-void DynamicLibrary::UnloadImp()
+void DynamicLibrary::deallocateImp()
 {
 	// Create scoped stack traces.
 
-		SCOPED_STACK_TRACE( "DynamicLibrary::UnloadImp", 0000 );
+		SCOPED_STACK_TRACE( "DynamicLibrary::deallocateImp", 0000 );
+
+	// Perform necessary cleanup.
+
+		if( handle )
+			unloadImp();
+}
+
+void DynamicLibrary::unloadImp()
+{
+	// Create scoped stack traces.
+
+		SCOPED_STACK_TRACE( "DynamicLibrary::unloadImp", 0000 );
 
 	// Unload dynamic library.
 
-		QMX_ASSERT( Handle, "QMXStdLib", "DynamicLibrary::UnloadImp", "00000006", "" );
-		QMX_ASSERT( !DYNLIB_UNLOAD( Handle ), "QMXStdLib", "DynamicLibrary::UnloadImp", "00000007", DynLibTarget );
-		DynLibTarget.clear();
-		Handle = nullptr;
+		QMX_ASSERT( handle, "QMXStdLib", "DynamicLibrary::unloadImp", "00000006", "" );
+		QMX_ASSERT( !DYNLIB_UNLOAD( handle ), "QMXStdLib", "DynamicLibrary::unloadImp", "00000007", dynLibPath );
+		dynLibPath.clear();
+		handle = nullptr;
 }
 
 } // 'QMXStdLib' Namespace

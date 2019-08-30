@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Singleton.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 21FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to a singleton instance.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 21FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a mixin class to a singleton instance.
   *
-  * @section Description
+  * @section SingletonH0000 Description
   *
   * This header file defines the interface for a mixin class to a singleton instance.
   *
-  * @section License
+  * @section SingletonH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -91,7 +91,7 @@ public:
 		{
 			// Initialize fields.
 
-				SingletonInstance = static_cast< DType* >( this );
+				singletonInstance = static_cast< DType* >( this );
 		}
 
 	// Destructor
@@ -100,11 +100,11 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		~Singleton()
+		virtual ~Singleton()
 		{
 			// Perform necessary cleanup.
 
-				SingletonInstance = nullptr;
+				singletonInstance = nullptr;
 		}
 
 	// Public Methods
@@ -119,11 +119,11 @@ public:
 		  * 	A reference to the singleton instance.
 		  */
 
-		static DType& GetSingleton()
+		static DType& getSingleton()
 		{
 			// Return a singleton reference to calling routine.
 
-				return *SingletonInstance;
+				return *singletonInstance;
 		}
 
 		/**
@@ -136,11 +136,11 @@ public:
 		  * 	A pointer to the singleton instance.
 		  */
 
-		static DType* GetSingletonPointer()
+		static DType* getSingletonPointer()
 		{
 			// Return a singleton pointer to calling routine.
 
-				return SingletonInstance;
+				return singletonInstance;
 		}
 
 protected:
@@ -151,7 +151,7 @@ protected:
 		  * @brief This is the singleton pointer.
 		  */
 
-		static DType* SingletonInstance;
+		static DType* singletonInstance;
 };
 
 } // 'QMXStdLib' Namespace

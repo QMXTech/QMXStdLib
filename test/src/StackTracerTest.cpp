@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracerTest.cpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::StackTracer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -37,90 +37,90 @@ namespace StackTracerTest
 // Function Definitions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ThreadMain( const string& TargetID, uint32_t TargetIndex )
+void threadMain( const string& targetID, uint32_t targetIndex )
 {
 	// Create local variables.
 
-		string Seperator = STACKTRACER_ENTRY_SEPERATOR;
+		string separator = STACKTRACER_ENTRY_SEPARATOR;
 
 	// Perform thread test based on specified arguments.
 
-		switch( TargetIndex )
+		switch( targetIndex )
 		{
 			case 0:
 			{
-				ASSERT_TRUE( StackTracer::GetThreadID().empty() );
-				StackTracer::SetThreadID( TargetID );
-				ASSERT_EQ( TargetID, StackTracer::GetThreadID() );
+				ASSERT_TRUE( StackTracer::getThreadID().empty() );
+				StackTracer::setThreadID( targetID );
+				ASSERT_EQ( targetID, StackTracer::getThreadID() );
 
 				break;
 			}
 
 			case 1:
 			{
-				ASSERT_THROW( StackTracer::AddThread( ( TargetID + "Main" ) ), QMXException );
-				StackTracer::SetThreadID( "" );
-				ASSERT_THROW( StackTracer::AddThread( ( TargetID + "Main" ) ), QMXException );
-				StackTracer::SetThreadID( TargetID );
-				StackTracer::AddThread( ( TargetID + "Main" ) );
-				ASSERT_THROW( StackTracer::AddThread( ( TargetID + "Main" ) ), QMXException );
+				ASSERT_THROW( StackTracer::addThread( ( targetID + "Main" ) ), QMXException );
+				StackTracer::setThreadID( "" );
+				ASSERT_THROW( StackTracer::addThread( ( targetID + "Main" ) ), QMXException );
+				StackTracer::setThreadID( targetID );
+				StackTracer::addThread( ( targetID + "Main" ) );
+				ASSERT_THROW( StackTracer::addThread( ( targetID + "Main" ) ), QMXException );
 
 				break;
 			}
 
 			case 2:
 			{
-				ASSERT_THROW( StackTracer::RemoveThread(), QMXException );
-				StackTracer::SetThreadID( "" );
-				ASSERT_THROW( StackTracer::RemoveThread(), QMXException );
-				StackTracer::SetThreadID( TargetID );
-				ASSERT_THROW( StackTracer::RemoveThread(), QMXException );
-				StackTracer::AddThread( ( TargetID + "Main" ) );
-				StackTracer::RemoveThread();
+				ASSERT_THROW( StackTracer::removeThread(), QMXException );
+				StackTracer::setThreadID( "" );
+				ASSERT_THROW( StackTracer::removeThread(), QMXException );
+				StackTracer::setThreadID( targetID );
+				ASSERT_THROW( StackTracer::removeThread(), QMXException );
+				StackTracer::addThread( ( targetID + "Main" ) );
+				StackTracer::removeThread();
 
 				break;
 			}
 
 			case 3:
 			{
-				ASSERT_THROW( StackTracer::Push( "Class::Method" ), QMXException );
-				StackTracer::SetThreadID( "" );
-				ASSERT_THROW( StackTracer::Push( "Class::Method" ), QMXException );
-				StackTracer::SetThreadID( TargetID );
-				ASSERT_THROW( StackTracer::Push( "Class::Method" ), QMXException );
-				StackTracer::AddThread( ( TargetID + "Main" ) );
-				StackTracer::Push( "Class::Method" );
+				ASSERT_THROW( StackTracer::push( "Class::method" ), QMXException );
+				StackTracer::setThreadID( "" );
+				ASSERT_THROW( StackTracer::push( "Class::method" ), QMXException );
+				StackTracer::setThreadID( targetID );
+				ASSERT_THROW( StackTracer::push( "Class::method" ), QMXException );
+				StackTracer::addThread( ( targetID + "Main" ) );
+				StackTracer::push( "Class::method" );
 
 				break;
 			}
 
 			case 4:
 			{
-				ASSERT_THROW( StackTracer::Pop(), QMXException );
-				StackTracer::SetThreadID( "" );
-				ASSERT_THROW( StackTracer::Pop(), QMXException );
-				StackTracer::SetThreadID( TargetID );
-				ASSERT_THROW( StackTracer::Pop(), QMXException );
-				StackTracer::AddThread( ( TargetID + "Main" ) );
-				StackTracer::Pop();
+				ASSERT_THROW( StackTracer::pop(), QMXException );
+				StackTracer::setThreadID( "" );
+				ASSERT_THROW( StackTracer::pop(), QMXException );
+				StackTracer::setThreadID( targetID );
+				ASSERT_THROW( StackTracer::pop(), QMXException );
+				StackTracer::addThread( ( targetID + "Main" ) );
+				StackTracer::pop();
 
 				break;
 			}
 
 			case 5:
 			{
-				ASSERT_THROW( StackTracer::GetStackTrace(), QMXException );
-				StackTracer::SetThreadID( "" );
-				ASSERT_THROW( StackTracer::GetStackTrace(), QMXException );
-				StackTracer::SetThreadID( TargetID );
-				ASSERT_THROW( StackTracer::GetStackTrace(), QMXException );
-				StackTracer::AddThread( ( TargetID + "Main" ) );
-				ASSERT_EQ( ( TargetID + "Main" ), StackTracer::GetStackTrace() );
-				StackTracer::Push( "Class::Method" );
-				ASSERT_EQ( ( TargetID + "Main" + Seperator + "Class::Method" ), StackTracer::GetStackTrace() );
-				StackTracer::Pop();
-				StackTracer::Pop();
-				ASSERT_EQ( ( TargetID + "Main" ), StackTracer::GetStackTrace() );
+				ASSERT_THROW( StackTracer::getStackTrace(), QMXException );
+				StackTracer::setThreadID( "" );
+				ASSERT_THROW( StackTracer::getStackTrace(), QMXException );
+				StackTracer::setThreadID( targetID );
+				ASSERT_THROW( StackTracer::getStackTrace(), QMXException );
+				StackTracer::addThread( ( targetID + "Main" ) );
+				ASSERT_EQ( ( targetID + "Main" ), StackTracer::getStackTrace() );
+				StackTracer::push( "Class::method" );
+				ASSERT_EQ( ( targetID + "Main" + separator + "Class::method" ), StackTracer::getStackTrace() );
+				StackTracer::pop();
+				StackTracer::pop();
+				ASSERT_EQ( ( targetID + "Main" ), StackTracer::getStackTrace() );
 
 				break;
 			}
@@ -141,136 +141,136 @@ TEST( StackTracerTest, ThreadIDWorks )
 {
 	// Create local variables.
 
-		boost::thread_group Threads;
+		boost::thread_group threads;
 
-	// Perform unit test for 'ThreadID' methods.
+	// Perform unit test for 'threadID' methods.
 
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadA", 0 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadB", 0 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadC", 0 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadD", 0 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadE", 0 ) ) );
-		Threads.join_all();
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadA", 0 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadB", 0 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadC", 0 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadD", 0 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadE", 0 ) ) );
+		threads.join_all();
 }
 
 TEST( StackTracerTest, AddThreadWorks )
 {
 	// Create local variables.
 
-		boost::thread_group Threads;
+		boost::thread_group threads;
 
 	// Prepare stack tracer for testing.
 
-		StackTracer::SetEnabled( true );
+		StackTracer::setEnabled( true );
 
-	// Perform unit test for 'ThreadID' methods.
+	// Perform unit test for 'addThread' methods.
 
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadA", 1 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadB", 1 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadC", 1 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadD", 1 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadE", 1 ) ) );
-		Threads.join_all();
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadA", 1 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadB", 1 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadC", 1 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadD", 1 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadE", 1 ) ) );
+		threads.join_all();
 
 	// Cleanup stack tracer.
 
-		StackTracer::Reset();
+		StackTracer::reset();
 }
 
 TEST( StackTracerTest, RemoveThreadWorks )
 {
 	// Create local variables.
 
-		boost::thread_group Threads;
+		boost::thread_group threads;
 
 	// Prepare stack tracer for testing.
 
-		StackTracer::SetEnabled( true );
+		StackTracer::setEnabled( true );
 
-	// Perform unit test for 'ThreadID' methods.
+	// Perform unit test for 'removeThread' methods.
 
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadA", 2 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadB", 2 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadC", 2 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadD", 2 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadE", 2 ) ) );
-		Threads.join_all();
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadA", 2 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadB", 2 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadC", 2 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadD", 2 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadE", 2 ) ) );
+		threads.join_all();
 
 	// Cleanup stack tracer.
 
-		StackTracer::Reset();
+		StackTracer::reset();
 }
 
 TEST( StackTracerTest, PushWorks )
 {
 	// Create local variables.
 
-		boost::thread_group Threads;
+		boost::thread_group threads;
 
 	// Prepare stack tracer for testing.
 
-		StackTracer::SetEnabled( true );
+		StackTracer::setEnabled( true );
 
 	// Perform unit test for 'ThreadID' methods.
 
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadA", 3 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadB", 3 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadC", 3 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadD", 3 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadE", 3 ) ) );
-		Threads.join_all();
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadA", 3 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadB", 3 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadC", 3 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadD", 3 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadE", 3 ) ) );
+		threads.join_all();
 
 	// Cleanup stack tracer.
 
-		StackTracer::Reset();
+		StackTracer::reset();
 }
 
 TEST( StackTracerTest, PopWorks )
 {
 	// Create local variables.
 
-		boost::thread_group Threads;
+		boost::thread_group threads;
 
 	// Prepare stack tracer for testing.
 
-		StackTracer::SetEnabled( true );
+		StackTracer::setEnabled( true );
 
 	// Perform unit test for 'ThreadID' methods.
 
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadA", 4 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadB", 4 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadC", 4 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadD", 4 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadE", 4 ) ) );
-		Threads.join_all();
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadA", 4 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadB", 4 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadC", 4 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadD", 4 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadE", 4 ) ) );
+		threads.join_all();
 
 	// Cleanup stack tracer.
 
-		StackTracer::Reset();
+		StackTracer::reset();
 }
 
 TEST( StackTracerTest, GetStackTraceWorks )
 {
 	// Create local variables.
 
-		boost::thread_group Threads;
+		boost::thread_group threads;
 
 	// Prepare stack tracer for testing.
 
-		StackTracer::SetEnabled( true );
+		StackTracer::setEnabled( true );
 
 	// Perform unit test for 'ThreadID' methods.
 
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadA", 5 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadB", 5 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadC", 5 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadD", 5 ) ) );
-		Threads.add_thread( ( new boost::thread( StackTracerTest::ThreadMain, "ThreadE", 5 ) ) );
-		Threads.join_all();
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadA", 5 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadB", 5 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadC", 5 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadD", 5 ) ) );
+		threads.add_thread( ( new boost::thread( StackTracerTest::threadMain, "ThreadE", 5 ) ) );
+		threads.join_all();
 
 	// Cleanup stack tracer.
 
-		StackTracer::Reset();
+		StackTracer::reset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

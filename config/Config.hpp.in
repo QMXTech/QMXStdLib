@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Config.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 26AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is the platform-specific configuration header file for 'QMXStdLib'.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 26AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file contains configuration data determined by the target platform.
   *
@@ -32,7 +32,7 @@
   *
   * @section License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -65,10 +65,10 @@
 #define CONSOLEIO_DEFAULT_CHOICES            "@CONSOLEIO_DEFAULT_CHOICES@"
 #define FILESYSTEM_SYMBOL_DELIMITER_LEFT     '@FILESYSTEM_SYMBOL_DELIMITER_LEFT@'
 #define FILESYSTEM_SYMBOL_DELIMITER_RIGHT    '@FILESYSTEM_SYMBOL_DELIMITER_RIGHT@'
-#define STACKTRACER_ENTRY_SEPERATOR          "@STACKTRACER_ENTRY_SEPERATOR@"
+#define STACKTRACER_ENTRY_SEPARATOR          "@STACKTRACER_ENTRY_SEPARATOR@"
 #define PROGRAMOPTIONS_TOGGLE_OPTION_PREFIX  '@PROGRAMOPTIONS_TOGGLE_OPTION_PREFIX@'
 #define PROGRAMOPTIONS_COMMAND_OPTION_PREFIX "@PROGRAMOPTIONS_COMMAND_OPTION_PREFIX@"
-#define PROGRAMOPTIONS_GROUP_KEY_SEPERATOR   '@PROGRAMOPTIONS_GROUP_KEY_SEPERATOR@'
+#define PROGRAMOPTIONS_GROUP_KEY_SEPARATOR   '@PROGRAMOPTIONS_GROUP_KEY_SEPARATOR@'
 #define PROGRAMOPTIONS_ASSIGNMENT_OPERATOR   '@PROGRAMOPTIONS_ASSIGNMENT_OPERATOR@'
 #define PROGRAMOPTIONS_COMMENT_INITIATOR     '@PROGRAMOPTIONS_COMMENT_INITIATOR@'
 #define PROGRAMOPTIONS_GROUP_DELIMITER_LEFT  '@PROGRAMOPTIONS_GROUP_DELIMITER_LEFT@'

@@ -19,7 +19,7 @@ Key
 27FEB16 1.1.0 Robert M. Baker <malachy@qmxtech.com>
 ===================================================
 ~ Modified various classes to use configurable values.
-~ Refactored code making use of the 'NonCopyable' mixin class to instead use C++11 method deletion. 
+~ Refactored code making use of the 'NonCopyable' mixin class to instead use C++11 method deletion.
 ~ Marked the 'NonCopyable' mixin class as deprecated in favor of C++11 method deletion.
 ~ Modified 'ProgramOptions' class to allow for config files with groups.
 + Added 'SaveConfigFile' method to 'ProgramOptions' class to facilitate writing of config options to file.
@@ -39,3 +39,25 @@ Key
 ===================================================
 ~ Moved 'Create' method from 'Object' derived classes to 'Object' itself.
 + Added 'DoAllocate' boolean parameter to 'Create' method in 'Object' class to allow for deferment of object allocation.
+
+
+
+DDMMMYY 2.0.0 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Refactored all code to conform to new QMX standards.
+~ Modified 'clone' and 'cloneImp' methods from 'Object' class to accept a pointer to a derived class.
+~ Uncommented code in 'toUTF8', 'toUTF16', and 'toUTF32' functions of 'String' namespace since GCC is now fully C++11 compliant.
+~ Modified various class destructors to be non-virtual, as they are not intended for use as base classes.
+- Removed 'cloneImp' method from 'DynamicLibrary' class, as cloning is not logical for this class.
+- Removed 'operator=' and 'operatorAssignImp' methods from 'Object' class.
+- Removed deprecated 'nonCopyable' class.
+- Removed 'Plugin' mixin class, as it is being moved to QMXSAF.
+- Removed 'PluginManager' class, as it is being moved to QMXSAF.
+~ Converted 'UniqueRandom' class into a namespace with a single function 'generate' which accepts integral and floating point types.
++ Added standard type definitions for the 'Thread' class.
++ Added 'wrap' function to 'Numeric' namespace to facilitate wrapping of values within a closed interval.
++ Added 'getConfigOptions' method to 'ProgramOptions' class to facilitate retrieval of the underlying config map.
++ Added 'setConfigOptions' method to 'ProgramOptions' class to facilitate setting of the underlying config map.
++ Added 'getGroupIDs' method to 'ThreadManager' class to facilitate retrieval of all existing groups.
++ Added 'getThreadIDs' method to 'ThreadManager' class to facilitate retrieval of all existing threads within a group.
++ Added 'InputIterator', 'OutputIterator', 'ForwardIterator', 'BidirectionalIterator', and 'RandomAccessIterator' classes.

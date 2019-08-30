@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main.cpp
-// Robert M. Baker | Created : 01FEB12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 01FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is the main source file for 'QMXStdLibTest'.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -30,20 +30,20 @@ using namespace testing;
 // The 'MAIN' Function
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int main( int ArgumentCount, char* ArgumentValues[] )
+int main( int argumentCount, char* argumentValues[] )
 {
 	// Create local variables.
 
-		int Result = Null;
+		int result = UNSET;
 
 	// Execute main code.
 
-		InitGoogleTest( &ArgumentCount, ArgumentValues );
-		Result = RUN_ALL_TESTS();
+		InitGoogleTest( &argumentCount, argumentValues );
+		result = RUN_ALL_TESTS();
 
 	// Return result to calling routine.
 
-		return Result;
+		return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

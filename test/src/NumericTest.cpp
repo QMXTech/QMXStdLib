@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NumericTest.cpp
-// Robert M. Baker | Created : 10FEB12 | Last Modified : 14FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 10FEB12 | Last Modified : 29AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Numeric' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -34,21 +34,76 @@ TEST( NumericTest, InRangeWorks )
 {
 	// Create local variables.
 
-		int64_t TestValuesI[] = { 27, 30, 2, 41, 19 };
-		real_t TestValuesF[] = { 27.1416, 30.142, 2.14, 41.1, 19.0 };
-		int64_t TestMinArgumentsI[] = { 17, 40, -8, 51, 9 };
-		real_t TestMinArgumentsF[] = { 17.1416, 40.142, -7.86, 51.1, 9.0 };
-		int64_t TestMaxArgumentsI[] = { 37, 50, 12, 61, 29 };
-		real_t TestMaxArgumentsF[] = { 37.1416, 50.142, 12.14, 61.1, 29.0 };
-		bool ExpectedResultsI[] = { true, false, true, false, true };
-		bool ExpectedResultsF[] = { true, false, true, false, true };
+		int64_t testValuesI[] = {
+			27,
+			30,
+			2,
+			41,
+			19
+		};
 
-	// Perform unit test for 'InRange' function.
+		real_t testValuesF[] = {
+			27.1416,
+			30.142,
+			2.14,
+			41.1,
+			19.0
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestValuesI ); Index++ )
+		int64_t testMinArgumentsI[] = {
+			17,
+			40,
+			-8,
+			51,
+			9
+		};
+
+		real_t testMinArgumentsF[] = {
+			17.1416,
+			40.142,
+			-7.86,
+			51.1,
+			9.0
+		};
+
+		int64_t testMaxArgumentsI[] = {
+			37,
+			50,
+			12,
+			61,
+			29
+		};
+
+		real_t testMaxArgumentsF[] = {
+			37.1416,
+			50.142,
+			12.14,
+			61.1,
+			29.0
+		};
+
+		bool expectedResultsI[] = {
+			true,
+			false,
+			true,
+			false,
+			true
+		};
+
+		bool expectedResultsF[] = {
+			true,
+			false,
+			true,
+			false,
+			true
+		};
+
+	// Perform unit test for 'inRange' function.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValuesI ); index++ )
 		{
-			ASSERT_EQ( ExpectedResultsI[ Index ], Numeric::InRange< int64_t >( TestValuesI[ Index ], TestMinArgumentsI[ Index ], TestMaxArgumentsI[ Index ] ) );
-			ASSERT_EQ( ExpectedResultsF[ Index ], Numeric::InRange< real_t >( TestValuesF[ Index ], TestMinArgumentsF[ Index ], TestMaxArgumentsF[ Index ] ) );
+			ASSERT_EQ( expectedResultsI[ index ], Numeric::inRange< int64_t >( testValuesI[ index ], testMinArgumentsI[ index ], testMaxArgumentsI[ index ] ) );
+			ASSERT_EQ( expectedResultsF[ index ], Numeric::inRange< real_t >( testValuesF[ index ], testMinArgumentsF[ index ], testMaxArgumentsF[ index ] ) );
 		}
 }
 
@@ -56,23 +111,156 @@ TEST( NumericTest, ClampWorks )
 {
 	// Create local variables.
 
-		int64_t TestValuesI[] = { 27, 30, 2, 71, 19 };
-		real_t TestValuesF[] = { 27.1416, 30.142, 2.14, 71.1, 19.0 };
-		int64_t TestMinArgumentsI[] = { 17, 40, -8, 51, 9 };
-		real_t TestMinArgumentsF[] = { 17.1416, 40.142, -7.86, 51.1, 9.0 };
-		int64_t TestMaxArgumentsI[] = { 37, 50, 12, 61, 29 };
-		real_t TestMaxArgumentsF[] = { 37.1416, 50.142, 12.14, 61.1, 29.0 };
-		int64_t ExpectedResultsI[] = { 27, 40, 2, 61, 19 };
-		real_t ExpectedResultsF[] = { 27.1416, 40.142, 2.14, 61.1, 19.0 };
+		int64_t testValuesI[] = {
+			27,
+			30,
+			2,
+			71,
+			19
+		};
 
-	// Perform unit test for 'Clamp' function.
+		real_t testValuesF[] = {
+			27.1416,
+			30.142,
+			2.14,
+			71.1,
+			19.0
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestValuesI ); Index++ )
+		int64_t testMinArgumentsI[] = {
+			17,
+			40,
+			-8,
+			51,
+			9
+		};
+
+		real_t testMinArgumentsF[] = {
+			17.1416,
+			40.142,
+			-7.86,
+			51.1,
+			9.0
+		};
+
+		int64_t testMaxArgumentsI[] = {
+			37,
+			50,
+			12,
+			61,
+			29
+		};
+
+		real_t testMaxArgumentsF[] = {
+			37.1416,
+			50.142,
+			12.14,
+			61.1,
+			29.0
+		};
+
+		int64_t expectedResultsI[] = {
+			27,
+			40,
+			2,
+			61,
+			19
+		};
+
+		real_t expectedResultsF[] = {
+			27.1416,
+			40.142,
+			2.14,
+			61.1,
+			19.0
+		};
+
+	// Perform unit test for 'clamp' function.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValuesI ); index++ )
 		{
-			Numeric::Clamp< int64_t >( TestValuesI[ Index ], TestMinArgumentsI[ Index ], TestMaxArgumentsI[ Index ] );
-			ASSERT_EQ( ExpectedResultsI[ Index ], TestValuesI[ Index ] );
-			Numeric::Clamp< real_t >( TestValuesF[ Index ], TestMinArgumentsF[ Index ], TestMaxArgumentsF[ Index ] );
-			ASSERT_EQ( ExpectedResultsF[ Index ], TestValuesF[ Index ] );
+			Numeric::clamp< int64_t >( testValuesI[ index ], testMinArgumentsI[ index ], testMaxArgumentsI[ index ] );
+			ASSERT_EQ( expectedResultsI[ index ], testValuesI[ index ] );
+			Numeric::clamp< real_t >( testValuesF[ index ], testMinArgumentsF[ index ], testMaxArgumentsF[ index ] );
+			ASSERT_EQ( expectedResultsF[ index ], testValuesF[ index ] );
+		}
+}
+
+TEST( NumericTest, WrapWorks )
+{
+	// Create local variables.
+
+		int64_t testValuesI[] = {
+			27,
+			30,
+			2,
+			71,
+			19
+		};
+
+		real_t testValuesF[] = {
+			27.1416,
+			30.142,
+			2.14,
+			71.1,
+			19.0
+		};
+
+		int64_t testMinArgumentsI[] = {
+			17,
+			40,
+			-8,
+			51,
+			9
+		};
+
+		real_t testMinArgumentsF[] = {
+			17.1416,
+			40.142,
+			-7.86,
+			51.1,
+			9.0
+		};
+
+		int64_t testMaxArgumentsI[] = {
+			37,
+			50,
+			12,
+			61,
+			29
+		};
+
+		real_t testMaxArgumentsF[] = {
+			37.1416,
+			50.142,
+			12.14,
+			61.1, 29.0
+		};
+
+		int64_t expectedResultsI[] = {
+			27,
+			50,
+			2,
+			51,
+			19
+		};
+
+		real_t expectedResultsF[] = {
+			27.1416,
+			50.142,
+			2.14,
+			51.1,
+			19.0
+		};
+
+	// Perform unit test for 'wrap' function.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValuesI ); index++ )
+		{
+			Numeric::wrap< int64_t >( testValuesI[ index ], testMinArgumentsI[ index ], testMaxArgumentsI[ index ] );
+			ASSERT_EQ( expectedResultsI[ index ], testValuesI[ index ] );
+			Numeric::wrap< real_t >( testValuesF[ index ], testMinArgumentsF[ index ], testMaxArgumentsF[ index ] );
+			ASSERT_EQ( expectedResultsF[ index ], testValuesF[ index ] );
 		}
 }
 
@@ -80,51 +268,67 @@ TEST( NumericTest, IsWholeNumberWorks )
 {
 	// Create local variables.
 
-		real_t TestValues[] = { 27.0, 30.142, 2.0, 41.1, 19.0 };
-		bool ExpectedResults[] = { true, false, true, false, true };
+		real_t testValues[] = {
+			27.0,
+			30.142,
+			2.0,
+			41.1,
+			19.0
+		};
 
-	// Perform unit test for 'IsWholeNumber' function.
+		bool expectedResults[] = {
+			true,
+			false,
+			true,
+			false,
+			true
+		};
 
-		for( size_t Index = 0; Index < ARRAY_SIZE( TestValues ); Index++ )
+	// Perform unit test for 'isWholeNumber' function.
+
+		for( size_t index = 0; index < ARRAY_SIZE( testValues ); index++ )
 		{
-			ASSERT_EQ( ExpectedResults[ Index ], Numeric::IsWholeNumber< real_t >( TestValues[ Index ] ) );
+			ASSERT_EQ( expectedResults[ index ], Numeric::isWholeNumber< real_t >( testValues[ index ] ) );
 		}
 }
 
 TEST( NumericTest, GetNextPowerOfTwoWorks )
 {
-	// Perform unit test for 'GetNextPowerOfTwo' function.
+	// Perform unit test for 'getNextPowerOfTwo' function.
 
-		ASSERT_EQ( 1u, Numeric::GetNextPowerOfTwo< uint64_t >( 1 ) );
-		ASSERT_EQ( 4u, Numeric::GetNextPowerOfTwo< uint64_t >( 3 ) );
-		ASSERT_EQ( 32u, Numeric::GetNextPowerOfTwo< uint64_t >( 27 ) );
-		ASSERT_EQ( 64u, Numeric::GetNextPowerOfTwo< uint64_t >( 33 ) );
-		ASSERT_EQ( 256u, Numeric::GetNextPowerOfTwo< uint64_t >( 212 ) );
-		ASSERT_EQ( 512u, Numeric::GetNextPowerOfTwo< uint64_t >( 301 ) );
-		ASSERT_EQ( 1024u, Numeric::GetNextPowerOfTwo< uint64_t >( 768 ) );
-		ASSERT_EQ( 65536u, Numeric::GetNextPowerOfTwo< uint64_t >( 65535 ) );
-		ASSERT_EQ( 131072u, Numeric::GetNextPowerOfTwo< uint64_t >( 104215 ) );
-		ASSERT_EQ( 524288u, Numeric::GetNextPowerOfTwo< uint64_t >( 265784 ) );
+		ASSERT_EQ( 1u, Numeric::getNextPowerOfTwo< uint64_t >( 1 ) );
+		ASSERT_EQ( 4u, Numeric::getNextPowerOfTwo< uint64_t >( 3 ) );
+		ASSERT_EQ( 32u, Numeric::getNextPowerOfTwo< uint64_t >( 27 ) );
+		ASSERT_EQ( 64u, Numeric::getNextPowerOfTwo< uint64_t >( 33 ) );
+		ASSERT_EQ( 256u, Numeric::getNextPowerOfTwo< uint64_t >( 212 ) );
+		ASSERT_EQ( 512u, Numeric::getNextPowerOfTwo< uint64_t >( 301 ) );
+		ASSERT_EQ( 1024u, Numeric::getNextPowerOfTwo< uint64_t >( 768 ) );
+		ASSERT_EQ( 65536u, Numeric::getNextPowerOfTwo< uint64_t >( 65535 ) );
+		ASSERT_EQ( 131072u, Numeric::getNextPowerOfTwo< uint64_t >( 104215 ) );
+		ASSERT_EQ( 524288u, Numeric::getNextPowerOfTwo< uint64_t >( 265784 ) );
 }
 
 TEST( NumericTest, ToStringWorks )
 {
 	// Create local variables.
 
-		Stringizable::StringFormat Format;
+		Stringizable::StringFormat format;
 
-	// Perform unit test for 'ToString' function.
+	// Perform unit test for 'toString' function.
 
-		ASSERT_THROW( Numeric::ToString< int >( 1337, Stringizable::None ), QMXException );
-		ASSERT_EQ( string( "0324" ), Numeric::ToString< uint64_t >( 212, Stringizable::Octal ) );
-		ASSERT_EQ( string( "3.14159" ), Numeric::ToString< real_t >( 3.14159 ) );
-		ASSERT_EQ( string( "0x00000000DEADBEEF" ), Numeric::ToString< uint64_t >( 3735928559u, Stringizable::Hexidecimal ) );
-		Stringizable::SetStringFormat( Format, Stringizable::Octal );
-		ASSERT_EQ( string( "0324" ), Numeric::ToString< uint64_t >( 212, Stringizable::None, &Format ) );
-		Stringizable::SetStringFormat( Format, Stringizable::Decimal );
-		ASSERT_EQ( string( "3.14159" ), Numeric::ToString< real_t >( 3.14159, Stringizable::None, &Format ) );
-		Stringizable::SetStringFormat( Format, Stringizable::Hexidecimal );
-		ASSERT_EQ( string( "0x00000000DEADBEEF" ), Numeric::ToString< uint64_t >( 3735928559u, Stringizable::None, &Format ) );
+		ASSERT_THROW( Numeric::toString< int >( 1337, Stringizable::NONE ), QMXException );
+		ASSERT_EQ( string( "0b11010100" ), Numeric::toString< uint8_t >( 212, Stringizable::BINARY ) );
+		ASSERT_EQ( string( "0324" ), Numeric::toString< uint64_t >( 212, Stringizable::OCTAL ) );
+		ASSERT_EQ( string( "3.14159" ), Numeric::toString< real_t >( 3.14159 ) );
+		ASSERT_EQ( string( "0x00000000DEADBEEF" ), Numeric::toString< uint64_t >( 3735928559u, Stringizable::HEXIDECIMAL ) );
+		Stringizable::setStringFormat( format, Stringizable::BINARY );
+		ASSERT_EQ( string( "0b11010100" ), Numeric::toString< uint8_t >( 212, Stringizable::NONE, &format ) );
+		Stringizable::setStringFormat( format, Stringizable::OCTAL );
+		ASSERT_EQ( string( "0324" ), Numeric::toString< uint64_t >( 212, Stringizable::NONE, &format ) );
+		Stringizable::setStringFormat( format, Stringizable::DECIMAL );
+		ASSERT_EQ( string( "3.14159" ), Numeric::toString< real_t >( 3.14159, Stringizable::NONE, &format ) );
+		Stringizable::setStringFormat( format, Stringizable::HEXIDECIMAL );
+		ASSERT_EQ( string( "0x00000000DEADBEEF" ), Numeric::toString< uint64_t >( 3735928559u, Stringizable::NONE, &format ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

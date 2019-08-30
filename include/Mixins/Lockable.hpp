@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Lockable.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 27FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 27AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to enable object locking.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 27FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for a mixin class to enable object locking.
   *
-  * @section Description
+  * @section LockableH0000 Description
   *
   * This header file defines the interface for a mixin class to enable object locking.
   *
-  * @section License
+  * @section LockableH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -53,15 +53,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "../Base.hpp"
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static Macros
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define SCOPED_READ_LOCK         QMXStdLib::SharedLock ScopedReadLock( this->LocalMutex )
-#define SCOPED_READ_LOCK_X(x,y)  QMXStdLib::SharedLock ScopedReadLock##y( x.GetMutex() )
-#define SCOPED_WRITE_LOCK        QMXStdLib::UniqueLock ScopedWriteLock( this->LocalMutex )
-#define SCOPED_WRITE_LOCK_X(x,y) QMXStdLib::UniqueLock ScopedWriteLock##y( x.GetMutex() )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -115,17 +106,17 @@ public:
 	// Public Methods
 
 		/**
-		  * @brief This method obtains the mutex object.
+		  * @brief This method obtains the mutex pair object.
 		  *
 		  * @return
-		  * 	A mutable reference to the mutex object.
+		  * 	A mutable reference to the mutex pair object.
 		  */
 
-		SharedMutex& GetMutex() const
+		SharedMutexPair& getMutex() const
 		{
 			// Return a mutable reference to the mutex object to calling routine.
 
-				return LocalMutex;
+				return localMutex;
 		}
 
 protected:
@@ -133,10 +124,10 @@ protected:
 	// Protected Fields
 
 		/**
-		  * @brief This is the mutex for use when thread-safety is needed.
+		  * @brief This is the mutex pair for use when thread-safety is needed.
 		  */
 
-		mutable SharedMutex LocalMutex;
+		mutable SharedMutexPair localMutex;
 };
 
 } // 'QMXStdLib' Namespace

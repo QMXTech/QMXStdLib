@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ScopedStackTrace.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 20FEB16 by Robert M. Baker
-// Version : 1.1.2
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 28AUG19 by Robert M. Baker
+// Version : 2.0.0
 // This is a header file for 'QMXStdLib'; it defines the interface for an RAII class to create a scoped trace.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+// Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 //
 // This file is part of 'QMXStdLib'.
 //
@@ -21,18 +21,18 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 20FEB16 by Robert M. Baker
-  * @version 1.1.2
+  * @date    Last Modified : 28AUG19 by Robert M. Baker
+  * @version 2.0.0
   *
   * @brief This header file defines the interface for an RAII class to create a scoped trace.
   *
-  * @section Description
+  * @section ScopedStackTraceH0000 Description
   *
   * This header file defines the interface for an RAII class to create a scoped trace.
   *
-  * @section License
+  * @section ScopedStackTraceH0001 License
   *
-  * Copyright (C) 2011-2016 QuantuMatriX Software, LLP.
+  * Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
   *
   * This file is part of 'QMXStdLib'.
   *
@@ -53,14 +53,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "../Base.hpp"
-#include "../Mixins/NonCopyable.hpp"
 #include "../StackTracer.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Macros
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SCOPED_STACK_TRACE(x,y) QMXStdLib::ScopedStackTrace ScopedStackTrace##y( x )
+#define SCOPED_STACK_TRACE(x,y) QMXStdLib::ScopedStackTrace scopedStackTrace##y( x )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of the 'QMXStdLib' Namespace
@@ -94,24 +93,24 @@ public:
 		/**
 		  * @brief This is the copy constructor, which is deleted to prevent copying.
 		  *
-		  * @param Instance
+		  * @param instance
 		  * 	N/A
 		  */
 
-		ScopedStackTrace( const ScopedStackTrace& Instance ) = delete;
+		ScopedStackTrace( const ScopedStackTrace& instance ) = delete;
 
 		/**
 		  * @brief This is the constructor which accepts the initialization data.
 		  *
-		  * @param Entry
+		  * @param entry
 		  * 	This is the string to use when pushing the stack tracer entry.
 		  */
 
-		ScopedStackTrace( const std::string& Entry )
+		ScopedStackTrace( const std::string& entry )
 		{
 			// Push specified entry into stack tracer.
 
-				StackTracer::Push( Entry );
+				StackTracer::push( entry );
 		}
 
 	// Destructor
@@ -120,11 +119,11 @@ public:
 		  * @brief This is the destructor.
 		  */
 
-		virtual ~ScopedStackTrace()
+		~ScopedStackTrace()
 		{
 			// Pop the entry from stack tracer.
 
-				StackTracer::Pop();
+				StackTracer::pop();
 		}
 
 	// Public Overloaded Operators
@@ -132,14 +131,14 @@ public:
 		/**
 		  * @brief This is the default assignment-operator, which is deleted to prevent copying.
 		  *
-		  * @param Instance
+		  * @param instance
 		  * 	N/A
 		  *
 		  * @return
 		  * 	N/A
 		  */
 
-		ScopedStackTrace& operator=( const ScopedStackTrace& Instance ) = delete;
+		ScopedStackTrace& operator=( const ScopedStackTrace& instance ) = delete;
 };
 
 } // 'QMXStdLib' Namespace
