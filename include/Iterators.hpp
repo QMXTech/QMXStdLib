@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Iterators.hpp
 // Robert M. Baker | Created : 08OCT17 | Last Modified : 27AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Version : 2.1.0
 // This is a header file for 'QMXStdLib'; it includes the various iterator classes.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 08OCT17
   * @date    Last Modified : 27AUG19 by Robert M. Baker
-  * @version 2.0.0
+  * @version 2.1.0
   *
   * @brief This header file includes the various iterator classes.
   *

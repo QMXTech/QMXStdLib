@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManagerTest.cpp
-// Robert M. Baker | Created : 26FEB16 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 26FEB16 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'ThreadManager' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -304,14 +304,14 @@ TEST( ThreadManagerTest, GetGroupIDsWorks )
 {
 	// Create local variables.
 
-		ThreadManager::InstancePtr instance = ThreadManager::create();
-		StringVector groupIDs;
-
 		string expectedResults[] = {
 			"TestGroupA",
 		   "TestGroupB",
 		   "TestGroupC"
 		};
+
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		StringVector groupIDs;
 
 	// Perform unit test for 'getgroupIDs' method.
 
@@ -365,15 +365,15 @@ TEST( ThreadManagerTest, GetThreadIDsWorks )
 {
 	// Create local variables.
 
-		ThreadManager::InstancePtr instance = ThreadManager::create();
-		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
-		StringVector threadIDs;
-
 		string expectedResults[] = {
 			"TestThreadA",
 		   "TestThreadB",
 		   "TestThreadC"
 		};
+
+		ThreadManager::InstancePtr instance = ThreadManager::create();
+		ThreadManagerTest::Variables::InstancePtr vars = make_shared< ThreadManagerTest::Variables >();
+		StringVector threadIDs;
 
 	// Perform unit test for 'getThreadIDs' method.
 

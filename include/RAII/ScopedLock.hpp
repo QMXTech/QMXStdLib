@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ScopedLock.hpp
 // Robert M. Baker | Created : 30MAR16 | Last Modified : 28AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Version : 2.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for an RAII class to obtain a scoped lock.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 30MAR16
   * @date    Last Modified : 28AUG19 by Robert M. Baker
-  * @version 2.0.0
+  * @version 2.1.0
   *
   * @brief This is a header file for 'QMXStdLib'; it defines the interface for an RAII class to obtain a scoped lock.
   *

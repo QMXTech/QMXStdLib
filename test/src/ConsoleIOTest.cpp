@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIOTest.cpp
-// Robert M. Baker | Created : 30JAN12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 30JAN12 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::ConsoleIO' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -58,10 +58,21 @@ TEST( ConsoleIOTest, SynchronizedStreamWorks )
 {
 	// Create local variables.
 
-		ostream* stream[] = { &cout, &cerr, &clog };
-		streambuf* bufferBackups[] = { cout.rdbuf(), cerr.rdbuf(), clog.rdbuf() };
-		ostringstream buffers[ ConsoleIO::StreamType::STREAM_COUNT ];
 		string expectedOutput;
+
+		ostream* stream[] = {
+			&cout,
+			&cerr,
+			&clog
+		};
+
+		streambuf* bufferBackups[] = {
+			cout.rdbuf(),
+			cerr.rdbuf(),
+			clog.rdbuf()
+		};
+
+		ostringstream buffers[ ConsoleIO::StreamType::STREAM_COUNT ];
 		boost::thread_group threads;
 		size_t threadCount = 10;
 
@@ -95,14 +106,38 @@ TEST( ConsoleIOTest, GetInputMinimumWorks )
 {
 	// Create local variables.
 
+		real_t testInput[] = {
+			53.5477,
+			-6.372,
+			43.17,
+			-45.6,
+			73.0
+		};
+
+		real_t testArguments[] = {
+			10.8676,
+			-39.494,
+			4.09,
+			-88.9,
+			32.0
+		};
+
+		real_t expectedOutput[] = {
+			53.5477,
+			-6.372,
+			43.17,
+			-45.6, 73.0
+		};
+
+		streambuf* bufferBackups[] = {
+			cin.rdbuf(),
+			cout.rdbuf()
+		};
+
 		real_t result = UNSET;
-		streambuf* bufferBackups[] = { cin.rdbuf(), cout.rdbuf() };
 		istringstream inputBuffer;
 		ostringstream outputBuffer;
 		ostringstream resultBuffer;
-		real_t testInput[] = { 53.5477, -6.372, 43.17, -45.6, 73.0 };
-		real_t testArguments[] = { 10.8676, -39.494, 4.09, -88.9, 32.0 };
-		real_t expectedOutput[] = { 53.5477, -6.372, 43.17, -45.6, 73.0 };
 
 	// Change stream buffers for input/output streams to input/output buffer streams.
 
@@ -128,14 +163,39 @@ TEST( ConsoleIOTest, GetInputMaximumWorks )
 {
 	// Create local variables.
 
+		real_t testInput[] = {
+			10.8676,
+			-39.494,
+			4.09,
+			-88.9,
+			32.0
+		};
+
+		real_t testArguments[] = {
+			53.5477,
+			-6.372,
+			43.17,
+			-45.6,
+			73.0
+		};
+
+		real_t expectedOutput[] = {
+			10.8676,
+			-39.494,
+			4.09,
+			-88.9,
+			32.0
+		};
+
+		streambuf* bufferBackups[] = {
+			cin.rdbuf(),
+			cout.rdbuf()
+		};
+
 		real_t result = UNSET;
-		streambuf* bufferBackups[] = { cin.rdbuf(), cout.rdbuf() };
 		istringstream inputBuffer;
 		ostringstream outputBuffer;
 		ostringstream resultBuffer;
-		real_t testInput[] = { 10.8676, -39.494, 4.09, -88.9, 32.0 };
-		real_t testArguments[] = { 53.5477, -6.372, 43.17, -45.6, 73.0 };
-		real_t expectedOutput[] = { 10.8676, -39.494, 4.09, -88.9, 32.0 };
 
 	// Change stream buffers for input/output streams to input/output buffer streams.
 
@@ -161,15 +221,47 @@ TEST( ConsoleIOTest, GetInputRangeWorks )
 {
 	// Create local variables.
 
+		real_t testInput[] = {
+			53.5477,
+			-6.372,
+			43.17,
+			-45.6,
+			73.0
+		};
+
+		real_t testMinArguments[] = {
+			28.5477,
+			-31.372,
+			18.17,
+			-70.6,
+			48.0
+		};
+
+		real_t testMaxArguments[] = {
+			78.5477,
+			18.628,
+			68.17,
+			-20.6,
+			98.0
+		};
+
+		real_t expectedOutput[] = {
+			53.5477,
+			-6.372,
+			43.17,
+			-45.6,
+			73.0
+		};
+
+		streambuf* bufferBackups[] = {
+			cin.rdbuf(),
+			cout.rdbuf()
+		};
+
 		real_t result = UNSET;
-		streambuf* bufferBackups[] = { cin.rdbuf(), cout.rdbuf() };
 		istringstream inputBuffer;
 		ostringstream outputBuffer;
 		ostringstream resultBuffer;
-		real_t testInput[] = { 53.5477, -6.372, 43.17, -45.6, 73.0 };
-		real_t testMinArguments[] = { 28.5477, -31.372, 18.17, -70.6, 48.0 };
-		real_t testMaxArguments[] = { 78.5477, 18.628, 68.17, -20.6, 98.0 };
-		real_t expectedOutput[] = { 53.5477, -6.372, 43.17, -45.6, 73.0 };
 
 	// Change stream buffers for input/output streams to input/output buffer streams.
 
@@ -195,15 +287,47 @@ TEST( ConsoleIOTest, GetInputTwoChoiceWorks )
 {
 	// Create local variables.
 
+		char testInput[] = {
+			'Y',
+			'F',
+			'A',
+			'D',
+			'X'
+		};
+
+		char testChoice1Arguments[] = {
+			'Y',
+			'T',
+			'A',
+			'C',
+			'X'
+		};
+
+		char testChoice2Arguments[] = {
+			'N',
+			'F',
+			'B',
+			'D',
+			'Y'
+		};
+
+		char expectedOutput[] = {
+			'Y',
+			'F',
+			'A',
+			'D',
+			'X'
+		};
+
+		streambuf* bufferBackups[] = {
+			cin.rdbuf(),
+			cout.rdbuf()
+		};
+
 		char result = UNSET;
-		streambuf* bufferBackups[] = { cin.rdbuf(), cout.rdbuf() };
 		istringstream inputBuffer;
 		ostringstream outputBuffer;
 		ostringstream resultBuffer;
-		char testInput[] = { 'Y', 'F', 'A', 'D', 'X' };
-		char testChoice1Arguments[] = { 'Y', 'T', 'A', 'C', 'X'};
-		char testChoice2Arguments[] = { 'N', 'F', 'B', 'D', 'Y' };
-		char expectedOutput[] = { 'Y', 'F', 'A', 'D', 'X' };
 
 	// Change stream buffers for input/output streams to input/output buffer streams.
 
@@ -229,12 +353,13 @@ TEST( ConsoleIOTest, GetInputMultipleChoiceWorks )
 {
 	// Create local variables.
 
-		char result = UNSET;
-		streambuf* bufferBackups[] = { cin.rdbuf(), cout.rdbuf() };
-		istringstream inputBuffer;
-		ostringstream outputBuffer;
-		ostringstream resultBuffer;
-		char testInput[] = { 'A', 'G', 'M', 'S', 'Y' };
+		char testInput[] = {
+			'A',
+			'G',
+			'M',
+			'S',
+			'Y'
+		};
 
 		string testArguments[] = {
 			"A, B, C, D, or E",
@@ -244,7 +369,23 @@ TEST( ConsoleIOTest, GetInputMultipleChoiceWorks )
 			"U, V, W, X, or Y"
 		};
 
-		char expectedOutput[] = { 'A', 'G', 'M', 'S', 'Y' };
+		char expectedOutput[] = {
+			'A',
+			'G',
+			'M',
+			'S',
+			'Y'
+		};
+
+		streambuf* bufferBackups[] = {
+			cin.rdbuf(),
+			cout.rdbuf()
+		};
+
+		char result = UNSET;
+		istringstream inputBuffer;
+		ostringstream outputBuffer;
+		ostringstream resultBuffer;
 
 	// Change stream buffers for input/output streams to input/output buffer streams.
 

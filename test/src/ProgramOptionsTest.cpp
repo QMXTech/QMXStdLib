@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptionsTest.cpp
-// Robert M. Baker | Created : 24OCT13 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 24OCT13 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::ProgramOptions' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -34,12 +34,6 @@ TEST( ProgramOptionsTest, SaveConfigFileWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
-		string testSaveFile = BASE_PATH + "TestSave.cfg";
-		ifstream configFile;
-		char buffer[ MAX_BUFFER_SIZE ];
-		string line;
-		size_t fileIndex = UNSET;
 		string assignment( 1, PROGRAMOPTIONS_ASSIGNMENT_OPERATOR );
 		string comment( 1, PROGRAMOPTIONS_COMMENT_INITIATOR );
 		string delimiterLeft( 1, PROGRAMOPTIONS_GROUP_DELIMITER_LEFT );
@@ -62,6 +56,13 @@ TEST( ProgramOptionsTest, SaveConfigFileWorks )
 		   "",
 		   ""
 		};
+
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
+		string testSaveFile = BASE_PATH + "TestSave.cfg";
+		ifstream configFile;
+		char buffer[ MAX_BUFFER_SIZE ];
+		string line;
+		size_t fileIndex = UNSET;
 
 	// Perform unit test for 'saveConfigFile' method.
 
@@ -90,7 +91,6 @@ TEST( ProgramOptionsTest, IsToggleOptionPresentWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 		char argument1[] = "--bit-mask=11";
 		char argument2[] = "--TestGroup1.bravo=2B";
 		char argument3[] = "--TestGroup2.delta=4D";
@@ -108,6 +108,8 @@ TEST( ProgramOptionsTest, IsToggleOptionPresentWorks )
 		   argument6,
 		   argument7
 		};
+
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 
 	// Perform unit test for 'isToggleOptionPresent' method.
 
@@ -123,7 +125,6 @@ TEST( ProgramOptionsTest, IsCommandOptionPresentWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 		char argument1[] = "--bit-mask=11";
 		char argument2[] = "--TestGroup1.bravo=2B";
 		char argument3[] = "--TestGroup2.delta=4D";
@@ -142,6 +143,8 @@ TEST( ProgramOptionsTest, IsCommandOptionPresentWorks )
 		   argument7
 		};
 
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
+
 	// Perform unit test for 'isCommandOptionPresent' method.
 
 		PROGRAM_OPTIONS.parseCommandLine( ARRAY_SIZE( argumentValues ), argumentValues );
@@ -153,7 +156,6 @@ TEST( ProgramOptionsTest, GetConfigOptionWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 		char argument1[] = "--bit-mask=11";
 		char argument2[] = "--TestGroup1.bravo=Bubble";
 		char argument3[] = "--TestGroup2.delta=DingBat";
@@ -171,6 +173,8 @@ TEST( ProgramOptionsTest, GetConfigOptionWorks )
 			argument6,
 			argument7
 		};
+
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 
 	// Perform unit test for 'getConfigOption' method.
 
@@ -190,7 +194,6 @@ TEST( ProgramOptionsTest, GetConfigOptionsWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 		char argument1[] = "--bit-mask=11";
 		char argument2[] = "--TestGroup1.bravo=Bubble";
 		char argument3[] = "--TestGroup2.delta=DingBat";
@@ -208,8 +211,6 @@ TEST( ProgramOptionsTest, GetConfigOptionsWorks )
 		   argument6,
 		   argument7
 		};
-
-		ProgramOptions::ConfigMap configOptions;
 
 		string expectedGroups[] = {
 			"Global",
@@ -229,6 +230,9 @@ TEST( ProgramOptionsTest, GetConfigOptionsWorks )
 		   "DingBat"
 		};
 
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
+		ProgramOptions::ConfigMap configOptions;
+
 	// Perform unit test for 'getConfigOptions' method.
 
 		PROGRAM_OPTIONS.parseCommandLine( ARRAY_SIZE( argumentValues ), argumentValues );
@@ -243,8 +247,6 @@ TEST( ProgramOptionsTest, GetConfigOptionsWorks )
 TEST( ProgramOptionsTest, SetConfigOptionWorks )
 {
 	// Create local variables.
-
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 
 		StringPair testOptions[] = {
 			make_pair( "bit-mask", "42" ),
@@ -269,6 +271,8 @@ TEST( ProgramOptionsTest, SetConfigOptionWorks )
 		   "DungBeetle",
 		   ""
 		};
+
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 
 	// Perform unit test for 'setConfigOption' method.
 
@@ -295,9 +299,6 @@ TEST( ProgramOptionsTest, SetConfigOptionsWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
-		ProgramOptions::ConfigMap configOptions;
-
 		tuple< string, string, string > testOptions[] = {
 			make_tuple( "Global", "bit-mask", "42" ),
 		   make_tuple( "TestGroup1", "bravo", "Booger" ),
@@ -306,6 +307,8 @@ TEST( ProgramOptionsTest, SetConfigOptionsWorks )
 		   make_tuple( "TestGroup2", "bit-mask", "168" )
 		};
 
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
+		ProgramOptions::ConfigMap configOptions;
 		string targetOption;
 
 	// Perform unit test for 'setConfigOptions' method.
@@ -326,8 +329,6 @@ TEST( ProgramOptionsTest, RemoveConfigOptionWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
-
 		StringPair testOptions[] = {
 			make_pair( "bit-mask", "42" ),
 		   make_pair( "TestGroup1.bravo", "Booger" ),
@@ -335,6 +336,8 @@ TEST( ProgramOptionsTest, RemoveConfigOptionWorks )
 		   make_pair( "TestGroup2.delta", "DungBeetle" ),
 		   make_pair( "TestGroup2.bit-mask", "168" )
 		};
+
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 
 	// Perform unit test for 'removeConfigOption' method.
 
@@ -351,7 +354,6 @@ TEST( ProgramOptionsTest, GetPositionalOptionWorks )
 {
 	// Create local variables.
 
-		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 		char argument1[] = "--bit-mask=11";
 		char argument2[] = "--TestGroup1.bravo=Bubble";
 		char argument3[] = "--TestGroup2.delta=DingBat";
@@ -369,6 +371,8 @@ TEST( ProgramOptionsTest, GetPositionalOptionWorks )
 		   argument6,
 		   argument7
 		};
+
+		ProgramOptions::InstancePtr instance = ProgramOptions::create();
 
 	// Perform unit test for 'getPositionalOption' method.
 

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManager.hpp
-// Robert M. Baker | Created : 24FEB16 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 24FEB16 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 24FEB16
-  * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.0.0
+  * @date    Last Modified : 31AUG19 by Robert M. Baker
+  * @version 2.1.0
   *
   * @brief This is a header file for 'QMXStdLib'; it defines the interface for a thread manager class.
   *
@@ -70,6 +70,18 @@
 
 namespace QMXStdLib
 {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Type Definitions
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef boost::thread                            Thread;
+typedef boost::barrier                           Barrier;
+typedef boost::this_thread::disable_interruption DisableInterruption;
+typedef boost::thread_interrupted                ThreadInterrupted;
+
+STANDARD_TYPEDEFS_X( Thread,                     Thread );
+STANDARD_TYPEDEFS_X( Barrier,                    Barrier );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The 'ThreadManager' Class

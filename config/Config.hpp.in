@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Config.hpp
 // Robert M. Baker | Created : 10DEC11 | Last Modified : 26AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Version : 2.1.0
 // This is the platform-specific configuration header file for 'QMXStdLib'.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
   * @date    Last Modified : 26AUG19 by Robert M. Baker
-  * @version 2.0.0
+  * @version 2.1.0
   *
   * @brief This header file contains configuration data determined by the target platform.
   *

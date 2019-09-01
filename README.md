@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-> QuantuMatriX Software Standard Library - V2.0.0
+> QuantuMatriX Software Standard Library - V2.1.0
 > Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 >
 > This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMXStdLib website at 'https://git.qmx-software.com/open-source/qmxstdlib/'.
@@ -20,7 +20,7 @@
 >> * Doxygen >= 1.6
 >>
 >> #### Libraries
->> * Boost >= 1.50
+>> * Boost >= 1.69
 >> * GTest >= 1.6 (optional)
 >>
 >> #### Tools
@@ -35,7 +35,7 @@
 >> * Doxygen >= 1.6
 >>
 >> #### Libraries
->> * Boost >= 1.50
+>> * Boost >= 1.69
 >> * GTest >= 1.6 (optional)
 >>
 >> #### Tools

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SequencerTest.cpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::Sequencer' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -34,8 +34,6 @@ TEST( SequencerTest, OperatorPostIncrementIntegralNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			0,
 			1,
@@ -48,6 +46,8 @@ TEST( SequencerTest, OperatorPostIncrementIntegralNonLoopedLinearWorks )
 			4,
 			4
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with no looping.
 
@@ -64,8 +64,6 @@ TEST( SequencerTest, OperatorPostIncrementIntegralNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			0,
 			1,
@@ -78,6 +76,8 @@ TEST( SequencerTest, OperatorPostIncrementIntegralNonLoopedOscillateWorks )
 			0,
 			0
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with no looping.
 
@@ -94,8 +94,6 @@ TEST( SequencerTest, OperatorPostIncrementIntegralLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			0,
 			1,
@@ -108,6 +106,8 @@ TEST( SequencerTest, OperatorPostIncrementIntegralLoopedLinearWorks )
 			3,
 			4
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with looping.
 
@@ -123,8 +123,6 @@ TEST( SequencerTest, OperatorPostIncrementIntegralLoopedLinearWorks )
 TEST( SequencerTest, OperatorPostIncrementIntegralLoopedOscillateWorks )
 {
 	// Create local variables.
-
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 	
 		int64_t expectedResults[] = {
 			0,
@@ -138,6 +136,8 @@ TEST( SequencerTest, OperatorPostIncrementIntegralLoopedOscillateWorks )
 			0,
 			1
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with looping.
 
@@ -154,8 +154,6 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			0.0,
 			0.5,
@@ -168,6 +166,8 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointNonLoopedLinearWorks )
 			2.0,
 			2.0
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with no looping.
 
@@ -184,8 +184,6 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			0.0,
 			0.5,
@@ -198,6 +196,8 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointNonLoopedOscillateWorks )
 			0.0,
 			0.0
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with no looping.
 
@@ -214,8 +214,6 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			0.0,
 			0.5,
@@ -228,6 +226,8 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointLoopedLinearWorks )
 			1.5,
 			2.0
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with looping.
 
@@ -244,8 +244,6 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			0.0,
 			0.5,
@@ -258,6 +256,8 @@ TEST( SequencerTest, OperatorPostIncrementFloatingPointLoopedOscillateWorks )
 			0.0,
 			0.5
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with looping.
 
@@ -274,8 +274,6 @@ TEST( SequencerTest, OperatorPostDecrementIntegralNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			4,
 			3,
@@ -288,6 +286,8 @@ TEST( SequencerTest, OperatorPostDecrementIntegralNonLoopedLinearWorks )
 			0,
 			0
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with no looping.
 
@@ -304,8 +304,6 @@ TEST( SequencerTest, OperatorPostDecrementIntegralNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			4,
 			3,
@@ -318,6 +316,8 @@ TEST( SequencerTest, OperatorPostDecrementIntegralNonLoopedOscillateWorks )
 			4,
 			4
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with no looping.
 
@@ -334,8 +334,6 @@ TEST( SequencerTest, OperatorPostDecrementIntegralLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			4,
 			3,
@@ -348,6 +346,8 @@ TEST( SequencerTest, OperatorPostDecrementIntegralLoopedLinearWorks )
 			1,
 			0
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'LINEAR' mode with looping.
 
@@ -364,8 +364,6 @@ TEST( SequencerTest, OperatorPostDecrementIntegralLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
-
 		int64_t expectedResults[] = {
 			4,
 			3,
@@ -378,6 +376,8 @@ TEST( SequencerTest, OperatorPostDecrementIntegralLoopedOscillateWorks )
 			4,
 			3
 		};
+
+		Sequencer< int64_t >::InstancePtr instance = Sequencer< int64_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using integral values in 'OSCILLATE' mode with looping.
 
@@ -394,8 +394,6 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointNonLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			2.0,
 			1.5,
@@ -408,6 +406,8 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointNonLoopedLinearWorks )
 			0.0,
 			0.0
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with no looping.
 
@@ -424,8 +424,6 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointNonLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			2.0,
 			1.5,
@@ -438,6 +436,8 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointNonLoopedOscillateWorks )
 			2.0,
 			2.0
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with no looping.
 
@@ -454,8 +454,6 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointLoopedLinearWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			2.0,
 			1.5,
@@ -468,6 +466,8 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointLoopedLinearWorks )
 			0.5,
 			0.0
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'LINEAR' mode with looping.
 
@@ -484,8 +484,6 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointLoopedOscillateWorks )
 {
 	// Create local variables.
 
-		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
-
 		real_t expectedResults[] = {
 			2.0,
 			1.5,
@@ -498,6 +496,8 @@ TEST( SequencerTest, OperatorPostDecrementFloatingPointLoopedOscillateWorks )
 			2.0,
 			1.5
 		};
+
+		Sequencer< real_t >::InstancePtr instance = Sequencer< real_t >::create();
 
 	// Perform unit test for 'operator++( int )' method using floating point values in 'OSCILLATE' mode with looping.
 

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base.hpp
-// Robert M. Baker | Created : 10DEC11 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 10DEC11 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is the base header file for 'QMXStdLib'; it defines data common to all modules.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
   * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.0.0
+  * @version 2.1.0
   *
   * @brief This base header file defines data common to all modules.
   *
@@ -115,8 +115,6 @@
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/timer/timer.hpp>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -134,8 +132,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SINGLE_STATEMENT(x)        do{ x }while( false )
-#define NOT_A_THREAD               boost::thread::id()
-#define THIS_THREAD_HASH           boost::this_thread::get_id()
 #define STRINGIZE_IMP(x)           #x
 #define STRINGIZE(x)               STRINGIZE_IMP( x )
 #define PURE_VIRTUAL               0
@@ -148,6 +144,8 @@
 #define SAFE_DELETE_ARRAY(x)       SINGLE_STATEMENT( delete[] x;  x = nullptr; )
 #define FLUSH_ISTREAM(x)           x.ignore( std::numeric_limits< std::streamsize >::max(), '\n' )
 #define STRIP_ALL_WHITESPACE(x)    x.erase( std::remove_if( x.begin(), x.end(), boost::algorithm::is_space() ), x.end() )
+#define NOT_A_THREAD               boost::thread::id()
+#define THIS_THREAD_HASH           boost::this_thread::get_id()
 
 #define STANDARD_TYPEDEFS(x)       typedef std::shared_ptr< x > InstancePtr;\
                                    typedef std::pair< std::string, x > InstancePair;\
@@ -210,21 +208,9 @@ namespace QMXStdLib
 
 typedef long double                              real_t;
 typedef uint64_t                                 bit_field_t;
-typedef boost::chrono::nanoseconds               Nanoseconds;
-typedef boost::chrono::microseconds              Microseconds;
-typedef boost::chrono::milliseconds              Milliseconds;
-typedef boost::chrono::seconds                   Seconds;
-typedef boost::chrono::minutes                   Minutes;
-typedef boost::chrono::hours                     Hours;
-typedef boost::thread                            Thread;
 typedef boost::thread::id                        ThreadHash;
-typedef boost::barrier                           Barrier;
-typedef boost::this_thread::disable_interruption DisableInterruption;
-typedef boost::thread_interrupted                ThreadInterrupted;
 typedef boost::shared_mutex                      SharedMutex;
 typedef std::pair< ThreadHash, SharedMutex >     SharedMutexPair;
-typedef boost::filesystem::path                  Path;
-typedef boost::filesystem::directory_iterator    DirectoryIterator;
 
 #ifdef QMX_32BIT
 	typedef uint32_t                              ptr_size_t;
@@ -247,9 +233,6 @@ STANDARD_TYPEDEFS_X( float,                      Float )
 STANDARD_TYPEDEFS_X( double,                     Double )
 STANDARD_TYPEDEFS_X( real_t,                     Real )
 STANDARD_TYPEDEFS_X( std::string,                String )
-STANDARD_TYPEDEFS_X( Thread,                     Thread );
-STANDARD_TYPEDEFS_X( Barrier,                    Barrier );
-STANDARD_TYPEDEFS_X( Path,                       Path );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Anonymous Enumerations

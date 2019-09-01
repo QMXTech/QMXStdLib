@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StringTest.cpp
-// Robert M. Baker | Created : 20FEB12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 20FEB12 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::String' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -172,8 +172,8 @@ TEST( StringTest, ToUpperWorks )
 {
 	// Create local variables.
 
-		boost::locale::generator localeGenerator;
 		string testValue = u8"βετα/ΒΕΤΑ : beta/BETA";
+		boost::locale::generator localeGenerator;
 
 	// Set global locale.
 
@@ -191,8 +191,8 @@ TEST( StringTest, ToLowerWorks )
 {
 	// Create local variables.
 
-		boost::locale::generator localeGenerator;
 		string testValue = u8"βετα/ΒΕΤΑ : beta/BETA";
+		boost::locale::generator localeGenerator;
 
 	// Set global locale.
 

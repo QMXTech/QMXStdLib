@@ -42,7 +42,7 @@ Key
 
 
 
-DDMMMYY 2.0.0 Robert M. Baker <malachy@qmxtech.com>
+29AUG19 2.0.0 Robert M. Baker <malachy@qmxtech.com>
 ===================================================
 ~ Refactored all code to conform to new QMX standards.
 ~ Modified 'clone' and 'cloneImp' methods from 'Object' class to accept a pointer to a derived class.
@@ -53,7 +53,7 @@ DDMMMYY 2.0.0 Robert M. Baker <malachy@qmxtech.com>
 - Removed deprecated 'nonCopyable' class.
 - Removed 'Plugin' mixin class, as it is being moved to QMXSAF.
 - Removed 'PluginManager' class, as it is being moved to QMXSAF.
-~ Converted 'UniqueRandom' class into a namespace with a single function 'generate' which accepts integral and floating point types.
+~ Converted 'UniqueRandom' class into a namespace with generate functions which accepts integral and floating point types.
 + Added standard type definitions for the 'Thread' class.
 + Added 'wrap' function to 'Numeric' namespace to facilitate wrapping of values within a closed interval.
 + Added 'getConfigOptions' method to 'ProgramOptions' class to facilitate retrieval of the underlying config map.
@@ -61,3 +61,11 @@ DDMMMYY 2.0.0 Robert M. Baker <malachy@qmxtech.com>
 + Added 'getGroupIDs' method to 'ThreadManager' class to facilitate retrieval of all existing groups.
 + Added 'getThreadIDs' method to 'ThreadManager' class to facilitate retrieval of all existing threads within a group.
 + Added 'InputIterator', 'OutputIterator', 'ForwardIterator', 'BidirectionalIterator', and 'RandomAccessIterator' classes.
+
+
+
+31AUG19 2.1.0 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Moved filesystem-related type definitions to 'FileSytem.hpp'.
+~ Moved thread-related type definitions to 'ThreadManager.hpp' (except 'ThreadHash', 'SharedMutex, & 'SharedMutexPair').
+~ Moved time-related type definitions to 'Timer.hpp'.

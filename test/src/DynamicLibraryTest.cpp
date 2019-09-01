@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DynamicLibraryTest.cpp
-// Robert M. Baker | Created : 01JUL12 | Last Modified : 29OCT19 by Robert M. Baker
-// Version : 2.0.0
+// Robert M. Baker | Created : 01JUL12 | Last Modified : 31OCT19 by Robert M. Baker
+// Version : 2.1.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::DynamicLibrary' class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -34,14 +34,14 @@ TEST( DynamicLibraryTest, LoadWorks )
 {
 	// Create local variables.
 
-		DynamicLibrary::InstancePtr instance = DynamicLibrary::create();
-
 		string dynLibPathsBad[] = {
 			"NonEmptyTestFile.txt",
 			"NonExistent"
 		};
 
 		string dynLibPathGood = "TestLibrary";
+
+		DynamicLibrary::InstancePtr instance = DynamicLibrary::create();
 
 	// Perform unit test for 'load' method.
 
