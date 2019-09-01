@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Timer.hpp
 // Robert M. Baker | Created : 11JAN12 | Last Modified : 31AUG19 by Robert M. Baker
-// Version : 2.1.0
+// Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a timer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
   * @date    Last Modified : 31JAN19 by Robert M. Baker
-  * @version 2.1.0
+  * @version 2.1.1
   *
   * @brief This header file defines the interface for a timer class.
   *
@@ -149,7 +149,7 @@ public:
 		/**
 		  * @brief This method gets the elapsed time in the specified units.
 		  *
-		  * @param Units
+		  * @param units
 		  * 	This is the time units specifier; if it is set to an out-of-range value, it will be set to seconds.
 		  *
 		  * @return

@@ -2,7 +2,7 @@
 ################################################################################################################################################################
 # update-version.sh
 # Robert M. Baker | Created : 22JUL18 | Last Modified : 26AUG19 by Robert M. Baker
-# Version : 2.1.0
+# Version : 2.1.1
 # This script updates the project version number in all files.
 ################################################################################################################################################################
 # Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership

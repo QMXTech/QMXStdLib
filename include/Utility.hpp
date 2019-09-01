@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.1.0
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a general utility class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.1.0
+  * @date    Last Modified : 31AUG19 by Robert M. Baker
+  * @version 2.1.1
   *
   * @brief This header file defines the interface for a general utility class.
   *
@@ -414,7 +414,7 @@ public:
 		/**
 		  * @brief This method sets the seed for the random number generator.
 		  *
-		  * @param Seed
+		  * @param seed
 		  * 	This is the seed to use; if it is set to 'UNSET', the current time will be used instead.
 		  */
 

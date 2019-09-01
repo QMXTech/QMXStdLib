@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Object.hpp
 // Robert M. Baker | Created : 05JAN12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.1.0
+// Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a generic base class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 05JAN12
   * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.1.0
+  * @version 2.1.1
   *
   * @brief This header file defines the interface for a generic base class.
   *

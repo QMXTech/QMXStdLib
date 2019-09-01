@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sequencer.hpp
 // Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.1.0
+// Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a numeric sequencer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
   * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.1.0
+  * @version 2.1.1
   *
   * @brief This header file defines the interface for a numeric sequencer class.
   *

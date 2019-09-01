@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracer.hpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.1.0
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 31AUG19 by Robert M. Baker
+// Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a stack tracer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.1.0
+  * @date    Last Modified : 31AUG19 by Robert M. Baker
+  * @version 2.1.1
   *
   * @brief This header file defines the interface for a stack tracer class.
   *
@@ -164,7 +164,7 @@ public:
 		  *
 		  * The current thread's ID should first be set with a call to 'setThreadID'.
 		  *
-		  * @param baseStackTrace
+		  * @param base
 		  * 	This is a string containing the base stack trace.
 		  *
 		  * @exception QMXException

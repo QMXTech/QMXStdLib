@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIO.cpp
 // Robert M. Baker | Created : 01OCT13 | Last Modified : 26AUG19 by Robert M. Baker
-// Version : 2.1.0
+// Version : 2.1.1
 // This is a source file for 'QMXStdLib'; it defines the implementation for a console I/O class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 01OCT13
   * @date    Last Modified : 26AUG19 by Robert M. Baker
-  * @version 2.1.0
+  * @version 2.1.1
   *
   * @brief This source file defines the implementation for a console I/O class.
   *

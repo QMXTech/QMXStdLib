@@ -69,3 +69,9 @@ Key
 ~ Moved filesystem-related type definitions to 'FileSytem.hpp'.
 ~ Moved thread-related type definitions to 'ThreadManager.hpp' (except 'ThreadHash', 'SharedMutex, & 'SharedMutexPair').
 ~ Moved time-related type definitions to 'Timer.hpp'.
+
+
+
+31AUG19 2.1.1 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Fixed various typos in the Doxygen documenation.
