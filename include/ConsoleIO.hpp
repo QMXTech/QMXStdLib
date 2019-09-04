@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConsoleIO.hpp
-// Robert M. Baker | Created : 12DEC11 | Last Modified : 27AUG19 by Robert M. Baker
+// Robert M. Baker | Created : 12DEC11 | Last Modified : 03SEP19 by Robert M. Baker
 // Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a console I/O class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 12DEC11
-  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @date    Last Modified : 03SEP19 by Robert M. Baker
   * @version 2.1.1
   *
   * @brief This header file defines the interface for a console I/O class.
@@ -516,19 +516,23 @@ private:
 		  * @brief This is the flag array used to determine if a certain stream type is disabled.
 		  */
 
-		static bool isStreamDisabled[ STREAM_COUNT ];
+		inline static bool isStreamDisabled[] = {
+			false,
+			false,
+			false
+		};
 
 		/**
 		  * @brief This is the mutex used for synchronization of field manipulation.
 		  */
 
-		static SharedMutexPair localMutex;
+		inline static SharedMutexPair localMutex;
 
 		/**
 		  * @brief This is the mutex array used for synchronization of a certain stream type.
 		  */
 
-		static SharedMutex streamMutexes[ STREAM_COUNT ];
+		inline static SharedMutex streamMutexes[ STREAM_COUNT ];
 
 	// Private Constructors
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Singleton.hpp
-// Robert M. Baker | Created : 04MAR12 | Last Modified : 27AUG19 by Robert M. Baker
+// Robert M. Baker | Created : 04MAR12 | Last Modified : 03SEP19 by Robert M. Baker
 // Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a mixin class to a singleton instance.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
-  * @date    Last Modified : 27AUG19 by Robert M. Baker
+  * @date    Last Modified : 03SEP19 by Robert M. Baker
   * @version 2.1.1
   *
   * @brief This header file defines the interface for a mixin class to a singleton instance.
@@ -151,7 +151,7 @@ protected:
 		  * @brief This is the singleton pointer.
 		  */
 
-		static DType* singletonInstance;
+		inline static DType* singletonInstance = nullptr;
 };
 
 } // 'QMXStdLib' Namespace

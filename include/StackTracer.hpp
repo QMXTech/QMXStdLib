@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StackTracer.hpp
-// Robert M. Baker | Created : 29FEB12 | Last Modified : 31AUG19 by Robert M. Baker
+// Robert M. Baker | Created : 29FEB12 | Last Modified : 03SEP19 by Robert M. Baker
 // Version : 2.1.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a stack tracer class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 29FEB12
-  * @date    Last Modified : 31AUG19 by Robert M. Baker
+  * @date    Last Modified : 03SEP19 by Robert M. Baker
   * @version 2.1.1
   *
   * @brief This header file defines the interface for a stack tracer class.
@@ -407,25 +407,25 @@ private:
 		  * @brief This is the mutex for use when thread-safety is needed.
 		  */
 
-		static SharedMutexPair localMutex;
+		inline static SharedMutexPair localMutex;
 
 		/**
 		  * @brief This is the flag which determines if the stack tracer is enabled.
 		  */
 
-		static bool isEnabled;
+		inline static bool isEnabled = false;
 
 		/**
 		  * @brief This is a thread-specific pointer to a string containing the current thread's ID.
 		  */
 
-		static StringTLS threadID;
+		inline static StringTLS threadID;
 
 		/**
 		  * @brief This is the stack trace map.
 		  */
 
-		static StackTraceMap stackTraces;
+		inline static StackTraceMap stackTraces;
 
 	// Private Constructors
 

@@ -1,6 +1,6 @@
 ################################################################################################################################################################
 # CMakeLists.txt
-# Robert M. Baker | Created : 10DEC11 | Last Modified : 26AUG19 by Robert M. Baker
+# Robert M. Baker | Created : 10DEC11 | Last Modified : 03SEP19 by Robert M. Baker
 # Version : 2.1.1
 # This is a CMake script for building 'QMXStdLib'.
 ################################################################################################################################################################
@@ -58,22 +58,22 @@ include( CMakePackageConfigHelpers )
 set( CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true )
 
 set(
-	COMPILE_FLAGS_DEBUG "-g -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG"
+	COMPILE_FLAGS_DEBUG "-std=c++17 -g -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -D_DEBUG"
 	CACHE STRING "These are the debug compile flags."
 )
 
 set(
-	COMPILE_FLAGS_RELWITHDEBINFO "-O2 -g -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG"
+	COMPILE_FLAGS_RELWITHDEBINFO "-std=c++17 -O2 -g -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG"
 	CACHE STRING "These are the release with debug info compile flags."
 )
 
 set(
-	COMPILE_FLAGS_RELEASE "-O3 -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG"
+	COMPILE_FLAGS_RELEASE "-std=c++17 -O3 -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG"
 	CACHE STRING "These are the release compile flags."
 )
 
 set(
-	COMPILE_FLAGS_MINSIZEREL "-Os -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG"
+	COMPILE_FLAGS_MINSIZEREL "-std=c++17 -Os -Wall -Wno-unknown-warning-option -Wno-maybe-uninitialized -Wno-attributes -DNDEBUG"
 	CACHE STRING "These are the minimum size release compile flags."
 )
 
@@ -228,16 +228,13 @@ set(
 
 set(
 	PROJECT_SOURCES
-	"src/ConsoleIO.cpp"
 	"src/DynamicLibrary.cpp"
 	"src/FileSystem.cpp"
 	"src/ProgramOptions.cpp"
 	"src/QMXException.cpp"
-	"src/StackTracer.cpp"
 	"src/String.cpp"
 	"src/ThreadManager.cpp"
 	"src/Timer.cpp"
-	"src/Utility.cpp"
 )
 
 set(

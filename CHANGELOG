@@ -75,3 +75,10 @@ Key
 31AUG19 2.1.1 Robert M. Baker <malachy@qmxtech.com>
 ===================================================
 ~ Fixed various typos in the Doxygen documenation.
+
+
+
+03SEP19 2.2.0 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Modifed all static member variables to be inline.
+- Removed unnecessary source files 'ConsoleIO.cpp', 'StackTracer.cpp', and 'Utility.cpp'.
