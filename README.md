@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-> QuantuMatriX Software Standard Library - V2.1.1
+> QuantuMatriX Software Standard Library - V2.2.1
 > Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
 >
 > This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for its specific usefulness to be determined.  Please see the API documentation for more details, or visit the QMXStdLib website at 'https://git.qmx-software.com/open-source/qmxstdlib/'.
@@ -14,7 +14,7 @@
 > ### GNU Linux and Apple macOS
 >
 >> #### Compiler
->> * Clang >= 3.0 or GCC >= 4.6
+>> * Clang >= 3.9 or GCC >= 7.0
 >>
 >> #### Documentation
 >> * Doxygen >= 1.6
@@ -29,7 +29,7 @@
 > ### Microsoft Windows
 >
 >> #### Compiler
->> * MSYS2 + Clang >= 3.0 or MSYS2 + MinGW >= 4.6
+>> * MSYS2 + Clang >= 3.9 or MSYS2 + MinGW with GCC >= 7.0
 >>
 >> #### Documentation
 >> * Doxygen >= 1.6

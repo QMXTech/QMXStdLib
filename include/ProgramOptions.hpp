@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptions.hpp
 // Robert M. Baker | Created : 23OCT13 | Last Modified : 28AUG19 by Robert M. Baker
-// Version : 2.1.1
+// Version : 2.2.1
 // This is a header file for 'QMXStdLib'; it defines the interface for a program options class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 23OCT13
   * @date    Last Modified : 28AUG19 by Robert M. Baker
-  * @version 2.1.1
+  * @version 2.2.1
   *
   * @brief This header file defines the interface for a program options class.
   *

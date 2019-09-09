@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // QMXStdLib.hpp
 // Robert M. Baker | Created : 10DEC11 | Last Modified : 27AUG19 by Robert M. Baker
-// Version : 2.1.1
+// Version : 2.2.1
 // This is the main header file for 'QMXStdLib'; it is for users of the library as a convenient way to include all headers.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 10DEC11
   * @date    Last Modified : 27AUG19 by Robert M. Baker
-  * @version 2.1.1
+  * @version 2.2.1
   *
   * @brief This is the main header file for 'QMXStdLib' which includes all the other necessary headers.
   *
@@ -46,7 +46,7 @@
   */
 
 /**
-  * @mainpage QMX Standard Library API Documentation (V2.1.1)
+  * @mainpage QMX Standard Library API Documentation (V2.2.1)
   *
   * @section QMXStdLibH0002 About QMX Standard Library
   * 	This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses.  Each structure must be examined for

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RAII.hpp
 // Robert M. Baker | Created : 04MAR12 | Last Modified : 28AUG19 by Robert M. Baker
-// Version : 2.1.1
+// Version : 2.2.1
 // This is a header file for 'QMXStdLib'; it includes the various RAII classes.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 04MAR12
   * @date    Last Modified : 28AUG19 by Robert M. Baker
-  * @version 2.1.1
+  * @version 2.2.1
   *
   * @brief This header file includes the various RAII classes.
   *

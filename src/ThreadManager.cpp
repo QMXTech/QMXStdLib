@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ThreadManager.cpp
 // Robert M. Baker | Created : 24FEB16 | Last Modified : 03SEP19 by Robert M. Baker
-// Version : 2.1.1
+// Version : 2.2.1
 // This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 24FEB16
   * @date    Last Modified : 03SEP19 by Robert M. Baker
-  * @version 2.1.1
+  * @version 2.2.1
   *
   * @brief This is a source file for 'QMXStdLib'; it defines the implementation for a thread manager class.
   *
