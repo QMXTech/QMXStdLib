@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BaseIterator.hpp
 // Robert M. Baker | Created : 08OCT17 | Last Modified : 28AUG19 by Robert M. Baker
-// Version : 2.2.1
+// Version : 2.3.0
 // This is a header file for 'QMXStdLib'; it defines data common to all the various iterator classes.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -22,7 +22,7 @@
   * @author  Robert M. Baker
   * @date    Created : 08OCT17
   * @date    Last Modified : 28AUG19 by Robert M. Baker
-  * @version 2.2.1
+  * @version 2.3.0
   *
   * @brief This header file defines data common to all the various iterator classes.
   *

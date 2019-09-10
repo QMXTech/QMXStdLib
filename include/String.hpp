@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.hpp
-// Robert M. Baker | Created : 11JAN12 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.2.1
+// Robert M. Baker | Created : 11JAN12 | Last Modified : 10SEP19 by Robert M. Baker
+// Version : 2.3.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 11JAN12
-  * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.2.1
+  * @date    Last Modified : 10SEP19 by Robert M. Baker
+  * @version 2.3.0
   *
   * @brief This header file defines the interface for a set of string utility functions.
   *
@@ -211,16 +211,28 @@ std::string toLower( std::string& target, bool modifyTarget = false );
 std::string findReplace( std::string& target, const std::string& find, const std::string& replace, bool modifyTarget = false );
 
 /**
-  * @brief This function splits the specified string into tokens.
+  * @brief This function defines the structure for a string tokenizer.
   *
   * @param target
   * 	This is the string deque into which the tokens are placed.
   *
   * @param source
   * 	This is the string to split into tokens.
+  *
+  * @param predicate
+  *   This is the predicate which determines the token separator.
   */
 
-void tokenize( StringDeque& target, const std::string& source );
+template< typename PType = boost::algorithm::detail::is_classifiedF > void tokenize(
+	StringDeque& target,
+	const std::string& source,
+	PType predicate = boost::algorithm::is_space()
+)
+{
+	// Split specified string into tokens.
+
+		boost::algorithm::split( target, source, predicate, boost::algorithm::token_compress_on );
+}
 
 /**
   * @brief This function defines the structure for a string to numeric value converter.

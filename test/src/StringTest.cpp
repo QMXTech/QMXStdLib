@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StringTest.cpp
-// Robert M. Baker | Created : 20FEB12 | Last Modified : 31AUG19 by Robert M. Baker
-// Version : 2.2.1
+// Robert M. Baker | Created : 20FEB12 | Last Modified : 10SEP19 by Robert M. Baker
+// Version : 2.3.0
 // This is a source file for 'QMXStdLibTest'; it defines a set of unit tests for the 'QMXStdLib::String' functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -233,6 +233,12 @@ TEST( StringTest, TokenizeWorks )
 	// Perform unit test for 'tokenize' function.
 
 		String::tokenize( tokens, "Bitches \t \v love \t \f smiley \n \r faces!" );
+		ASSERT_EQ( string( "Bitches" ), tokens[ 0 ] );
+		ASSERT_EQ( string( "love" ), tokens[ 1 ] );
+		ASSERT_EQ( string( "smiley" ), tokens[ 2 ] );
+		ASSERT_EQ( string( "faces!" ), tokens[ 3 ] );
+		tokens.clear();
+		String::tokenize( tokens, "Bitches,love;smiley|faces!", boost::algorithm::is_any_of( ",;|" ) );
 		ASSERT_EQ( string( "Bitches" ), tokens[ 0 ] );
 		ASSERT_EQ( string( "love" ), tokens[ 1 ] );
 		ASSERT_EQ( string( "smiley" ), tokens[ 2 ] );

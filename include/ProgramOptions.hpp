@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProgramOptions.hpp
-// Robert M. Baker | Created : 23OCT13 | Last Modified : 28AUG19 by Robert M. Baker
-// Version : 2.2.1
+// Robert M. Baker | Created : 23OCT13 | Last Modified : 09SEP19 by Robert M. Baker
+// Version : 2.3.0
 // This is a header file for 'QMXStdLib'; it defines the interface for a program options class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 23OCT13
-  * @date    Last Modified : 28AUG19 by Robert M. Baker
-  * @version 2.2.1
+  * @date    Last Modified : 09SEP19 by Robert M. Baker
+  * @version 2.3.0
   *
   * @brief This header file defines the interface for a program options class.
   *
@@ -137,7 +137,7 @@ public:
 		  * the group for any key/value pairs that follow.  Any line containing two strings separated by the configurable assignment operator, which by default is
 		  * the equal sign ('='), will become a key/value pair.  Any malformed lines will be ignored.  After the config file is parsed, any empty groups will be
 		  * discarded.  Any config options parsed may be overridden by the command line, depending on the order in which the methods are called (i.e. If a call is
-		  * made to 'ParseConfigFile' and then to 'ParseCommandLine', any identical entries on the command line will override those in the config file.).
+		  * made to 'parseConfigFile' and then to 'parseCommandLine', any identical entries on the command line will override those in the config file.).
 		  *
 		  * Refer to the 'getConfigOption' method for more information on the config option type.
 		  *

@@ -1,7 +1,7 @@
 ################################################################################################################################################################
 # CMakeLists.txt
 # Robert M. Baker | Created : 10DEC11 | Last Modified : 03SEP19 by Robert M. Baker
-# Version : 2.2.1
+# Version : 2.3.0
 # This is a CMake script for building 'QMXStdLib'.
 ################################################################################################################################################################
 # Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -32,7 +32,7 @@ if( NOT "${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}/build" )
 	message( FATAL_ERROR "You must build the project from '${CMAKE_SOURCE_DIR}/build'!  See 'README.md' for build instructions." )
 endif()
 
-project( PROJECT VERSION 2.2.1 LANGUAGES C CXX )
+project( PROJECT VERSION 2.3.0 LANGUAGES C CXX )
 
 find_package( GTest 1.6 )
 find_package( Doxygen )
@@ -301,7 +301,7 @@ configure_package_config_file(
 	NO_CHECK_REQUIRED_COMPONENTS_MACRO
 )
 
-write_basic_package_version_file( "${DOXYGEN_PROJECT_NAME}ConfigVersion.cmake" VERSION 2.2.1 COMPATIBILITY SameMajorVersion )
+write_basic_package_version_file( "${DOXYGEN_PROJECT_NAME}ConfigVersion.cmake" VERSION 2.3.0 COMPATIBILITY SameMajorVersion )
 
 ################################################################################################################################################################
 # Targets

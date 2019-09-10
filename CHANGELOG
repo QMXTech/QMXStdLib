@@ -88,3 +88,9 @@ Key
 09SEP19 2.2.1 Robert M. Baker <malachy@qmxtech.com>
 ===================================================
 ~ Modified 'README.md' to reflect new dependency versions.
+
+
+
+10SEP19 2.3.0 Robert M. Baker <malachy@qmxtech.com>
+===================================================
+~ Modified 'String::tokenize' function to accept an optional predicate argument.

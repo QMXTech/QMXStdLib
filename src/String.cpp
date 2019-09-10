@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // String.cpp
-// Robert M. Baker | Created : 08JAN15 | Last Modified : 29AUG19 by Robert M. Baker
-// Version : 2.2.1
+// Robert M. Baker | Created : 08JAN15 | Last Modified : 10SEP19 by Robert M. Baker
+// Version : 2.3.0
 // This is a source file for 'QMXStdLib'; it defines the implementation for a set of string utility functions.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2011-2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership
@@ -21,8 +21,8 @@
   * @file
   * @author  Robert M. Baker
   * @date    Created : 08JAN15
-  * @date    Last Modified : 29AUG19 by Robert M. Baker
-  * @version 2.2.1
+  * @date    Last Modified : 10SEP19 by Robert M. Baker
+  * @version 2.3.0
   *
   * @brief This source file defines the implementation for a set of string utility functions.
   *
@@ -184,13 +184,6 @@ string findReplace( string& target, const string& find, const string& replace, b
 	// Return result to calling routine.
 
 		return result;
-}
-
-void tokenize( StringDeque& target, const string& source )
-{
-	// Split specified string into tokens.
-
-		boost::algorithm::split( target, source, boost::algorithm::is_space(), boost::algorithm::token_compress_on );
 }
 
 } // 'String' Namespace
